@@ -1,0 +1,201 @@
+$(document).ready(function () {
+    $("#course-form").on("submit", function (event) {
+        event.preventDefault();
+
+        let dept = $("#dept").val();
+        let quarter = $("#quarter").val();
+        let number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
+        let courseType = $("#course-type").val();
+
+        $.ajax({
+            url: "/",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                dept: dept,
+                quarter: quarter,
+                number: number,
+                courseType: courseType
+            }),
+            success: function (res) {
+                $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>`);
+
+                if (res.success) {
+                    const courseData = res.courseData;
+                    const courses = res.courseData.courses;
+                    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`;
+                    $("#enrollment-data").append(`<h4 class="enrollment-heading">${title}</h4>`);
+
+                    for (let i = 0; i < courses.length; i++) {
+                        if (res.courseType === "all" || res.courseType === courses[i].type) {
+                            $("#enrollment-data").append(
+                                `<div class="container-fluid">
+                                   <div class="table-responsiveness enrollment-table">
+                                    <table class="table table-sm table-light table-striped table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">Code</th>
+                                          <th scope="col">Type</th>
+                                          <th scope="col">Sec</th>
+                                          <th scope="col">Units</th>
+                                          <th scope="col">Instructor</th>
+                                          <th scope="col">Time</th>
+                                          <th scope="col">Place</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>${courses[i]["course_code"]}</td>
+                                          <td>${courses[i].type}</td>
+                                          <td>${courses[i].section}</td>
+                                          <td>${courses[i].units}</td>
+                                          <td class="table-list">${formatArray(courses[i].instructor)}</td>
+                                          <td class="table-list">${formatArray(courses[i].time)}</td>
+                                          <td class="table-list">${formatArray(courses[i].place)}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                   </div>
+                                 </div>
+                                 <div class="graph-container">
+                                   <canvas id="enrollment-chart${i}" class="chart"></canvas>
+                                 </div>`);
+    
+                            createGraph(`enrollment-chart${i}`, formatDates(courses[i].dates), courses[i].max, courses[i].enrolled);
+                        }
+                    }
+                } else {
+                    $("#enrollment-data").append(
+                        `<div class="container-fluid error-message">
+                            <p>That specific course does not exist. Please try again!</p>
+                        </div>`);
+                }
+            }
+        });
+
+    });
+});
+
+
+function createGraph(graphID, dates, max, enrolled) {
+    const labels = dates;
+    
+    const data = {
+        labels: labels,
+        datasets: [{
+                label: "Enrolled",
+                backgroundColor: "rgb(71,185,200)",
+                borderColor: "rgb(71,185,200)",
+                data: enrolled
+            },
+            {
+                label: "Max",
+                backgroundColor: "rgb(201,71,47)",
+                borderColor: "rgb(201,71,47)",
+                data: max
+            }
+        ]
+    };
+
+    const config = {
+        type: "line",
+        data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Date",
+                        font: {
+                            size: 12,
+                            weight: "bold",
+                            padding: 10
+                        },
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Number of Students",
+                        font: {
+                            size: 12,
+                            weight: "bold",
+                            padding: 10
+                        },
+                    }
+                }
+            },
+            tooltips: {
+                mode: "index",
+                intersect: false
+            },
+            hover: {
+                mode: "index",
+                intersect: false
+            }
+        }
+    };
+
+    return new Chart(document.getElementById(graphID), config);
+}
+
+
+function getQuarter(quarter) {
+    const year = quarter.slice(0, 4);
+
+    switch (quarter.slice(5, 7)) {
+        case "92":
+            return `Fall ${year}`;
+        case "03":
+            return `Winter ${year}`;
+        case "14":
+            return `Spring ${year}`;
+        case "25":
+            return `SS1 ${year}`;
+        case "39":
+            return `10-wk Summer ${year}`;
+        case "51":
+            return `Summer COM ${year}`;
+        case "76":
+            return `SS2 ${year}`;
+        case "8F":
+            return `Law Fall ${year}`;
+    }
+}
+
+
+function formatArray(array) {
+    let arrayHTML = "";
+
+    array.forEach((item) => {
+        arrayHTML += `<p>${item}</p>`;
+    });
+
+    return arrayHTML;
+}
+
+
+function formatDates(dates) {
+    let newDates = [];
+
+    dates.forEach((date) => {
+        let year = date.slice(2, 4);
+        let month = date.slice(5, 7);
+        if (month.startsWith("0")) {
+            month = month.slice(1, 2);
+        }
+        let day = date.slice(8, 10);
+
+        newDates.push(`${month}/${day}/${year}`);
+    });
+
+    return newDates;
+}
