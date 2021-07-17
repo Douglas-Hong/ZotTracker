@@ -22,13 +22,13 @@ $(document).ready(function () {
                 courseCode: courseCode
             }),
             success: function (res) {
-                $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>`);
-
                 if (res.success) {
                     const courseData = res.courseData;
                     const courses = res.courseData.courses;
                     const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`;
-                    $("#enrollment-data").append(`<h4 class="enrollment-heading">${title}</h4>`);
+                    let numGraphs = 0;
+                    $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>
+                      <h4 class="enrollment-heading">${title}</h4>`);
 
                     for (let i = 0; i < courses.length; i++) {
                         if ((res.courseType === "all" || res.courseType === courses[i].type) && hasInstructor(courses[i].instructor, res.instructor) 
@@ -67,13 +67,14 @@ $(document).ready(function () {
                                  </div>`);
     
                             createGraph(`enrollment-chart${i}`, formatDates(courses[i].dates), courses[i].max, courses[i].enrolled);
+                            numGraphs++;
                         }
                     }
+                    if (numGraphs === 0) {
+                      $("#enrollment-data").html(createError("No graphs can be created because this instructor did not teach this specific course!"));
+                    }
                 } else {
-                    $("#enrollment-data").append(
-                        `<div class="container-fluid error-message">
-                            <p>That specific course does not exist. Please try again!</p>
-                        </div>`);
+                    $("#enrollment-data").html(createError("That specific course does not exist. Please try again!"));
                 }
             }
         });
@@ -154,6 +155,13 @@ function createGraph(graphID, dates, max, enrolled) {
     };
 
     return new Chart(document.getElementById(graphID), config);
+}
+
+
+function createError(message) {
+  return `<div class="container-fluid">
+            <div class="alert alert-danger alert-dismissible fade show error-message" role="alert">${message}</div>
+          </div>`;
 }
 
 
