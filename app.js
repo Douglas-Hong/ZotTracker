@@ -9,7 +9,6 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 
@@ -26,7 +25,7 @@ var Course = mongoose.model("Course", courseSchema, "enrollments");
 
 
 app.get("/", function (req, res) {
-    res.render("index.ejs");
+    res.sendFile(__dirname + "/views/index.html");
 });
 
 

@@ -24,63 +24,137 @@ $(document).ready(function () {
             success: function (res) {
                 if (res.success) {
                     const courseData = res.courseData;
-                    const courses = res.courseData.courses;
                     const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`;
                     let numGraphs = 0;
                     $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>
                       <h4 class="enrollment-heading">${title}</h4>`);
 
-                    for (let i = 0; i < courses.length; i++) {
-                        if ((res.courseType === "all" || res.courseType === courses[i].type) && hasInstructor(courses[i].instructor, res.instructor) 
-                            && hasCourseCode(courses[i].course_code, res.courseCode)) {
-                            $("#enrollment-data").append(
-                                `<div class="container-fluid">
-                                   <div class="table-responsiveness enrollment-table">
-                                    <table class="table table-sm table-light table-striped table-bordered">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">Code</th>
-                                          <th scope="col">Type</th>
-                                          <th scope="col">Sec</th>
-                                          <th scope="col">Units</th>
-                                          <th scope="col">Instructor</th>
-                                          <th scope="col">Time</th>
-                                          <th scope="col">Place</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td>${courses[i]["course_code"]}</td>
-                                          <td>${courses[i].type}</td>
-                                          <td>${courses[i].section}</td>
-                                          <td>${courses[i].units}</td>
-                                          <td class="table-list">${formatArray(courses[i].instructor)}</td>
-                                          <td class="table-list">${formatArray(courses[i].time)}</td>
-                                          <td class="table-list">${formatArray(courses[i].place)}</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                   </div>
-                                 </div>
-                                 <div class="graph-container">
-                                   <canvas id="enrollment-chart${i}" class="chart"></canvas>
-                                 </div>`);
-    
-                            createGraph(`enrollment-chart${i}`, formatDates(courses[i].dates), courses[i].max, courses[i].enrolled);
+                    res.courseData.courses.forEach((course) => {
+                        if ((res.courseType === "all" || res.courseType === course.type) && hasInstructor(course.instructor, res.instructor) 
+                            && hasCourseCode(course.course_code, res.courseCode)) {
+                            createEnrollmentSection(course, numGraphs);
+                            createGraph(`enrollment-chart${numGraphs}`, formatDates(course.dates), course.max, course.enrolled);
                             numGraphs++;
                         }
-                    }
+                    });
+
                     if (numGraphs === 0) {
-                      $("#enrollment-data").html(createError("No graphs can be created because this instructor did not teach this specific course!"));
+                        createError("No graphs can be created because this instructor did not teach this specific course!");
                     }
+
                 } else {
-                    $("#enrollment-data").html(createError("That specific course does not exist. Please try again!"));
+                    createError("That specific course does not exist. Please try again!");
                 }
             }
         });
-
     });
 });
+
+
+function getQuarter(quarter) {
+    const year = quarter.slice(0, 4);
+
+    switch (quarter.slice(5, 7)) {
+        case "92":
+            return `Fall ${year}`;
+        case "03":
+            return `Winter ${year}`;
+        case "14":
+            return `Spring ${year}`;
+        case "25":
+            return `SS1 ${year}`;
+        case "39":
+            return `10-wk Summer ${year}`;
+        case "51":
+            return `Summer COM ${year}`;
+        case "76":
+            return `SS2 ${year}`;
+        case "8F":
+            return `Law Fall ${year}`;
+    }
+}
+
+
+function hasInstructor(instructors, instructor) {
+    return instructor === "" || instructors.some((person) => person === instructor);
+}
+
+
+function hasCourseCode(currentCourseCode, courseCode) {
+    return courseCode === "" || currentCourseCode === courseCode;
+}
+
+
+function formatArray(array) {
+    let arrayHTML = "";
+
+    array.forEach((item) => {
+        arrayHTML += `<p>${item}</p>`;
+    });
+
+    return arrayHTML;
+}
+
+
+function formatDates(dates) {
+    let newDates = [];
+
+    dates.forEach((date) => {
+        let year = date.slice(2, 4);
+        let month = date.slice(5, 7);
+        if (month.startsWith("0")) {
+            month = month.slice(1, 2);
+        }
+        let day = date.slice(8, 10);
+
+        newDates.push(`${month}/${day}/${year}`);
+    });
+
+    return newDates;
+}
+
+
+function createError(message) {
+    $("#enrollment-data").html(`<div class="container-fluid">
+                                  <div class="alert alert-danger alert-dismissible fade show error-message" role="alert">${message}</div>
+                                </div>`);
+}
+
+
+function createEnrollmentSection(course, courseIndex) {
+    $("#enrollment-data").append(
+        `<div class="container-fluid">
+           <div class="table-responsiveness enrollment-table">
+            <table class="table table-sm table-light table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Sec</th>
+                  <th scope="col">Units</th>
+                  <th scope="col">Instructor</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Place</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>${course["course_code"]}</td>
+                  <td>${course.type}</td>
+                  <td>${course.section}</td>
+                  <td>${course.units}</td>
+                  <td class="table-list">${formatArray(course.instructor)}</td>
+                  <td class="table-list">${formatArray(course.time)}</td>
+                  <td class="table-list">${formatArray(course.place)}</td>
+                </tr>
+              </tbody>
+            </table>
+           </div>
+         </div>
+         <div class="graph-container">
+           <canvas id="enrollment-chart${courseIndex}" class="chart"></canvas>
+         </div>`);
+}
 
 
 function createGraph(graphID, dates, max, enrolled) {
@@ -102,7 +176,7 @@ function createGraph(graphID, dates, max, enrolled) {
                 label: "Max",
                 backgroundColor: "rgb(201,71,47)",
                 borderColor: "rgb(201,71,47)",
-                data: max
+                data: max,
             }
         ]
     };
@@ -144,87 +218,12 @@ function createGraph(graphID, dates, max, enrolled) {
                 }
             },
             tooltips: {
-                mode: "index",
-                intersect: false
-            },
-            hover: {
-                mode: "index",
-                intersect: false
+                enabled: true
             }
         }
     };
 
     return new Chart(document.getElementById(graphID), config);
-}
-
-
-function createError(message) {
-  return `<div class="container-fluid">
-            <div class="alert alert-danger alert-dismissible fade show error-message" role="alert">${message}</div>
-          </div>`;
-}
-
-
-function getQuarter(quarter) {
-    const year = quarter.slice(0, 4);
-
-    switch (quarter.slice(5, 7)) {
-        case "92":
-            return `Fall ${year}`;
-        case "03":
-            return `Winter ${year}`;
-        case "14":
-            return `Spring ${year}`;
-        case "25":
-            return `SS1 ${year}`;
-        case "39":
-            return `10-wk Summer ${year}`;
-        case "51":
-            return `Summer COM ${year}`;
-        case "76":
-            return `SS2 ${year}`;
-        case "8F":
-            return `Law Fall ${year}`;
-    }
-}
-
-
-function formatArray(array) {
-    let arrayHTML = "";
-
-    array.forEach((item) => {
-        arrayHTML += `<p>${item}</p>`;
-    });
-
-    return arrayHTML;
-}
-
-
-function formatDates(dates) {
-    let newDates = [];
-
-    dates.forEach((date) => {
-        let year = date.slice(2, 4);
-        let month = date.slice(5, 7);
-        if (month.startsWith("0")) {
-            month = month.slice(1, 2);
-        }
-        let day = date.slice(8, 10);
-
-        newDates.push(`${month}/${day}/${year}`);
-    });
-
-    return newDates;
-}
-
-
-function hasInstructor(instructors, instructor) {
-    return instructor === "" || instructors.some((person) => person === instructor);
-}
-
-
-function hasCourseCode(currentCourseCode, courseCode) {
-    return courseCode === "" || currentCourseCode === courseCode;
 }
 
 
