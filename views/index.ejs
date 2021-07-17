@@ -11,9 +11,11 @@
   <title>ZotTracker</title>
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/1c9ad4b785.js" crossorigin="anonymous"></script>
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
@@ -58,7 +60,7 @@
           <div class="col-md-6">
             <label for="dept" class="form-label selection-label">Department</label>
             <select class="form-select" id="dept" name="dept">
-              <option selected disabled>Choose a Department...</option>
+              <option value="" hidden>Choose a Department...</option>
               <%- include("partials/allDepts") -%>
             </select>
           </div>
@@ -69,21 +71,24 @@
           <div class="col-md-3">
             <label for="quarter" class="form-label selection-label">Quarter</label>
             <select class="form-select" id="quarter" name="quarter">
-              <option selected disabled>Choose a Quarter...</option>
+              <option value="" hidden>Choose a Quarter...</option>
               <%- include("partials/allQuarters") -%>
             </select>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-6">
             <label for="instructor" class="form-label selection-label">Instructor</label>
-            <input type="text" class="form-control" id="instructor" name="instructor">
+            <input type="text" class="form-control" id="instructor" name="instructor" list="instructor-list" placeholder="Enter a name from WebSoc...">
+            <datalist id="instructor-list">
+              <%- include("partials/allInstructors") -%>
+            </datalist>
           </div>
           <div class="col-md-3">
             <label for="course-code" class="form-label selection-label">Course Code</label>
-            <input type="text" class="form-control" id="course-code" name="courseCode" placeholder="34060">
+            <input type="text" class="form-control" id="course-code" name="courseCode" placeholder="35870">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label for="course-type" class="form-label selection-label">Course Type</label>
             <select class="form-select" id="course-type" name="courseType">
               <option value="all">All Types</option>
@@ -95,23 +100,26 @@
           </div>
         </div>
         <div class="text-center button-row">
-          <button type="submit" class="btn btn-primary submit-button text-center">Submit Course</button>
-          <button type="reset" class="btn btn-primary reset-button text-center">Reset</button>
+          <button type="submit" class="btn btn-primary submit-button">Submit</button>
+          <button type="reset" class="btn btn-primary reset-button">Reset</button>
+          <i class="far fa-question-circle fa-2x question-icon" data-bs-toggle="tooltip" data-bs-placement="right" 
+          title="To successfully submit a course, select a Department, Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter."></i>
         </div>
       </form>
     </div>
   </section>
-
+  
   <section id="enrollment-data">
   </section>
 
   <!-- jQuery, Bootstrap Bundle with Popper, Chart.js, and custom scripts -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="scripts/createGraph.js"></script>
+  <script src="scripts/dropdown.js"></script>
+  <script src="scripts/tooltip.js"></script>
 </body>
 
 </html>

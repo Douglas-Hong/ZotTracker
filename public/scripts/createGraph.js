@@ -2,10 +2,12 @@ $(document).ready(function () {
     $("#course-form").on("submit", function (event) {
         event.preventDefault();
 
-        let dept = $("#dept").val();
-        let quarter = $("#quarter").val();
-        let number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
-        let courseType = $("#course-type").val();
+        const dept = $("#dept").val();
+        const quarter = $("#quarter").val();
+        const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
+        const courseType = $("#course-type").val();
+        const instructor = $("#instructor").val();
+        const courseCode = $("#course-code").val();
 
         $.ajax({
             url: "/",
@@ -15,7 +17,9 @@ $(document).ready(function () {
                 dept: dept,
                 quarter: quarter,
                 number: number,
-                courseType: courseType
+                courseType: courseType,
+                instructor: instructor,
+                courseCode: courseCode
             }),
             success: function (res) {
                 $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>`);
@@ -27,7 +31,8 @@ $(document).ready(function () {
                     $("#enrollment-data").append(`<h4 class="enrollment-heading">${title}</h4>`);
 
                     for (let i = 0; i < courses.length; i++) {
-                        if (res.courseType === "all" || res.courseType === courses[i].type) {
+                        if ((res.courseType === "all" || res.courseType === courses[i].type) && hasInstructor(courses[i].instructor, res.instructor) 
+                            && hasCourseCode(courses[i].course_code, res.courseCode)) {
                             $("#enrollment-data").append(
                                 `<div class="container-fluid">
                                    <div class="table-responsiveness enrollment-table">
@@ -78,6 +83,10 @@ $(document).ready(function () {
 
 
 function createGraph(graphID, dates, max, enrolled) {
+    if (dates.length === 1) {
+        handleOneElementArrays(dates, max, enrolled);
+    }
+
     const labels = dates;
     
     const data = {
@@ -198,4 +207,21 @@ function formatDates(dates) {
     });
 
     return newDates;
+}
+
+
+function hasInstructor(instructors, instructor) {
+    return instructor === "" || instructors.some((person) => person === instructor);
+}
+
+
+function hasCourseCode(currentCourseCode, courseCode) {
+    return courseCode === "" || currentCourseCode === courseCode;
+}
+
+
+function handleOneElementArrays(dates, max, enrolled) {
+    dates.push(dates[0]);
+    max.push(max[0]);
+    enrolled.push(enrolled[0]);
 }

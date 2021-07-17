@@ -19,7 +19,7 @@ const courseSchema = new mongoose.Schema({
     dept: String,
     number: String,
     title: String,
-    date: String,
+    course_codes: [String],
     courses: {}
 });
 var Course = mongoose.model("Course", courseSchema, "enrollments");
@@ -31,20 +31,29 @@ app.get("/", function (req, res) {
 
 
 app.post("/", function (req, res) {
-    Course.findOne({
+    let query = {            
+        quarter: req.body.quarter,
+        dept: req.body.dept,
+        number: req.body.number
+    };
+
+    if (req.body.courseCode !== "" && req.body.quarter !== "") {
+        query = {
             quarter: req.body.quarter,
-            dept: req.body.dept,
-            number: req.body.number
-        },
-        function (err, course) {
-            if (err) {
-                console.log(err);
-            } else if (!course) {
-                res.send({success: false});
-            } else {
-                res.send({success: true, courseData: course, courseType: req.body.courseType});
-            }
-        });
+            course_codes: {$in: req.body.courseCode}
+        };
+    }
+
+    Course.findOne(query, function (err, course) {
+        if (err) {
+            console.log(err);
+        } else if (!course) {
+            res.send({success: false});
+        } else {
+            res.send({success: true, courseData: course, courseType: req.body.courseType, 
+                instructor: req.body.instructor, courseCode: req.body.courseCode});
+        }
+    });
 });
 
 

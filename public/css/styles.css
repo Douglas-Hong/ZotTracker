@@ -18,16 +18,26 @@
     margin-top: 25px;
 }
 
+#dept option, #quarter option {
+    color: black;
+}
+
+.select-placeholder {
+    color: gray;
+}
+
 .button-row {
     margin-top: 40px;
 }
 
 .submit-button {
-    margin-right: 12px;
+    margin-right: 25px;
 }
 
-.reset-button {
-    margin-left: 12px;
+.question-icon {
+    margin-left: 20px;
+    position: relative;
+    top: 7px;
 }
 
 #enrollment-data {
@@ -80,3 +90,4 @@
     margin-top: 75px;
     text-align: center;
 }
+
