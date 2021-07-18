@@ -22,7 +22,7 @@ $(document).ready(function () {
                 courseCode: courseCode
             }),
             success: function (res) {
-                if (res.success) {
+                if (res.status === "FOUND") {
                     const courseData = res.courseData;
                     const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`;
                     let numGraphs = 0;
@@ -42,6 +42,9 @@ $(document).ready(function () {
                         createError("No graphs can be created because this instructor did not teach this specific course!");
                     }
 
+                } else if (res.status === "EMPTY INPUT") {
+                    createError("You need to specify more information! To successfully submit a course, select a Department, " 
+                        + "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
                 } else {
                     createError("That specific course does not exist. Please try again!");
                 }

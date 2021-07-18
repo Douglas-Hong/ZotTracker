@@ -30,29 +30,38 @@ app.get("/", function (req, res) {
 
 
 app.post("/", function (req, res) {
-    let query = {            
-        quarter: req.body.quarter,
-        dept: req.body.dept,
-        number: req.body.number
-    };
-
-    if (req.body.courseCode !== "" && req.body.quarter !== "") {
-        query = {
+    if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "")) {
+        res.send({status: "EMPTY INPUT"});
+    } else {
+        let query = {            
             quarter: req.body.quarter,
-            course_codes: {$in: req.body.courseCode}
+            dept: req.body.dept,
+            number: req.body.number
         };
-    }
-
-    Course.findOne(query, function (err, course) {
-        if (err) {
-            console.log(err);
-        } else if (!course) {
-            res.send({success: false});
-        } else {
-            res.send({success: true, courseData: course, courseType: req.body.courseType, 
-                instructor: req.body.instructor, courseCode: req.body.courseCode});
+    
+        if (req.body.courseCode !== "" && req.body.quarter !== "") {
+            query = {
+                quarter: req.body.quarter,
+                course_codes: {$in: req.body.courseCode}
+            };
         }
-    });
+    
+        Course.findOne(query, function (err, course) {
+            if (err) {
+                console.log(err);
+            } else if (!course) {
+                res.send({status: "NOT FOUND"});
+            } else {
+                res.send({
+                    status: "FOUND", 
+                    courseData: course, 
+                    courseType: req.body.courseType, 
+                    instructor: req.body.instructor, 
+                    courseCode: req.body.courseCode
+                });
+            }
+        });
+    }
 });
 
 
