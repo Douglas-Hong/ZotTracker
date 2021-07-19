@@ -134,10 +134,10 @@ function createEnrollmentSection(course, courseIndex) {
                   <th scope="col">Code</th>
                   <th scope="col">Type</th>
                   <th scope="col">Sec</th>
-                  <th scope="col">Units</th>
                   <th scope="col">Instructor</th>
                   <th scope="col">Time</th>
                   <th scope="col">Place</th>
+                  <th scope="col">Graph Toggler</th>
                 </tr>
               </thead>
               <tbody>
@@ -145,18 +145,30 @@ function createEnrollmentSection(course, courseIndex) {
                   <td>${course["course_code"]}</td>
                   <td>${course.type}</td>
                   <td>${course.section}</td>
-                  <td>${course.units}</td>
                   <td class="table-list">${formatArray(course.instructor)}</td>
                   <td class="table-list">${formatArray(course.time)}</td>
                   <td class="table-list">${formatArray(course.place)}</td>
+                  <td class="text-center">
+                    <button class="btn btn-primary show-graph-button" type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
            </div>
          </div>
-         <div class="graph-container">
-           <canvas id="enrollment-chart${courseIndex}" class="chart"></canvas>
+         <div class="collapse" id="graph-collapse-${courseIndex}">
+           <div class="graph-container">
+             <canvas id="enrollment-chart${courseIndex}" class="chart"></canvas>
+           </div>
          </div>`);
+
+    $(".show-graph-button").on("click", function() {
+        if ($(".show-graph-button").text().trim() === "Open") {
+            $(".show-graph-button").text("Close");
+        } else {
+            $(".show-graph-button").text("Open");
+        }
+    });
 }
 
 
@@ -235,3 +247,9 @@ function handleOneElementArrays(dates, max, enrolled) {
     max.push(max[0]);
     enrolled.push(enrolled[0]);
 }
+
+
+
+
+
+

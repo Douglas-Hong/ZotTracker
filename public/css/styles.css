@@ -59,9 +59,11 @@
     margin: 0;
 }
 
+.show-graph-button {
+    font-size: 0.75rem;
+}
+
 .graph-container {
-    margin-top: 25px;
-    margin-bottom: 75px;
     padding: 0 25%;
 }
 
