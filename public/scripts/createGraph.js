@@ -137,7 +137,7 @@ function createEnrollmentSection(course, courseIndex) {
                   <th scope="col">Instructor</th>
                   <th scope="col">Time</th>
                   <th scope="col">Place</th>
-                  <th scope="col">Graph Toggler</th>
+                  <th scope="col">Display Graph</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +149,8 @@ function createEnrollmentSection(course, courseIndex) {
                   <td class="table-list">${formatArray(course.time)}</td>
                   <td class="table-list">${formatArray(course.place)}</td>
                   <td class="text-center">
-                    <button class="btn btn-primary show-graph-button" type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
+                    <button class="btn btn-primary show-graph-button" id="show-graph-button-${courseIndex}"
+                     type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
                   </td>
                 </tr>
               </tbody>
@@ -162,11 +163,11 @@ function createEnrollmentSection(course, courseIndex) {
            </div>
          </div>`);
 
-    $(".show-graph-button").on("click", function() {
-        if ($(".show-graph-button").text().trim() === "Open") {
-            $(".show-graph-button").text("Close");
+    $("#show-graph-button-" + courseIndex).on("click", function() {
+        if ($(this).text().trim() === "Open") {
+            $(this).text("Close");
         } else {
-            $(".show-graph-button").text("Open");
+            $(this).text("Open");
         }
     });
 }
@@ -247,9 +248,3 @@ function handleOneElementArrays(dates, max, enrolled) {
     max.push(max[0]);
     enrolled.push(enrolled[0]);
 }
-
-
-
-
-
-
