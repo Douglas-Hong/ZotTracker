@@ -59,6 +59,10 @@
   margin: 0;
 }
 
+.graph-table-nav {
+  margin-top: 15px;
+}
+
 .show-graph-button {
   font-size: 0.8rem;
 }

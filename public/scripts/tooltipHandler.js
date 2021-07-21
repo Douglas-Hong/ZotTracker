@@ -1,7 +1,6 @@
 // Source: https://www.chartjs.org/docs/latest/samples/tooltip/html.html
 
 
-// <block:external:2>
 const getOrCreateTooltip = (chart) => {
   let tooltipEl = chart.canvas.parentNode.querySelector('div');
 
@@ -113,4 +112,3 @@ export const externalTooltipHandler = (context) => {
   tooltipEl.style.font = tooltip.options.bodyFont.string;
   tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
 };
-// </block:external>

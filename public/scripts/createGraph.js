@@ -1,4 +1,6 @@
 import { externalTooltipHandler } from "./tooltipHandler.js";
+import { handleGraphTableForm } from "./graphTableForm.js";
+import * as Helper from "./enrollmentHelper.js";
 
 
 $(document).ready(function () {
@@ -25,146 +27,94 @@ $(document).ready(function () {
         courseCode: courseCode
       }),
       success: function (res) {
-        if (res.status === "FOUND") {
-          const courseData = res.courseData;
-          const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`;
-          let numGraphs = 0;
-          $("#enrollment-data").html(`<h1 class="heading">Enrollment Data</h1>
-                      <h4 class="enrollment-heading">${title}</h4>`);
-
-          res.courseData.courses.forEach((course) => {
-            if ((res.courseType === "all" || res.courseType === course.type) && hasInstructor(course.instructor, res.instructor) &&
-              hasCourseCode(course.course_code, res.courseCode)) {
-              createEnrollmentSection(course, numGraphs);
-              createGraph(`enrollment-chart-${numGraphs}`, formatDates(course.dates), course.max, course.enrolled);
-              numGraphs++;
-            }
-          });
-
-          if (numGraphs === 0) {
-            createError("No graphs can be created because this instructor did not teach this specific course!");
-          }
-
-        } else if (res.status === "EMPTY INPUT") {
-          createError("You need to specify more information! To successfully submit a course, select a Department, " +
-            "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
-        } else {
-          createError("That specific course does not exist. Please try again!");
-        }
+        createPage(res);
       }
     });
   });
 });
 
 
-function getQuarter(quarter) {
-  const year = quarter.slice(0, 4);
+export function createPage(res) {
+  if (res.status === "FOUND") {
+    const courseData = res.courseData;
+    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
+    let numGraphs = 0;
+    $("#enrollment-data").html(
+      `<h1 class="heading">Enrollment Data</h1>
+      <h4 class="enrollment-heading">${title}</h4>
+      <form id="graph-table-form">
+        <div class="text-center">
+          <div class="btn-group graph-table-nav" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="btnradio1">Graphs</label>
 
-  switch (quarter.slice(5, 7)) {
-    case "92":
-      return `Fall ${year}`;
-    case "03":
-      return `Winter ${year}`;
-    case "14":
-      return `Spring ${year}`;
-    case "25":
-      return `SS1 ${year}`;
-    case "39":
-      return `10-wk Summer ${year}`;
-    case "51":
-      return `Summer COM ${year}`;
-    case "76":
-      return `SS2 ${year}`;
-    case "8F":
-      return `Law Fall ${year}`;
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btnradio2">Tables</label>
+          </div>
+        </div>
+      </form>`);
+
+    handleGraphTableForm(res);
+
+    res.courseData.courses.forEach((course) => {
+      if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
+        Helper.hasCourseCode(course.course_code, res.courseCode)) {
+        createEnrollmentSection(course, numGraphs);
+        createGraph(`enrollment-chart-${numGraphs}`, Helper.formatDates(course.dates), course.max, course.enrolled);
+        numGraphs++;
+      }
+    });
+
+    if (numGraphs === 0) {
+      Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
+    }
+
+  } else if (res.status === "EMPTY INPUT") {
+    Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
+      "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
+  } else {
+    Helper.createError("That specific course does not exist. Please try again!");
   }
 }
-
-
-function hasInstructor(instructors, instructor) {
-  return instructor === "" || instructors.some((person) => person === instructor);
-}
-
-
-function hasCourseCode(currentCourseCode, courseCode) {
-  return courseCode === "" || currentCourseCode === courseCode;
-}
-
-
-function formatArray(array) {
-  let arrayHTML = "";
-
-  array.forEach((item) => {
-    arrayHTML += `<p>${item}</p>`;
-  });
-
-  return arrayHTML;
-}
-
-
-function formatDates(dates) {
-  let newDates = [];
-
-  dates.forEach((date) => {
-    let year = date.slice(2, 4);
-    let month = date.slice(5, 7);
-    if (month.startsWith("0")) {
-      month = month.slice(1, 2);
-    }
-    let day = date.slice(8, 10);
-
-    newDates.push(`${month}/${day}/${year}`);
-  });
-
-  return newDates;
-}
-
-
-function createError(message) {
-  $("#enrollment-data").html(`<div class="container-fluid">
-                                  <div class="alert alert-danger alert-dismissible fade show error-message" role="alert">${message}</div>
-                                </div>`);
-}
-
 
 function createEnrollmentSection(course, courseIndex) {
   $("#enrollment-data").append(
     `<div class="container-fluid">
-           <div class="table-responsiveness enrollment-table">
-            <table class="table table-sm table-light table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Code</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Sec</th>
-                  <th scope="col">Instructor</th>
-                  <th scope="col">Time</th>
-                  <th scope="col">Place</th>
-                  <th scope="col">Graph</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>${course["course_code"]}</td>
-                  <td>${course.type}</td>
-                  <td>${course.section}</td>
-                  <td class="table-list">${formatArray(course.instructor)}</td>
-                  <td class="table-list">${formatArray(course.time)}</td>
-                  <td class="table-list">${formatArray(course.place)}</td>
-                  <td class="text-center">
-                    <button class="btn btn-primary show-graph-button" id="show-graph-button-${courseIndex}"
-                     type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-           </div>
-         </div>
-         <div class="collapse" id="graph-collapse-${courseIndex}">
-           <div class="graph-container">
-             <canvas id="enrollment-chart-${courseIndex}"></canvas>
-           </div>
-         </div>`);
+      <div class="table-responsiveness enrollment-table">
+      <table class="table table-sm table-light table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Type</th>
+            <th scope="col">Sec</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">Time</th>
+            <th scope="col">Place</th>
+            <th scope="col">Graph</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${course["course_code"]}</td>
+            <td>${course.type}</td>
+            <td>${course.section}</td>
+            <td class="table-list">${Helper.formatArray(course.instructor)}</td>
+            <td class="table-list">${Helper.formatArray(course.time)}</td>
+            <td class="table-list">${Helper.formatArray(course.place)}</td>
+            <td class="text-center">
+              <button class="btn btn-primary show-graph-button" id="show-graph-button-${courseIndex}"
+                type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="collapse" id="graph-collapse-${courseIndex}">
+      <div class="graph-container">
+        <canvas id="enrollment-chart-${courseIndex}"></canvas>
+      </div>
+    </div>`);
 
   $("#show-graph-button-" + courseIndex).on("click", function () {
     if ($(this).text().trim() === "Open") {
@@ -181,11 +131,9 @@ function createGraph(graphID, dates, max, enrolled) {
     handleOneElementArrays(dates, max, enrolled);
   }
 
-  // <block:setup:1>
   const data = {
     labels: dates,
-    datasets: [
-      {
+    datasets: [{
         label: "Enrolled",
         data: enrolled,
         fill: false,
@@ -201,9 +149,7 @@ function createGraph(graphID, dates, max, enrolled) {
       },
     ]
   };
-  // </block:setup>
 
-  // <block:config:0>
   const config = {
     type: 'line',
     data: data,
