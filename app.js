@@ -32,6 +32,21 @@ app.get("/", function (req, res) {
 });
 
 
+app.get("/about", function (req, res) {
+  res.sendFile(__dirname + "/views/about.html");
+});
+
+
+app.get("/announcements", function (req, res) {
+  res.sendFile(__dirname + "/views/announcements.html");
+});
+
+
+app.get("/feedback", function (req, res) {
+  res.sendFile(__dirname + "/views/feedback.html");
+});
+
+
 app.post("/", function (req, res) {
   if (req.body.status === "PREVIOUS") {
     res.send({

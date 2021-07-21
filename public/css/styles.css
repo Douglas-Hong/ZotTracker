@@ -18,8 +18,7 @@
   margin-top: 25px;
 }
 
-#dept option,
-#quarter option {
+#dept option, #quarter option {
   color: black;
 }
 
@@ -122,4 +121,13 @@
   font-size: 1.25rem;
   margin-top: 75px;
   text-align: center;
+}
+
+.text-section {
+  margin-bottom: 60px;
+  margin-top: 35px;
+}
+
+.link {
+  text-decoration: none;
 }

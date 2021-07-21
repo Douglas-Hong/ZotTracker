@@ -14,6 +14,7 @@ export function handleGraphTableForm(res) {
       success: function (res) {
         const courseData = res.courseData;
         const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
+        let numTables = 0;
 
         Helper.createEnrollmentTitle(title, false);
 
@@ -35,7 +36,8 @@ export function handleGraphTableForm(res) {
         res.courseData.courses.forEach((course) => {
           if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
             Helper.hasCourseCode(course.course_code, res.courseCode)) {
-            createEnrollmentSection(course);
+            createEnrollmentSection(course, numTables);
+            numTables++;
           }
         });
       }
@@ -45,21 +47,14 @@ export function handleGraphTableForm(res) {
 
 
 function createEnrollmentSection(course, courseIndex) {
+  Helper.createCourseSummary(course, courseIndex, false);
+
   $("#enrollment-data").append(
-    `${Helper.createCourseSummary(course, courseIndex, false)}
-    <div class="collapse" id="chart-collapse-${courseIndex}">
+    `<div class="collapse" id="chart-collapse-${courseIndex}">
       <div class="chart-container">
         ${createTable(course)}
       </div>
     </div>`);
-
-  $("#show-data-button-" + courseIndex).on("click", function () {
-    if ($(this).text().trim() === "Open") {
-      $(this).text("Close");
-    } else {
-      $(this).text("Open");
-    }
-  });
 }
 
 

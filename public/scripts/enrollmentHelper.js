@@ -73,11 +73,11 @@ export function createEnrollmentTitle(title, hasGraph) {
     <form id="graph-table-form">
       <div class="text-center">
         <div class="btn-group graph-table-nav" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" ${hasGraph ? "checked" : ""}>
-          <label class="btn btn-outline-primary" for="btnradio1">Graphs</label>
+          <input type="radio" class="btn-check" id="graph-radio" autocomplete="off" ${hasGraph ? "checked" : ""}>
+          <label class="btn btn-outline-primary" for="graph-radio">Graphs</label>
 
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" ${hasGraph ? "" : "checked"}>
-          <label class="btn btn-outline-primary" for="btnradio2">Tables</label>
+          <input type="radio" class="btn-check" id="table-radio" autocomplete="off" ${hasGraph ? "" : "checked"}>
+          <label class="btn btn-outline-primary" for="table-radio">Tables</label>
         </div>
       </div>
     </form>`);
@@ -85,35 +85,45 @@ export function createEnrollmentTitle(title, hasGraph) {
 
 
 export function createCourseSummary(course, courseIndex, isGraph) {
-  return `<div class="container-fluid">
-    <div class="table-responsiveness summary-table">
-      <table class="table table-sm table-light table-striped table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Type</th>
-            <th scope="col">Sec</th>
-            <th scope="col">Instructor</th>
-            <th scope="col">Time</th>
-            <th scope="col">Place</th>
-            <th scope="col">${isGraph ? "Graph" : "Table"}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>${course["course_code"]}</td>
-            <td>${course.type}</td>
-            <td>${course.section}</td>
-            <td class="table-list">${formatArray(course.instructor)}</td>
-            <td class="table-list">${formatArray(course.time)}</td>
-            <td class="table-list">${formatArray(course.place)}</td>
-            <td class="text-center">
-              <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
-                type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>`;
+  $("#enrollment-data").append(
+    `<div class="container-fluid">
+      <div class="table-responsiveness summary-table">
+        <table class="table table-sm table-light table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Type</th>
+              <th scope="col">Sec</th>
+              <th scope="col">Instructor</th>
+              <th scope="col">Time</th>
+              <th scope="col">Place</th>
+              <th scope="col">${isGraph ? "Graph" : "Table"}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${course["course_code"]}</td>
+              <td>${course.type}</td>
+              <td>${course.section}</td>
+              <td class="table-list">${formatArray(course.instructor)}</td>
+              <td class="table-list">${formatArray(course.time)}</td>
+              <td class="table-list">${formatArray(course.place)}</td>
+              <td class="text-center">
+                <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
+                  type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`);
+
+  $("#show-data-button-" + courseIndex).on("click", function () {
+    if ($(this).text().trim() === "Open") {
+      $(this).text("Close");
+    } else {
+      $(this).text("Open");
+    }
+  });
 }

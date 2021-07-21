@@ -64,23 +64,16 @@ export function createPage(res) {
 }
 
 function createEnrollmentSection(course, courseIndex) {
+  Helper.createCourseSummary(course, courseIndex, true);
+
   $("#enrollment-data").append(
-    `${Helper.createCourseSummary(course, courseIndex, true)}
-    <div class="collapse" id="chart-collapse-${courseIndex}">
+    `<div class="collapse" id="chart-collapse-${courseIndex}">
       <div class="chart-container">
         <div class="chart">
           <canvas id="enrollment-chart-${courseIndex}"></canvas>
         </div>
       </div>
     </div>`);
-
-  $("#show-data-button-" + courseIndex).on("click", function () {
-    if ($(this).text().trim() === "Open") {
-      $(this).text("Close");
-    } else {
-      $(this).text("Open");
-    }
-  });
 }
 
 
