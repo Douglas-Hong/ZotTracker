@@ -14,21 +14,8 @@ export function handleGraphTableForm(res) {
       success: function (res) {
         const courseData = res.courseData;
         const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
-        let numGraphs = 0;
-        $("#enrollment-data").html(
-          `<h1 class="heading">Enrollment Data</h1>
-          <h4 class="enrollment-heading">${title}</h4>
-          <form id="graph-table-form">
-            <div class="text-center">
-              <div class="btn-group graph-table-nav" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio1">Graphs</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="btnradio2">Tables</label>
-              </div>
-            </div>
-          </form>`);
+        Helper.createEnrollmentTitle(title, false);
 
         $("#graph-table-form").on("change", function () {
           $.ajax({
@@ -48,8 +35,7 @@ export function handleGraphTableForm(res) {
         res.courseData.courses.forEach((course) => {
           if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
             Helper.hasCourseCode(course.course_code, res.courseCode)) {
-            createEnrollmentSection(course, numGraphs);
-            numGraphs++;
+            createEnrollmentSection(course);
           }
         });
       }
@@ -60,44 +46,14 @@ export function handleGraphTableForm(res) {
 
 function createEnrollmentSection(course, courseIndex) {
   $("#enrollment-data").append(
-    `<div class="container-fluid">
-      <div class="table-responsiveness enrollment-table">
-        <table class="table table-sm table-light table-striped table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Code</th>
-              <th scope="col">Type</th>
-              <th scope="col">Sec</th>
-              <th scope="col">Instructor</th>
-              <th scope="col">Time</th>
-              <th scope="col">Place</th>
-              <th scope="col">Table</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>${course["course_code"]}</td>
-              <td>${course.type}</td>
-              <td>${course.section}</td>
-              <td class="table-list">${Helper.formatArray(course.instructor)}</td>
-              <td class="table-list">${Helper.formatArray(course.time)}</td>
-              <td class="table-list">${Helper.formatArray(course.place)}</td>
-              <td class="text-center">
-                <button class="btn btn-primary show-graph-button" id="show-graph-button-${courseIndex}"
-                  type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="collapse" id="graph-collapse-${courseIndex}">
-      <div class="graph-container">
+    `${Helper.createCourseSummary(course, courseIndex, false)}
+    <div class="collapse" id="chart-collapse-${courseIndex}">
+      <div class="chart-container">
         ${createTable(course)}
       </div>
     </div>`);
 
-  $("#show-graph-button-" + courseIndex).on("click", function () {
+  $("#show-data-button-" + courseIndex).on("click", function () {
     if ($(this).text().trim() === "Open") {
       $(this).text("Close");
     } else {
@@ -114,7 +70,10 @@ function createTable(course) {
         <th scope="col">Date</th>
         <th scope="col">Enrolled</th>
         <th scope="col">Max</th>
-        <th scope="col">Requested</th>
+        ${course.waitlist ? '<th scope="col">Waitlist</th>' : ''}
+        <th scope="col">Req</th>
+        ${course.nor ? '<th scope="col">Nor</th>' : ''}
+        ${course.status ? '<th scope="col">Status</th>' : ''}
       </tr>
     </thead>
     <tbody>
@@ -129,13 +88,30 @@ function createTableBody(course) {
   let formattedDates = Helper.formatDates(course.dates);
 
   for (let i = 0; i < formattedDates.length; i++) {
-    body += `<tr>
+    body += 
+    `<tr>
       <td>${formattedDates[i]}</td>
       <td>${course.enrolled[i]}</td>
       <td>${course.max[i]}</td>
+      ${course.waitlist ? `<td>${course.waitlist[i]}</td>` : ''}
       <td>${course.requested[i]}</td>
+      ${course.nor ? `<td>${course.nor[i]}</td>` : ''}
+      ${course.status ? `<td class="course-status" style="color: ${getStatusColor(course.status[i])}">${course.status[i]}</td>` : ''}
     </tr>`
   }
 
   return body;
+}
+
+
+function getStatusColor(status) {
+  if (status === "OPEN") {
+    return "green";
+  } else if (status === "Waitl") {
+    return "red";
+  } else if (status === "NewOnly") {
+    return "blue";
+  } else {
+    return "black";
+  }
 }

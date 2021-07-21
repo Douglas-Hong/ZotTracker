@@ -50,9 +50,16 @@
   text-align: center;
 }
 
-.enrollment-table {
-  margin-top: 25px;
+.summary-table, .enrollment-table{
   font-size: 0.8rem;
+}
+
+.summary-table {
+  margin-top: 30px;
+}
+
+.enrollment-table {
+  margin: 0;
 }
 
 .table-list p {
@@ -63,12 +70,20 @@
   margin-top: 15px;
 }
 
-.show-graph-button {
+.show-data-button {
   font-size: 0.8rem;
 }
 
-.graph-container {
+.chart-container {
   padding: 0 25%;
+  margin-bottom: 60px;
+}
+
+.chart {
+  border: solid;
+  border-color: silver;
+  border-radius: 15px;
+  border-width: 2px;
 }
 
 @media (min-width: 577px) and (max-width: 992px) {
@@ -76,12 +91,11 @@
     padding: 0 12%;
   }
 
-  .graph-container {
+  .chart-container {
     padding: 0 16%;
   }
 
-  .enrollment-table,
-  .show-graph-button {
+  .summary-table, .enrollment-table, .show-data-button {
     font-size: 0.65rem;
   }
 }
@@ -91,14 +105,17 @@
     padding: 0 8%;
   }
 
-  .graph-container {
+  .chart-container {
     padding: 0 6%;
   }
 
-  .enrollment-table,
-  .show-graph-button {
+  .summary-table, .enrollment-table, .show-data-button {
     font-size: 0.65rem;
   }
+}
+
+.course-status {
+  font-weight: bold;
 }
 
 .error-message {

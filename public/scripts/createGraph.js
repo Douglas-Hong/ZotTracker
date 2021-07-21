@@ -39,21 +39,8 @@ export function createPage(res) {
     const courseData = res.courseData;
     const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
     let numGraphs = 0;
-    $("#enrollment-data").html(
-      `<h1 class="heading">Enrollment Data</h1>
-      <h4 class="enrollment-heading">${title}</h4>
-      <form id="graph-table-form">
-        <div class="text-center">
-          <div class="btn-group graph-table-nav" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-            <label class="btn btn-outline-primary" for="btnradio1">Graphs</label>
-
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btnradio2">Tables</label>
-          </div>
-        </div>
-      </form>`);
-
+    
+    Helper.createEnrollmentTitle(title, true);
     handleGraphTableForm(res);
 
     res.courseData.courses.forEach((course) => {
@@ -68,7 +55,6 @@ export function createPage(res) {
     if (numGraphs === 0) {
       Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
     }
-
   } else if (res.status === "EMPTY INPUT") {
     Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
       "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
@@ -79,44 +65,16 @@ export function createPage(res) {
 
 function createEnrollmentSection(course, courseIndex) {
   $("#enrollment-data").append(
-    `<div class="container-fluid">
-      <div class="table-responsiveness enrollment-table">
-      <table class="table table-sm table-light table-striped table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Type</th>
-            <th scope="col">Sec</th>
-            <th scope="col">Instructor</th>
-            <th scope="col">Time</th>
-            <th scope="col">Place</th>
-            <th scope="col">Graph</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>${course["course_code"]}</td>
-            <td>${course.type}</td>
-            <td>${course.section}</td>
-            <td class="table-list">${Helper.formatArray(course.instructor)}</td>
-            <td class="table-list">${Helper.formatArray(course.time)}</td>
-            <td class="table-list">${Helper.formatArray(course.place)}</td>
-            <td class="text-center">
-              <button class="btn btn-primary show-graph-button" id="show-graph-button-${courseIndex}"
-                type="button" data-bs-toggle="collapse" data-bs-target="#graph-collapse-${courseIndex}">Open</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-    <div class="collapse" id="graph-collapse-${courseIndex}">
-      <div class="graph-container">
-        <canvas id="enrollment-chart-${courseIndex}"></canvas>
+    `${Helper.createCourseSummary(course, courseIndex, true)}
+    <div class="collapse" id="chart-collapse-${courseIndex}">
+      <div class="chart-container">
+        <div class="chart">
+          <canvas id="enrollment-chart-${courseIndex}"></canvas>
+        </div>
       </div>
     </div>`);
 
-  $("#show-graph-button-" + courseIndex).on("click", function () {
+  $("#show-data-button-" + courseIndex).on("click", function () {
     if ($(this).text().trim() === "Open") {
       $(this).text("Close");
     } else {
@@ -156,6 +114,9 @@ function createGraph(graphID, dates, max, enrolled) {
     options: {
       responsive: true,
       maintainAspectRatio: true,
+      layout: {
+        padding: 10
+      },
       interaction: {
         mode: 'index',
         intersect: false,
