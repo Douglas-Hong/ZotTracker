@@ -47,7 +47,7 @@ export function createPage(res) {
       if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
         Helper.hasCourseCode(course.course_code, res.courseCode)) {
         createEnrollmentSection(course, numGraphs);
-        createGraph(`enrollment-chart-${numGraphs}`, Helper.formatDates(course.dates), course.max, course.enrolled);
+        createGraph(`enrollment-chart-${numGraphs}`, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
         numGraphs++;
       }
     });
@@ -77,12 +77,12 @@ function createEnrollmentSection(course, courseIndex) {
 }
 
 
-function createGraph(graphID, dates, max, enrolled) {
+function createGraph(graphID, dates, max, enrolled, waitlist) {
   if (dates.length === 1) {
     handleOneElementArrays(dates, max, enrolled);
   }
 
-  const data = {
+  let data = {
     labels: dates,
     datasets: [{
         label: "Enrolled",
@@ -100,6 +100,16 @@ function createGraph(graphID, dates, max, enrolled) {
       },
     ]
   };
+
+  if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
+    data.datasets.push({
+      label: "Waitlist",
+      data: waitlist.map((item) => (!isNaN(item) && !isNaN(parseFloat(item))) ? Number(item) : null),
+      fill: false,
+      borderColor: "gray",
+      backgroundColor: "gray",
+    });
+  }
 
   const config = {
     type: 'line',
