@@ -134,6 +134,7 @@ function createSearchHistory() {
         data: JSON.stringify(JSON.parse(Cookies.get("searchHistory"))[history.length - index - 1]),
         success: function (res) {
           createPage(res);
+          $("#close-history-button").trigger("click");
         }
       });
     });
