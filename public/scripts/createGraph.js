@@ -3,8 +3,14 @@ import { handleGraphTableForm } from "./graphTableForm.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
+const cookieSettings = {
+  expires: 7,
+  secure: true
+};
+
+
 if (!Cookies.get("searchHistory") || JSON.parse(Cookies.get("searchHistory")).length === 0) {
-  Cookies.set("searchHistory", JSON.stringify([]));
+  Cookies.set("searchHistory", JSON.stringify([]), cookieSettings);
   $(".offcanvas-body").html("You haven't searched anything yet!");
 } else {
   createSearchHistory();
@@ -38,7 +44,7 @@ $(document).ready(function () {
         if (res.status === "FOUND") {
           let oldHistory = JSON.parse(Cookies.get("searchHistory"));
           oldHistory.push(res.originalQuery);
-          Cookies.set("searchHistory", JSON.stringify(oldHistory));
+          Cookies.set("searchHistory", JSON.stringify(oldHistory), cookieSettings);
         }
         createPage(res);
       }
