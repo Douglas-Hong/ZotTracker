@@ -31,7 +31,11 @@
 }
 
 .submit-button {
-  margin-right: 25px;
+  margin-right: 20px;
+}
+
+.history-button {
+  margin-left: 20px;
 }
 
 .question-icon {
@@ -111,6 +115,18 @@
   .summary-table, .enrollment-table, .show-data-button {
     font-size: 0.65rem;
   }
+
+  .submit-button, .reset-button, .history-button {
+    font-size: 0.75rem;
+  }
+
+  .submit-button {
+    margin-right: 10px;
+  }
+
+  .history-button {
+    margin-left: 10px;
+  }
 }
 
 .course-status {
@@ -130,4 +146,17 @@
 
 .link {
   text-decoration: none;
+}
+
+.history-item {
+  padding: 10px 0 3px 10px;
+}
+
+.history-item:hover {
+  background-color: #DCDCDC;
+  transition: background-color 0.5s ease;
+}
+
+.history-subheading {
+  color: gray;
 }

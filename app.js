@@ -51,6 +51,7 @@ app.post("/", function (req, res) {
   if (req.body.status === "PREVIOUS") {
     res.send({
       status: "FOUND",
+      originalQuery: req.body,
       courseData: req.body.allData.courseData,
       courseType: req.body.allData.courseType,
       instructor: req.body.allData.instructor,
@@ -86,6 +87,7 @@ app.post("/", function (req, res) {
       } else {
         res.send({
           status: "FOUND",
+          originalQuery: req.body,
           courseData: course,
           courseType: req.body.courseType,
           instructor: req.body.instructor,

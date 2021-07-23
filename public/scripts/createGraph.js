@@ -3,6 +3,14 @@ import { handleGraphTableForm } from "./graphTableForm.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
+if (!Cookies.get("searchHistory") || JSON.parse(Cookies.get("searchHistory")).length === 0) {
+  Cookies.set("searchHistory", JSON.stringify([]));
+  $(".offcanvas-body").html("You haven't searched anything yet!");
+} else {
+  createSearchHistory();
+}
+
+
 $(document).ready(function () {
   $("#course-form").on("submit", function (event) {
     event.preventDefault();
@@ -27,6 +35,11 @@ $(document).ready(function () {
         courseCode: courseCode
       }),
       success: function (res) {
+        if (res.status === "FOUND") {
+          let oldHistory = JSON.parse(Cookies.get("searchHistory"));
+          oldHistory.push(res.originalQuery);
+          Cookies.set("searchHistory", JSON.stringify(oldHistory));
+        }
         createPage(res);
       }
     });
@@ -39,7 +52,8 @@ export function createPage(res) {
     const courseData = res.courseData;
     const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
     let numGraphs = 0;
-    
+
+    createSearchHistory();
     Helper.createEnrollmentTitle(title, true);
     handleGraphTableForm(res);
 
@@ -74,6 +88,50 @@ function createEnrollmentSection(course, courseIndex) {
         </div>
       </div>
     </div>`);
+}
+
+
+function createSearchHistory() {
+  $(".offcanvas-body").html("<p>Click a course below to see its enrollment data again!</p>");
+
+  const history = JSON.parse(Cookies.get("searchHistory"));
+  history.reverse().forEach((item, index) => {
+    if (item.courseCode !== "") {
+      $(".offcanvas-body").append(
+        `<div class="history-item" id="history-item-${index}">
+          <h5>Course Code: ${item.courseCode} (${Helper.getQuarter(item.quarter)})</h5>
+        </div>`
+      );
+    } else {
+      $(".offcanvas-body").append(
+        `<div class="history-item" id="history-item-${index}">
+          <h5>${item.dept} ${item.number} (${Helper.getQuarter(item.quarter)})</h5>
+        </div>`
+      );
+    }
+
+    if (item.instructor !== "") {
+      $("#history-item-" + index).append(
+        `<p class="history-subheading">${item.instructor}, ${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`
+      );
+    } else {
+      $("#history-item-" + index).append(
+        `<p class="history-subheading">${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`
+      );
+    }
+
+    $("#history-item-" + index).on("click", function() {
+      $.ajax({
+        url: "/",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(JSON.parse(Cookies.get("searchHistory"))[history.length - index - 1]),
+        success: function (res) {
+          createPage(res);
+        }
+      });
+    });
+  });
 }
 
 
