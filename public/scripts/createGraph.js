@@ -3,14 +3,8 @@ import { handleGraphTableForm } from "./graphTableForm.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
-const cookieSettings = {
-  expires: 7,
-  secure: true
-};
-
-
-if (!Cookies.get("searchHistory") || JSON.parse(Cookies.get("searchHistory")).length === 0) {
-  Cookies.set("searchHistory", JSON.stringify([]), cookieSettings);
+if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("searchHistory")).length === 0) {
+  localStorage.setItem("searchHistory", JSON.stringify([]));
   $(".offcanvas-body").html("You haven't searched anything yet!");
 } else {
   createSearchHistory();
@@ -42,9 +36,9 @@ $(document).ready(function () {
       }),
       success: function (res) {
         if (res.status === "FOUND") {
-          let oldHistory = JSON.parse(Cookies.get("searchHistory"));
+          let oldHistory = JSON.parse(localStorage.getItem("searchHistory"));
           oldHistory.push(res.originalQuery);
-          Cookies.set("searchHistory", JSON.stringify(oldHistory), cookieSettings);
+          localStorage.setItem("searchHistory", JSON.stringify(oldHistory));
         }
         createPage(res);
       }
@@ -83,6 +77,7 @@ export function createPage(res) {
   }
 }
 
+
 function createEnrollmentSection(course, courseIndex) {
   Helper.createCourseSummary(course, courseIndex, true);
 
@@ -100,7 +95,7 @@ function createEnrollmentSection(course, courseIndex) {
 function createSearchHistory() {
   $(".offcanvas-body").html("<p>Click a course below to see its enrollment data again!</p>");
 
-  const history = JSON.parse(Cookies.get("searchHistory"));
+  const history = JSON.parse(localStorage.getItem("searchHistory"));
   history.reverse().forEach((item, index) => {
     if (item.courseCode !== "") {
       $(".offcanvas-body").append(
@@ -131,7 +126,7 @@ function createSearchHistory() {
         url: "/",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify(JSON.parse(Cookies.get("searchHistory"))[history.length - index - 1]),
+        data: JSON.stringify(JSON.parse(localStorage.getItem("searchHistory"))[history.length - index - 1]),
         success: function (res) {
           createPage(res);
           $("#close-history-button").trigger("click");

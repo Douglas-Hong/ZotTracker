@@ -1,3 +1,7 @@
+// This scripts contains the functions that are used for each course's graphs
+// and tables sections
+
+
 export function getQuarter(quarter) {
   const year = quarter.slice(0, 4);
 

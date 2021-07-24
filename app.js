@@ -48,6 +48,7 @@ app.get("/feedback", function (req, res) {
 
 
 app.post("/", function (req, res) {
+  // A "PREVIOUS" status means a user wants to go back to the previous graphs tab
   if (req.body.status === "PREVIOUS") {
     res.send({
       status: "FOUND",
@@ -68,6 +69,8 @@ app.post("/", function (req, res) {
       number: req.body.number
     };
 
+    // If the user specified a course code and quarter, then we 
+    // should use those inputs instead
     if (req.body.courseCode !== "" && req.body.quarter !== "") {
       query = {
         quarter: req.body.quarter,

@@ -1,3 +1,7 @@
+// This script controls the functionality of the selection section, particularly
+// the department select menu, the quarter select menu, and the instructor input/datalist
+
+
 $("#dept, #quarter").change(function () {
   if ($(this).val() === "") {
     $(this).addClass("select-placeholder");
