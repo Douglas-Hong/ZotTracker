@@ -68,6 +68,10 @@ export function createPage(res) {
 
     if (numGraphs === 0) {
       Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
+    } else {
+      $("html, body").animate({
+        scrollTop: $("#enrollment-data").offset().top
+      }, 250);
     }
   } else if (res.status === "EMPTY INPUT") {
     Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
@@ -93,7 +97,16 @@ function createEnrollmentSection(course, courseIndex) {
 
 
 function createSearchHistory() {
-  $(".offcanvas-body").html("<p>Click a course below to see its enrollment data again!</p>");
+  $(".offcanvas-body").html(
+    `<div class="text-center">
+      <button type="button" class="btn btn-danger clear-history-button">Clear History</button>
+    </div> 
+    <p>Click a course below to see its enrollment data again!</p>`);
+
+  $(".clear-history-button").on("click", function() {
+    localStorage.setItem("searchHistory", JSON.stringify([]));
+    $(".offcanvas-body").html("You haven't searched anything yet!");
+  });
 
   const history = JSON.parse(localStorage.getItem("searchHistory"));
   history.reverse().forEach((item, index) => {
@@ -112,13 +125,9 @@ function createSearchHistory() {
     }
 
     if (item.instructor !== "") {
-      $("#history-item-" + index).append(
-        `<p class="history-subheading">${item.instructor}, ${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`
-      );
+      $("#history-item-" + index).append(`<p class="history-subheading">${item.instructor}, ${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
     } else {
-      $("#history-item-" + index).append(
-        `<p class="history-subheading">${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`
-      );
+      $("#history-item-" + index).append(`<p class="history-subheading">${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
     }
 
     $("#history-item-" + index).on("click", function() {

@@ -148,6 +148,10 @@
   text-decoration: none;
 }
 
+.clear-history-button {
+  margin-bottom: 25px;
+}
+
 .history-item {
   padding: 10px 0 3px 10px;
 }
