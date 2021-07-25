@@ -8,9 +8,7 @@ export function handleGraphTableForm(res) {
       url: "/graph-table-form",
       method: "POST",
       contentType: "application/json",
-      data: JSON.stringify({
-        allData: res
-      }),
+      data: JSON.stringify(res),
       success: function (res) {
         const courseData = res.courseData;
         const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
@@ -18,6 +16,7 @@ export function handleGraphTableForm(res) {
 
         Helper.createEnrollmentTitle(title, false);
 
+        // This post request deals with changing back to the graphs tab
         $("#graph-table-form").on("change", function () {
           $.ajax({
             url: "/",
@@ -36,7 +35,7 @@ export function handleGraphTableForm(res) {
         res.courseData.courses.forEach((course) => {
           if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
             Helper.hasCourseCode(course.course_code, res.courseCode)) {
-            createEnrollmentSection(course, numTables);
+            createCourse(course, numTables);
             numTables++;
           }
         });
@@ -46,7 +45,8 @@ export function handleGraphTableForm(res) {
 }
 
 
-function createEnrollmentSection(course, courseIndex) {
+// This function inserts the given course into the "Enrollment Data" section
+function createCourse(course, courseIndex) {
   Helper.createCourseSummary(course, courseIndex, false);
 
   $("#enrollment-data").append(
@@ -58,6 +58,8 @@ function createEnrollmentSection(course, courseIndex) {
 }
 
 
+// This function  creates the table associated with the given course section; it will
+// include all the recorded dates, enrolled/max/req/waitlist/nor statistics, and statuses
 function createTable(course) {
   return `<table class="table table-sm table-light table-striped table-bordered enrollment-table">
     <thead>
@@ -78,6 +80,8 @@ function createTable(course) {
 }
 
 
+// This function generates the table body for a certain course section; each row contains
+// all the enrollment data for one day
 function createTableBody(course) {
   let body = "";
   let formattedDates = Helper.formatDates(course.dates);
@@ -99,6 +103,7 @@ function createTableBody(course) {
 }
 
 
+// This function returns the color of the given status (according to WebSoc)
 function getStatusColor(status) {
   if (status === "OPEN") {
     return "green";

@@ -48,16 +48,9 @@ app.get("/feedback", function (req, res) {
 
 
 app.post("/", function (req, res) {
-  // A "PREVIOUS" status means a user wants to go back to the previous graphs tab
+  // A "PREVIOUS" status means a user wants to go back to the graphs tab
   if (req.body.status === "PREVIOUS") {
-    res.send({
-      status: "FOUND",
-      originalQuery: req.body,
-      courseData: req.body.allData.courseData,
-      courseType: req.body.allData.courseType,
-      instructor: req.body.allData.instructor,
-      courseCode: req.body.allData.courseCode
-    });
+    res.send(req.body.allData);
   } else if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "")) {
     res.send({
       status: "EMPTY INPUT"
@@ -103,13 +96,7 @@ app.post("/", function (req, res) {
 
 
 app.post("/graph-table-form", function(req, res) {
-  res.send({
-    status: req.body.allData.status,
-    courseData: req.body.allData.courseData,
-    courseType: req.body.allData.courseType,
-    instructor: req.body.allData.instructor,
-    courseCode: req.body.allData.courseCode
-  });
+  res.send(req.body);
 });
 
 

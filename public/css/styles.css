@@ -38,6 +38,23 @@
   margin-left: 20px;
 }
 
+.clear-history-button {
+  margin-bottom: 25px;
+}
+
+.history-item {
+  padding: 10px 0 3px 10px;
+}
+
+.history-item:hover {
+  background-color: #DCDCDC;
+  transition: background-color 0.5s ease;
+}
+
+.history-subheading {
+  color: gray;
+}
+
 .question-icon {
   margin-left: 20px;
   position: relative;
@@ -53,24 +70,22 @@
   text-align: center;
 }
 
-.summary-table, .enrollment-table{
-  font-size: 0.8rem;
+.graph-table-nav {
+  margin-top: 15px;
 }
 
 .summary-table {
+  font-size: 0.8rem;
   margin-top: 30px;
 }
 
 .enrollment-table {
+  font-size: 0.8rem;
   margin: 0;
 }
 
 .table-list p {
   margin: 0;
-}
-
-.graph-table-nav {
-  margin-top: 15px;
 }
 
 .show-data-button {
@@ -146,21 +161,4 @@
 
 .link {
   text-decoration: none;
-}
-
-.clear-history-button {
-  margin-bottom: 25px;
-}
-
-.history-item {
-  padding: 10px 0 3px 10px;
-}
-
-.history-item:hover {
-  background-color: #DCDCDC;
-  transition: background-color 0.5s ease;
-}
-
-.history-subheading {
-  color: gray;
 }

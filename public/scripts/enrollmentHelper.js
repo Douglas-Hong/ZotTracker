@@ -2,6 +2,7 @@
 // and tables sections
 
 
+// This functions converts the given WebSoc quarter value into its proper name
 export function getQuarter(quarter) {
   const year = quarter.slice(0, 4);
 
@@ -26,16 +27,22 @@ export function getQuarter(quarter) {
 }
 
 
+// This function determines if a certain course section has the given instructor;
+// if the instructor is empty, true will still be returned
 export function hasInstructor(instructors, instructor) {
   return instructor === "" || instructors.some((person) => person === instructor);
 }
 
 
+// This function determines if a certain course section has the given course code;
+// if the course code is empty, true will still be returned
 export function hasCourseCode(currentCourseCode, courseCode) {
   return courseCode === "" || currentCourseCode === courseCode;
 }
 
 
+// This function returns a string where each element in the given array is its own
+// line; this is used for formatting multiple instructors/times/finals in a table cell
 export function formatArray(array) {
   let arrayHTML = "";
 
@@ -47,6 +54,7 @@ export function formatArray(array) {
 }
 
 
+// This function uses the given string to create an error message
 export function createError(message) {
   $("#enrollment-data").html(
     `<div class="container-fluid">
@@ -55,6 +63,8 @@ export function createError(message) {
 }
 
 
+// This function translates each date in the given array of strings
+// to a more readable form (month/day/year)
 export function formatDates(dates) {
   return dates.map((date) => {
     let year = date.slice(2, 4);
@@ -70,16 +80,19 @@ export function formatDates(dates) {
 }
 
 
+// This function creates the title of the "Enrollment Data" section; it inserts 
+// the "Enrollment Data" heading, title of the course, and the "Graphs" and "Tables" buttons
 export function createEnrollmentTitle(title, hasGraph) {
   $("#enrollment-data").html(
-    `<h1 class="heading">Enrollment Data</h1>
-    <h4 class="enrollment-heading">${title}</h4>
+    `<div class="container-fluid">
+      <h1 class="heading">Enrollment Data</h1>
+      <h4 class="enrollment-heading">${title}</h4>
+    </div>
     <form id="graph-table-form">
       <div class="text-center">
-        <div class="btn-group graph-table-nav" role="group" aria-label="Basic radio toggle button group">
+        <div class="btn-group graph-table-nav" role="group">
           <input type="radio" class="btn-check" id="graph-radio" autocomplete="off" ${hasGraph ? "checked" : ""}>
           <label class="btn btn-outline-primary" for="graph-radio">Graphs</label>
-
           <input type="radio" class="btn-check" id="table-radio" autocomplete="off" ${hasGraph ? "" : "checked"}>
           <label class="btn btn-outline-primary" for="table-radio">Tables</label>
         </div>
@@ -88,6 +101,9 @@ export function createEnrollmentTitle(title, hasGraph) {
 }
 
 
+// This function adds the course summary to the "Enrollment Data" section; it inserts
+// a table with the course code, course type, course section, course instructor(s), course time
+// course location, and a button that allows the user to switch between graphs and tables
 export function createCourseSummary(course, courseIndex, isGraph) {
   $("#enrollment-data").append(
     `<div class="container-fluid">

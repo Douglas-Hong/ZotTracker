@@ -2,6 +2,8 @@
 // the department select menu, the quarter select menu, and the instructor input/datalist
 
 
+// If the value of the select menu is a placeholder ("Choose a Department..." or
+// "Choose a Quarter..."), then the color of the text should be gray
 $("#dept, #quarter").change(function () {
   if ($(this).val() === "") {
     $(this).addClass("select-placeholder");
@@ -28,6 +30,8 @@ quarters.forEach((quar) => {
 });
 
 
+// WebSoc uses special values for each quarter, so this function converts
+// the given quarter's name into a value that can be used to query WebSoc
 function getQuarterValue(quarter) {
   const year = quarter.slice(0, 4);
 
@@ -51,6 +55,7 @@ function getQuarterValue(quarter) {
 }
 
 
+// This function determines the color of the given quarter in the select menu
 function getQuarterColor(quarter) {
   if ((quarter.indexOf("Fall") !== -1 && quarter.indexOf("Law") === -1) || quarter.indexOf("Winter") !== -1
     || quarter.indexOf("Spring") !== -1) {
@@ -71,6 +76,7 @@ instructors.forEach((instructor) => {
 });
 
 
+// If the instructor input box is empty, do not give the user any suggestions
 $("#instructor").on("input", function () {
   if ($("#instructor").val().trim() !== "") {
     $("#instructor").attr("list", "instructor-list");
@@ -80,6 +86,8 @@ $("#instructor").on("input", function () {
 });
 
 
+// If the reset button is clicked, we have to make sure that all
+// select menus are gray and the instructor input does not show any suggestions
 $(".reset-button").click(function () {
   $("#dept").addClass("select-placeholder");
   $("#quarter").addClass("select-placeholder");

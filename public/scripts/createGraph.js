@@ -1,8 +1,11 @@
 import { externalTooltipHandler } from "./tooltipHandler.js";
 import { handleGraphTableForm } from "./graphTableForm.js";
+import { createSearchHistory } from "./searchHistory.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
+// If "searchHistory" is not found in local storage or "searchHistory" is associated 
+// with an empty array, then inform the user that their search history is empty
 if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("searchHistory")).length === 0) {
   localStorage.setItem("searchHistory", JSON.stringify([]));
   $(".offcanvas-body").html("You haven't searched anything yet!");
@@ -17,6 +20,7 @@ $(document).ready(function () {
 
     const dept = $("#dept").val();
     const quarter = $("#quarter").val();
+    // This makes the course number case-insensitive and whitespace-insensitive
     const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
     const courseType = $("#course-type").val();
     const instructor = $("#instructor").val();
@@ -35,10 +39,12 @@ $(document).ready(function () {
         courseCode: courseCode
       }),
       success: function (res) {
+        // If we can find one course, update the search history with the query
+        // the user used to get that course
         if (res.status === "FOUND") {
-          let oldHistory = JSON.parse(localStorage.getItem("searchHistory"));
-          oldHistory.push(res.originalQuery);
-          localStorage.setItem("searchHistory", JSON.stringify(oldHistory));
+          let history = JSON.parse(localStorage.getItem("searchHistory"));
+          history.push(res.originalQuery);
+          localStorage.setItem("searchHistory", JSON.stringify(history));
         }
         createPage(res);
       }
@@ -47,6 +53,8 @@ $(document).ready(function () {
 });
 
 
+// This function creates the majority of the webpage; it displays the entire
+// enrollment section
 export function createPage(res) {
   if (res.status === "FOUND") {
     const courseData = res.courseData;
@@ -60,12 +68,14 @@ export function createPage(res) {
     res.courseData.courses.forEach((course) => {
       if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
         Helper.hasCourseCode(course.course_code, res.courseCode)) {
-        createEnrollmentSection(course, numGraphs);
+        createCourse(course, numGraphs);
+        // The number of graphs will be used to keep track of the index of each graph
         createGraph(`enrollment-chart-${numGraphs}`, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
         numGraphs++;
       }
     });
 
+    // If no graphs can be generated, display an error; otherwise, scroll to the "Enrollment Data" section
     if (numGraphs === 0) {
       Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
     } else {
@@ -82,7 +92,9 @@ export function createPage(res) {
 }
 
 
-function createEnrollmentSection(course, courseIndex) {
+// This function inserts the course summary and graph for a particular
+// course section (e.g., one of a course's lectures, discussions, labs, etc.)
+function createCourse(course, courseIndex) {
   Helper.createCourseSummary(course, courseIndex, true);
 
   $("#enrollment-data").append(
@@ -96,57 +108,10 @@ function createEnrollmentSection(course, courseIndex) {
 }
 
 
-function createSearchHistory() {
-  $(".offcanvas-body").html(
-    `<div class="text-center">
-      <button type="button" class="btn btn-danger clear-history-button">Clear History</button>
-    </div> 
-    <p>Click a course below to see its enrollment data again!</p>`);
-
-  $(".clear-history-button").on("click", function() {
-    localStorage.setItem("searchHistory", JSON.stringify([]));
-    $(".offcanvas-body").html("You haven't searched anything yet!");
-  });
-
-  const history = JSON.parse(localStorage.getItem("searchHistory"));
-  history.reverse().forEach((item, index) => {
-    if (item.courseCode !== "") {
-      $(".offcanvas-body").append(
-        `<div class="history-item" id="history-item-${index}">
-          <h5>Course Code: ${item.courseCode} (${Helper.getQuarter(item.quarter)})</h5>
-        </div>`
-      );
-    } else {
-      $(".offcanvas-body").append(
-        `<div class="history-item" id="history-item-${index}">
-          <h5>${item.dept} ${item.number} (${Helper.getQuarter(item.quarter)})</h5>
-        </div>`
-      );
-    }
-
-    if (item.instructor !== "") {
-      $("#history-item-" + index).append(`<p class="history-subheading">${item.instructor}, ${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
-    } else {
-      $("#history-item-" + index).append(`<p class="history-subheading">${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
-    }
-
-    $("#history-item-" + index).on("click", function() {
-      $.ajax({
-        url: "/",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(JSON.parse(localStorage.getItem("searchHistory"))[history.length - index - 1]),
-        success: function (res) {
-          createPage(res);
-          $("#close-history-button").trigger("click");
-        }
-      });
-    });
-  });
-}
-
-
+// This function creates a course section's graph by configuring the Chart.js graph
 function createGraph(graphID, dates, max, enrolled, waitlist) {
+  // To make a line, we need at least two data points; thus, if there is only one 
+  // data, we have to duplicate data points
   if (dates.length === 1) {
     handleOneElementArrays(dates, max, enrolled);
   }
@@ -170,6 +135,8 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
     ]
   };
 
+  // If the waitlist array has at least one number, create a line on the graph that 
+  // is dedicated to the waitlist
   if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
     data.datasets.push({
       label: "Waitlist",
@@ -237,6 +204,8 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
     window[graphID].options.aspectRatio = 1;
   }
 
+  // If the screen is small, use an aspect ratio where the height is the 
+  // same as the width; otherwise, make the graph wider
   $(window).resize(function () {
     if ($(window).width() < "576") {
       window[graphID].options.aspectRatio = 1;
@@ -247,6 +216,8 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
 }
 
 
+// This function duplicates the first element of the array and appends
+// it to the end
 function handleOneElementArrays(dates, max, enrolled) {
   dates.push(dates[0]);
   max.push(max[0]);
