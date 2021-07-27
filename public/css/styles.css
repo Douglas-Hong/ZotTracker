@@ -18,7 +18,14 @@
   margin-top: 25px;
 }
 
-#dept option, #quarter option {
+.bootstrap-select>.dropdown-toggle.bs-placeholder, 
+.bootstrap-select>.dropdown-toggle.bs-placeholder:active, 
+.bootstrap-select>.dropdown-toggle.bs-placeholder:focus, 
+.bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+  color: gray;
+}
+
+#quarter option {
   color: black;
 }
 

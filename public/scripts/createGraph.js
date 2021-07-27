@@ -39,6 +39,13 @@ $(document).ready(function () {
         courseCode: courseCode
       }),
       success: function (res) {
+        // If we can find one course, update the search history with the query
+        // the user used to get that course
+        if (res.status === "FOUND") {
+          let history = JSON.parse(localStorage.getItem("searchHistory"));
+          history.push(res.originalQuery);
+          localStorage.setItem("searchHistory", JSON.stringify(history));
+        }
         createPage(res);
       }
     });
@@ -52,7 +59,6 @@ export function createPage(res) {
   if (res.status === "FOUND") {
     let numGraphs = 0;
 
-    createSearchHistory();
     Helper.createEnrollmentTitle(res);
     $("#graph-radio").attr("checked", "checked");
     handleTableTab(res);
@@ -70,16 +76,18 @@ export function createPage(res) {
 
     // If no graphs can be generated, display an error; otherwise, scroll to the "Enrollment Data" section
     if (numGraphs === 0) {
-      Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
-    } else {
       let history = JSON.parse(localStorage.getItem("searchHistory"));
-      history.push(res.originalQuery);
+      history.pop();
       localStorage.setItem("searchHistory", JSON.stringify(history));
 
+      Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
+    } else {
       $("html, body").animate({
         scrollTop: $("#enrollment-data").offset().top
       }, 250);
     }
+
+    createSearchHistory();
   } else if (res.status === "EMPTY INPUT") {
     Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
       "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");

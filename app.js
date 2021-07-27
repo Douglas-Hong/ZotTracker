@@ -109,10 +109,7 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 
-
 /* 
 TODO:
-- Add course subtitle when course code is entered
-- Sort quarters based on how early they are
-- Find better input + select menu combos
+- Fix search history
 */
