@@ -78,11 +78,8 @@ app.post("/", function (req, res) {
           status: "NOT FOUND"
         });
       } else {
-        const quarterQuery = {
-          dept: req.body.dept,
-          number: req.body.number,
-          title: course.title
-        };
+        const quarterQuery = query;
+        delete quarterQuery.quarter;
 
         Course.find(quarterQuery, function (err, courses) {
           if (err) {
@@ -107,11 +104,15 @@ app.post("/", function (req, res) {
 });
 
 
-app.post("/graph-table-form", function (req, res) {
-  res.send(req.body);
-});
-
-
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port 3000.");
 });
+
+
+
+/* 
+TODO:
+- Add course subtitle when course code is entered
+- Sort quarters based on how early they are
+- Find better input + select menu combos
+*/

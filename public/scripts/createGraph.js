@@ -39,13 +39,6 @@ $(document).ready(function () {
         courseCode: courseCode
       }),
       success: function (res) {
-        // If we can find one course, update the search history with the query
-        // the user used to get that course
-        if (res.status === "FOUND") {
-          let history = JSON.parse(localStorage.getItem("searchHistory"));
-          history.push(res.originalQuery);
-          localStorage.setItem("searchHistory", JSON.stringify(history));
-        }
         createPage(res);
       }
     });
@@ -57,12 +50,10 @@ $(document).ready(function () {
 // enrollment section
 export function createPage(res) {
   if (res.status === "FOUND") {
-    const courseData = res.courseData;
-    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
     let numGraphs = 0;
 
     createSearchHistory();
-    Helper.createEnrollmentTitle(title);
+    Helper.createEnrollmentTitle(res);
     $("#graph-radio").attr("checked", "checked");
     handleTableTab(res);
     handleQuarterTab(res);
@@ -81,6 +72,10 @@ export function createPage(res) {
     if (numGraphs === 0) {
       Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
     } else {
+      let history = JSON.parse(localStorage.getItem("searchHistory"));
+      history.push(res.originalQuery);
+      localStorage.setItem("searchHistory", JSON.stringify(history));
+
       $("html, body").animate({
         scrollTop: $("#enrollment-data").offset().top
       }, 250);

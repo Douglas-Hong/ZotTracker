@@ -85,11 +85,16 @@ export function formatDates(dates) {
 
 // This function creates the title of the "Enrollment Data" section; it inserts 
 // the "Enrollment Data" heading, title of the course, and the "Graphs" and "Tables" buttons
-export function createEnrollmentTitle(title) {
+export function createEnrollmentTitle(res) {
+  const courseData = res.courseData;
+  const title = res.courseCode === "" ? `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`
+    : `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
+  const subtitle = res.courseCode === "" ? "" : `<p class="enrollment-subheading">${courseData.dept} ${courseData.number} - ${courseData.title}</p>`;
   $("#enrollment-data").html(
     `<div class="container-fluid">
       <h1 class="heading">Enrollment Data</h1>
       <h4 class="enrollment-heading">${title}</h4>
+      ${subtitle}
     </div>
     <div class="text-center">
       <div class="btn-group graph-table-nav" role="group">
@@ -105,23 +110,21 @@ export function createEnrollmentTitle(title) {
 
 
 export function createQuarterTable(quarters) {
-  let quarterDropdown = 
-    `<div class="container-fluid">
-      <div class="table-responsiveness quarter-table">
-        <table class="table table-sm table-light table-striped table-bordered">
-          <thead>
-            <tr class="text-center">
-              <th scope="col">Year</th>
-              <th scope="col">Quarters Offered</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${createQuarterBody(quarters)}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-  return quarterDropdown;
+  return `<div class="container-fluid">
+    <div class="table-responsiveness quarter-table">
+      <table class="table table-sm table-light table-striped table-bordered">
+        <thead>
+          <tr class="text-center">
+            <th scope="col">Year</th>
+            <th scope="col">Quarters Offered</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${createQuarterBody(quarters)}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
 }
 
 
@@ -134,7 +137,7 @@ function createQuarterBody(quarters) {
         <td scope="row">${year}</td>
         <td>`;
 
-    const currYearQuarters = quarters.filter((quarter) => quarter.startsWith(year));
+    const currYearQuarters = quarters.filter((quarter) => quarter.startsWith(year)).sort();
     currYearQuarters.forEach((quarter, index) => {
       if (index === currYearQuarters.length - 1) {
         body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>`

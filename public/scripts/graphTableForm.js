@@ -4,11 +4,9 @@ import * as Helper from "./enrollmentHelper.js";
 
 export function handleTableTab(res) {
   $("#table-radio").on("click", function () {
-    const courseData = res.courseData;
-    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
     let numTables = 0;
 
-    Helper.createEnrollmentTitle(title, res.courseCode === "");
+    Helper.createEnrollmentTitle(res);
     $("#table-radio").attr("checked", "checked");
     $("#graph-radio").on("click", function () {
       createPage(res);
@@ -27,17 +25,15 @@ export function handleTableTab(res) {
 
 
 export function handleQuarterTab(res) {
-  $("#quarters-radio").on("click", function() {
-    const courseData = res.courseData;
-    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
-    
-    Helper.createEnrollmentTitle(title);
+  $("#quarters-radio").on("click", function() {    
+    Helper.createEnrollmentTitle(res);
     $("#quarters-radio").attr("checked", "checked");
     $("#graph-radio").on("click", function () {
       createPage(res);
     });
     handleTableTab(res);
 
+    // NOTE: searching instructor does not work with quarters tab
     $("#enrollment-data").append(Helper.createQuarterTable(res.quarters));
     res.quarters.forEach((quarter) => {
       $("#" + quarter).on("click", function() {
@@ -46,11 +42,11 @@ export function handleQuarterTab(res) {
           method: "POST",
           contentType: "application/json",
           data: JSON.stringify({
-            dept: courseData.dept,
+            dept: res.courseData.dept,
             quarter: quarter,
-            number: courseData.number,
+            number: res.courseData.number,
             courseType: res.courseType,
-            instructor: res.instructor,
+            instructor: "",
             courseCode: res.courseCode
           }),
           success: function (res) {
