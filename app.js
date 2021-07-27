@@ -48,10 +48,7 @@ app.get("/feedback", function (req, res) {
 
 
 app.post("/", function (req, res) {
-  // A "PREVIOUS" status means a user wants to go back to the graphs tab
-  if (req.body.status === "PREVIOUS") {
-    res.send(req.body.allData);
-  } else if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "")) {
+  if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "")) {
     res.send({
       status: "EMPTY INPUT"
     });
@@ -81,13 +78,28 @@ app.post("/", function (req, res) {
           status: "NOT FOUND"
         });
       } else {
-        res.send({
-          status: "FOUND",
-          originalQuery: req.body,
-          courseData: course,
-          courseType: req.body.courseType,
-          instructor: req.body.instructor,
-          courseCode: req.body.courseCode
+        const quarterQuery = {
+          dept: req.body.dept,
+          number: req.body.number,
+          title: course.title
+        };
+
+        Course.find(quarterQuery, function (err, courses) {
+          if (err) {
+            console.log(err);
+          } else {
+            const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
+
+            res.send({
+              status: "FOUND",
+              originalQuery: req.body,
+              courseData: course,
+              courseType: req.body.courseType,
+              instructor: req.body.instructor,
+              courseCode: req.body.courseCode,
+              quarters: uniqueQuarters
+            });
+          }
         });
       }
     });
@@ -95,7 +107,7 @@ app.post("/", function (req, res) {
 });
 
 
-app.post("/graph-table-form", function(req, res) {
+app.post("/graph-table-form", function (req, res) {
   res.send(req.body);
 });
 

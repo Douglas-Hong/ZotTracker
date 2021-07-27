@@ -1,5 +1,5 @@
 import { externalTooltipHandler } from "./tooltipHandler.js";
-import { handleGraphTableForm } from "./graphTableForm.js";
+import { handleQuarterTab, handleTableTab } from "./graphTableForm.js";
 import { createSearchHistory } from "./searchHistory.js";
 import * as Helper from "./enrollmentHelper.js";
 
@@ -62,8 +62,10 @@ export function createPage(res) {
     let numGraphs = 0;
 
     createSearchHistory();
-    Helper.createEnrollmentTitle(title, true);
-    handleGraphTableForm(res);
+    Helper.createEnrollmentTitle(title);
+    $("#graph-radio").attr("checked", "checked");
+    handleTableTab(res);
+    handleQuarterTab(res);
 
     res.courseData.courses.forEach((course) => {
       if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&

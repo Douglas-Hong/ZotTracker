@@ -2,44 +2,65 @@ import { createPage } from "./createGraph.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
-export function handleGraphTableForm(res) {
-  $("#graph-table-form").on("change", function () {
-    $.ajax({
-      url: "/graph-table-form",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(res),
-      success: function (res) {
-        const courseData = res.courseData;
-        const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
-        let numTables = 0;
+export function handleTableTab(res) {
+  $("#table-radio").on("click", function () {
+    const courseData = res.courseData;
+    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
+    let numTables = 0;
 
-        Helper.createEnrollmentTitle(title, false);
+    Helper.createEnrollmentTitle(title, res.courseCode === "");
+    $("#table-radio").attr("checked", "checked");
+    $("#graph-radio").on("click", function () {
+      createPage(res);
+    });
+    handleQuarterTab(res);
 
-        // This post request deals with changing back to the graphs tab
-        $("#graph-table-form").on("change", function () {
-          $.ajax({
-            url: "/",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-              status: "PREVIOUS",
-              allData: res
-            }),
-            success: function (res) {
-              createPage(res);
-            }
-          });
-        });
+    res.courseData.courses.forEach((course) => {
+      if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
+        Helper.hasCourseCode(course.course_code, res.courseCode)) {
+        createCourse(course, numTables);
+        numTables++;
+      }
+    });
+  });
+}
 
-        res.courseData.courses.forEach((course) => {
-          if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
-            Helper.hasCourseCode(course.course_code, res.courseCode)) {
-            createCourse(course, numTables);
-            numTables++;
+
+export function handleQuarterTab(res) {
+  $("#quarters-radio").on("click", function() {
+    const courseData = res.courseData;
+    const title = `${courseData.dept} ${courseData.number} - ${courseData.title} (${Helper.getQuarter(courseData.quarter)})`;
+    
+    Helper.createEnrollmentTitle(title);
+    $("#quarters-radio").attr("checked", "checked");
+    $("#graph-radio").on("click", function () {
+      createPage(res);
+    });
+    handleTableTab(res);
+
+    $("#enrollment-data").append(Helper.createQuarterTable(res.quarters));
+    res.quarters.forEach((quarter) => {
+      $("#" + quarter).on("click", function() {
+        $.ajax({
+          url: "/",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            dept: courseData.dept,
+            quarter: quarter,
+            number: courseData.number,
+            courseType: res.courseType,
+            instructor: res.instructor,
+            courseCode: res.courseCode
+          }),
+          success: function (res) {
+            let history = JSON.parse(localStorage.getItem("searchHistory"));
+            history.push(res.originalQuery);
+            localStorage.setItem("searchHistory", JSON.stringify(history));
+            createPage(res);
           }
         });
-      }
+      });
     });
   });
 }

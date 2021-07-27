@@ -44,6 +44,7 @@
 
 .history-item {
   padding: 10px 0 3px 10px;
+  cursor: pointer;
 }
 
 .history-item:hover {
@@ -161,4 +162,21 @@
 
 .link {
   text-decoration: none;
+}
+
+.dropdown-menu {
+  width: 500px;
+}
+
+.quarter-table {
+  margin-top: 25px;
+}
+
+.quarter-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quarter-link:hover {
+  text-decoration: underline;
 }
