@@ -22,6 +22,7 @@ const courseSchema = new mongoose.Schema({
   number: String,
   title: String,
   course_codes: [String],
+  instructors: [String],
   courses: {}
 });
 var Course = mongoose.model("Course", courseSchema, "enrollments");
@@ -70,6 +71,12 @@ app.post("/", function (req, res) {
       };
     }
 
+    if (req.body.instructor !== "") {
+      query.instructors = {
+        $in: req.body.instructor
+      };
+    }
+
     Course.findOne(query, function (err, course) {
       if (err) {
         console.log(err);
@@ -107,9 +114,3 @@ app.post("/", function (req, res) {
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port 3000.");
 });
-
-
-/* 
-TODO:
-- Fix search history
-*/

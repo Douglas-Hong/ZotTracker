@@ -59,6 +59,7 @@ export function createPage(res) {
   if (res.status === "FOUND") {
     let numGraphs = 0;
 
+    createSearchHistory();
     Helper.createEnrollmentTitle(res);
     $("#graph-radio").attr("checked", "checked");
     handleTableTab(res);
@@ -74,20 +75,13 @@ export function createPage(res) {
       }
     });
 
-    // If no graphs can be generated, display an error; otherwise, scroll to the "Enrollment Data" section
     if (numGraphs === 0) {
-      let history = JSON.parse(localStorage.getItem("searchHistory"));
-      history.pop();
-      localStorage.setItem("searchHistory", JSON.stringify(history));
-
-      Helper.createError("No graphs can be created because this instructor did not teach this specific course!");
+      Helper.createError("No data could be generated. Double-check your Course Type!");
     } else {
       $("html, body").animate({
         scrollTop: $("#enrollment-data").offset().top
       }, 250);
     }
-
-    createSearchHistory();
   } else if (res.status === "EMPTY INPUT") {
     Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
       "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");

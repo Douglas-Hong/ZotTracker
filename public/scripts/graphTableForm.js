@@ -46,7 +46,7 @@ export function handleQuarterTab(res) {
             quarter: quarter,
             number: res.courseData.number,
             courseType: res.courseType,
-            instructor: "",
+            instructor: res.instructor,
             courseCode: res.courseCode
           }),
           success: function (res) {

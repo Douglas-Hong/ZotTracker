@@ -89,7 +89,13 @@ export function createEnrollmentTitle(res) {
   const courseData = res.courseData;
   const title = res.courseCode === "" ? `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`
     : `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
-  const subtitle = res.courseCode === "" ? "" : `<p class="enrollment-subheading">${courseData.dept} ${courseData.number} - ${courseData.title}</p>`;
+
+  if (res.courseCode === "") {
+    var subtitle = `<p class="enrollment-subheading">${res.instructor === "" ? "" : res.instructor + ", "}${res.courseType === "all" ? "All Course Types" : res.courseType}`;
+  } else {
+    var subtitle = `<p class="enrollment-subheading">${courseData.dept} ${courseData.number} - ${courseData.title}</p>`;
+  }
+  
   $("#enrollment-data").html(
     `<div class="container-fluid">
       <h1 class="heading">Enrollment Data</h1>
