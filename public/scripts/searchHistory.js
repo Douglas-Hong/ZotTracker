@@ -45,6 +45,12 @@ export function createSearchHistory() {
           contentType: "application/json",
           data: JSON.stringify(JSON.parse(localStorage.getItem("searchHistory"))[history.length - index - 1]),
           success: function (res) {
+            // Move the course to the end of the history array, and then render the new page
+            let history = JSON.parse(localStorage.getItem("searchHistory"));
+            const originalItem = history[history.length - index - 1];
+            history.splice(history.length - index - 1, 1);
+            history.push(originalItem);
+            localStorage.setItem("searchHistory", JSON.stringify(history));
             createPage(res);
             $("#close-history-button").trigger("click");
           }

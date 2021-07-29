@@ -25,6 +25,10 @@
   color: gray;
 }
 
+.dropdown-menu {
+  width: 90% !important;
+}
+
 #quarter option {
   color: black;
 }
@@ -186,8 +190,8 @@
 }
 
 .quarter-link {
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .quarter-link:hover {
