@@ -31,12 +31,8 @@ export function createSearchHistory() {
           </div>`
         );
       }
-  
-      if (item.instructor !== "") {
-        $("#history-item-" + index).append(`<p class="history-subheading">${item.instructor}, ${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
-      } else {
-        $("#history-item-" + index).append(`<p class="history-subheading">${item.courseType === "all" ? "All Course Types" : item.courseType}</p>`);
-      }
+
+      $("#history-item-" + index).append(`<p class="history-subheading">${item.instructor === "" ? "" : item.instructor + ", "}${Helper.getCourseType(item.courseType)}</p>`);
   
       $("#history-item-" + index).on("click", function() {
         $.ajax({

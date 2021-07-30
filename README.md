@@ -16,8 +16,7 @@ View the enrollment data of any course at UC Irvine!
 * Daily and detailed enrollment data for any type of UCI course (lectures, labs, discussions, etc.)
 * View enrollment data with organized graphs and tables
 * A search history menu that allows you to easily see the enrollment data of courses you searched
-* View other quarters that offer a specific course
-before
+* View other quarters that have offered a specific course
 
 ## How to Use This Website
 

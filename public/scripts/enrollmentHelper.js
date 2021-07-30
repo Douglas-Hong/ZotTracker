@@ -91,7 +91,7 @@ export function createEnrollmentTitle(res) {
     : `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
 
   if (res.courseCode === "") {
-    var subtitle = `<p class="enrollment-subheading">${res.instructor === "" ? "" : res.instructor + ", "}${res.courseType === "all" ? "All Course Types" : res.courseType}`;
+    var subtitle = `<p class="enrollment-subheading">${res.instructor === "" ? "" : res.instructor + ", "}${getCourseType(res.courseType)}`;
   } else {
     var subtitle = `<p class="enrollment-subheading">${courseData.dept} ${courseData.number} - ${courseData.title}</p>`;
   }
@@ -103,7 +103,7 @@ export function createEnrollmentTitle(res) {
       ${subtitle}
     </div>
     <div class="text-center">
-      <div class="btn-group graph-table-nav" role="group">
+      <div class="btn-group" role="group">
         <input type="radio" class="btn-check" id="graph-radio" autocomplete="off">
         <label class="btn btn-outline-primary" for="graph-radio">Graphs</label>
         <input type="radio" class="btn-check" id="table-radio" autocomplete="off">
@@ -112,6 +112,34 @@ export function createEnrollmentTitle(res) {
         <label class="btn btn-outline-primary" for="quarters-radio">Quarters</label>
       </div>
     </div>`);
+}
+
+
+export function getCourseType(type) {
+  switch (type) {
+    case "all":
+      return "All Course Types";
+    case "LEC":
+      return "Lecture";
+    case "LAB":
+      return "Lab";
+    case "DIS":
+      return "Discussion";
+    case "SEM":
+      return "Seminar";
+    case "FLD":
+      return "Field Work";
+    case "RES":
+      return "Research";
+    case "ACT":
+      return "Activity";
+    case "TUT":
+      return "Tutorial";
+    case "COL":
+      return "Colloquium";
+    case "STU":
+      return "Studio";
+  }
 }
 
 
