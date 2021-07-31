@@ -1,9 +1,8 @@
 // This script controls the functionality of the selection section, particularly
-// the department select menu, the quarter select menu, and the instructor input/datalist
+// the department, quarter, and instructor select menu
 
 
-// If the value of the select menu is a placeholder ("Choose a Department..." or
-// "Choose a Quarter..."), then the color of the text should be gray
+// If the value of the select menu is a placeholder, then the color of the text should be gray
 $("#quarter").change(function () {
   if ($(this).val() === "") {
     $(this).addClass("select-placeholder");
@@ -77,9 +76,9 @@ instructors.forEach((instructor) => {
 
 
 // If the reset button is clicked, we have to make sure that all
-// select menus are gray and the instructor input does not show any suggestions
-$(".reset-button").click(function () {
-  $(".selectpicker").val('default');
-  $('.selectpicker').selectpicker('refresh');
+// select menus are gray and properly reset
+$(".reset-button").on("click", function () {
+  $(".selectpicker").val("default");
+  $('.selectpicker').selectpicker("refresh");
   $("#quarter").addClass("select-placeholder");
 });

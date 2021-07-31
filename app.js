@@ -25,7 +25,7 @@ const courseSchema = new mongoose.Schema({
   instructors: [String],
   courses: {}
 });
-var Course = mongoose.model("Course", courseSchema, "enrollments");
+let Course = mongoose.model("Course", courseSchema, "enrollments");
 
 
 app.get("/", function (req, res) {
@@ -79,7 +79,9 @@ app.post("/", function (req, res) {
 
     Course.findOne(query, function (err, course) {
       if (err) {
-        console.log(err);
+        res.send({
+          status: "ERROR"
+        });
       } else if (!course) {
         res.send({
           status: "NOT FOUND"
@@ -90,10 +92,13 @@ app.post("/", function (req, res) {
 
         Course.find(quarterQuery, function (err, courses) {
           if (err) {
-            console.log(err);
+            res.send({
+              status: "ERROR"
+            });
           } else {
             const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-
+            
+            // We store the original query in case the user clicks on this course in their search history
             res.send({
               status: "FOUND",
               originalQuery: req.body,

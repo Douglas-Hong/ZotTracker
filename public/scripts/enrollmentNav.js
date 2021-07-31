@@ -1,14 +1,19 @@
+// This script handles the other parts of the enrollment data section:
+// the tables and quarters tab
+
+
 import { createPage } from "./createGraph.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
+// This function handles the event where the Tables button is clicked
 export function handleTableTab(res) {
-  $("#table-radio").on("click", function () {
+  $("#tables-radio").on("click", function () {
     let numTables = 0;
 
     Helper.createEnrollmentTitle(res);
-    $("#table-radio").attr("checked", "checked");
-    $("#graph-radio").on("click", function () {
+    $("#tables-radio").attr("checked", "checked");
+    $("#graphs-radio").on("click", function () {
       createPage(res);
     });
     handleQuarterTab(res);
@@ -24,17 +29,18 @@ export function handleTableTab(res) {
 }
 
 
+// This function handles the event where the Quarters button is clicked
 export function handleQuarterTab(res) {
   $("#quarters-radio").on("click", function() {    
     Helper.createEnrollmentTitle(res);
     $("#quarters-radio").attr("checked", "checked");
-    $("#graph-radio").on("click", function () {
+    $("#graphs-radio").on("click", function () {
       createPage(res);
     });
     handleTableTab(res);
 
-    // NOTE: searching instructor does not work with quarters tab
     $("#enrollment-data").append(Helper.createQuarterTable(res.quarters));
+    
     res.quarters.forEach((quarter) => {
       $("#" + quarter).on("click", function() {
         $.ajax({
@@ -51,7 +57,7 @@ export function handleQuarterTab(res) {
           }),
           success: function (res) {
             let history = JSON.parse(localStorage.getItem("searchHistory"));
-            history.push(res.originalQuery);
+            history.unshift(res.originalQuery);
             localStorage.setItem("searchHistory", JSON.stringify(history));
             createPage(res);
           }
@@ -84,10 +90,10 @@ function createTable(course) {
         <th scope="col">Date</th>
         <th scope="col">Enrolled</th>
         <th scope="col">Max</th>
-        ${course.waitlist ? '<th scope="col">Waitlist</th>' : ''}
+        ${course.waitlist ? '<th scope="col">Waitlist</th>' : ""}
         <th scope="col">Req</th>
-        ${course.nor ? '<th scope="col">Nor</th>' : ''}
-        ${course.status ? '<th scope="col">Status</th>' : ''}
+        ${course.nor ? '<th scope="col">Nor</th>' : ""}
+        ${course.status ? '<th scope="col">Status</th>' : ""}
       </tr>
     </thead>
     <tbody>

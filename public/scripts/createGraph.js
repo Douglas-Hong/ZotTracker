@@ -1,5 +1,5 @@
 import { externalTooltipHandler } from "./tooltipHandler.js";
-import { handleQuarterTab, handleTableTab } from "./graphTableForm.js";
+import { handleQuarterTab, handleTableTab } from "./enrollmentNav.js";
 import { createSearchHistory } from "./searchHistory.js";
 import * as Helper from "./enrollmentHelper.js";
 
@@ -14,43 +14,51 @@ if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("s
 }
 
 
-$(document).ready(function () {
-  $("#course-form").on("submit", function (event) {
-    event.preventDefault();
+$("#course-form").on("submit", function (event) {
+  event.preventDefault();
 
-    const dept = $("#dept").val();
-    const quarter = $("#quarter").val();
-    // This makes the course number case-insensitive and whitespace-insensitive
-    const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
-    const courseType = $("#course-type").val();
-    const instructor = $("#instructor").val();
-    const courseCode = $("#course-code").val();
+  const dept = $("#dept").val();
+  // This makes the course number case-insensitive and whitespace-insensitive
+  const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
+  const quarter = $("#quarter").val();
+  const instructor = $("#instructor").val();
+  const courseCode = $("#course-code").val();
+  const courseType = $("#course-type").val();
 
-    $.ajax({
-      url: "/",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({
-        dept: dept,
-        quarter: quarter,
-        number: number,
-        courseType: courseType,
-        instructor: instructor,
-        courseCode: courseCode
-      }),
-      success: function (res) {
-        // If we can find one course, update the search history with the query
-        // the user used to get that course
-        if (res.status === "FOUND") {
-          let history = JSON.parse(localStorage.getItem("searchHistory"));
-          history.push(res.originalQuery);
-          localStorage.setItem("searchHistory", JSON.stringify(history));
-        }
-        createPage(res);
-      }
-    });
-  });
+  handleSearchRequest(dept, number, quarter, instructor, courseCode, courseType);
 });
+
+
+// This function handles the post request when the user submits a course to search
+function handleSearchRequest(dept, number, quarter, instructor, courseCode, courseType) {
+  $.ajax({
+    url: "/",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      dept: dept,
+      number: number,
+      quarter: quarter,
+      instructor: instructor,
+      courseCode: courseCode,
+      courseType: courseType
+    }),
+    success: function (res) {
+      // If we can find one course, update the search history with the query
+      // the user used to get that course
+      if (res.status === "FOUND") {
+        let history = JSON.parse(localStorage.getItem("searchHistory"));
+        history.unshift(res.originalQuery);
+        localStorage.setItem("searchHistory", JSON.stringify(history));
+      }
+      createPage(res);
+      // Scroll down to the enrollment data section
+      $("html, body").animate({
+        scrollTop: $("#enrollment-data").offset().top
+      }, 250);
+    }
+  });
+}
 
 
 // This function creates the majority of the webpage; it displays the entire
@@ -61,7 +69,7 @@ export function createPage(res) {
 
     createSearchHistory();
     Helper.createEnrollmentTitle(res);
-    $("#graph-radio").attr("checked", "checked");
+    $("#graphs-radio").attr("checked", "checked");
     handleTableTab(res);
     handleQuarterTab(res);
 
@@ -77,16 +85,14 @@ export function createPage(res) {
 
     if (numGraphs === 0) {
       Helper.createError("No data could be generated. Double-check your Course Type!");
-    } else {
-      $("html, body").animate({
-        scrollTop: $("#enrollment-data").offset().top
-      }, 250);
     }
   } else if (res.status === "EMPTY INPUT") {
     Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
       "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
-  } else {
+  } else if (res.status === "NOT FOUND") {
     Helper.createError("That specific course does not exist. Please try again!");
+  } else {
+    Helper.createError("An error happened! Please try again!");
   }
 }
 
@@ -112,7 +118,9 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
   // To make a line, we need at least two data points; thus, if there is only one 
   // data, we have to duplicate data points
   if (dates.length === 1) {
-    handleOneElementArrays(dates, max, enrolled);
+    dates.push(dates[0]);
+    max.push(max[0]);
+    enrolled.push(enrolled[0]);
   }
 
   let data = {
@@ -135,7 +143,8 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
   };
 
   // If the waitlist array has at least one number, create a line on the graph that 
-  // is dedicated to the waitlist
+  // is dedicated to the waitlist; note that a null data point means the waitlist 
+  // is n/a or nonexistent on a certain day
   if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
     data.datasets.push({
       label: "Waitlist",
@@ -212,13 +221,4 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
       window[graphID].options.aspectRatio = 2;
     }
   });
-}
-
-
-// This function duplicates the first element of the array and appends
-// it to the end
-function handleOneElementArrays(dates, max, enrolled) {
-  dates.push(dates[0]);
-  max.push(max[0]);
-  enrolled.push(enrolled[0]);
 }
