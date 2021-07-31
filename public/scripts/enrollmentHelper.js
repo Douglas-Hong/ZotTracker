@@ -1,9 +1,6 @@
 // This scripts contains the functions that are used for more than one enrollment data tab
 
 
-const years = ["2021", "2020", "2019", "2018", "2017", "2016"];
-
-
 // This function creates the title of the "Enrollment Data" section; it inserts 
 // the "Enrollment Data" heading, the title of the course, and the Graphs/Tables/Quarters buttons
 export function createEnrollmentTitle(res) {
@@ -156,7 +153,7 @@ export function createCourseSummary(course, courseIndex, isGraph) {
               <td class="table-list">${formatArray(course.instructor)}</td>
               <td class="table-list">${formatArray(course.time)}</td>
               <td class="table-list">${formatArray(course.place)}</td>
-              <td class="text-center">
+              <td class="text-center align-middle">
                 <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
                   type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open
                 </button>
@@ -180,7 +177,7 @@ export function createCourseSummary(course, courseIndex, isGraph) {
 
 // This function returns a string where each element in the given array is its own
 // line; this is used for formatting multiple instructors/times/finals in a table cell
-export function formatArray(array) {
+function formatArray(array) {
   let arrayHTML = "";
 
   array.forEach((item) => {
@@ -188,77 +185,4 @@ export function formatArray(array) {
   });
 
   return arrayHTML;
-}
-
-
-// This function creates the table that shows which quarters offered
-// a specific course
-export function createQuarterTable(quarters) {
-  return `<div class="container-fluid">
-    <div class="table-responsiveness quarter-table">
-      <table class="table table-sm table-light table-striped table-bordered">
-        <thead>
-          <tr class="text-center">
-            <th scope="col">Year</th>
-            <th scope="col">Quarters Offered</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${createQuarterBody(quarters)}
-        </tbody>
-      </table>
-    </div>
-  </div>`;
-}
-
-
-// This function iterates through the quarters a specific course is available and
-// inserts them into the proper table cell
-function createQuarterBody(quarters) {
-  let body = "";
-
-  years.forEach((year) => {
-    body +=
-      `<tr>
-        <td scope="row">${year}</td>
-        <td>`;
-
-    const currYearQuarters = quarters.filter((quarter) => quarter.startsWith(year)).sort();
-    currYearQuarters.forEach((quarter, index) => {
-      if (index === currYearQuarters.length - 1) {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>`
-      } else {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>, `
-      }
-    });
-    
-    body += 
-      `</td>
-      </tr>`;
-  });
-
-  return body;
-}
-
-
-// This functions converts the given WebSoc quarter value into its proper name (excluding the year)
-function getSimpleQuarter(quarter) {
-  switch (quarter.slice(5, 7)) {
-    case "92":
-      return `Fall`;
-    case "03":
-      return `Winter`;
-    case "14":
-      return `Spring`;
-    case "25":
-      return `Summer Session 1`;
-    case "39":
-      return `10-wk Summer`;
-    case "51":
-      return `Summer COM`;
-    case "76":
-      return `Summer Session 2`;
-    case "8F":
-      return `Law Fall`;
-  }
 }

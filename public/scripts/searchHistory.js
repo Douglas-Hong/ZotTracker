@@ -1,15 +1,15 @@
-import * as Helper from "./enrollmentHelper.js";
 import { createPage } from "./createGraph.js";
+import * as Helper from "./enrollmentHelper.js";
 
 
 // This function creates the search history offcanvas tab; it uses the "searchHistory" key
 // from local storage in order to get the user's previous queries
 export function createSearchHistory() {
   createHistoryHeader();
-  const history = JSON.parse(localStorage.getItem("searchHistory"));
+  let history = JSON.parse(localStorage.getItem("searchHistory"));
   history.forEach((item, index) => {
     createHistoryItem(item, index);
-    handleHistoryItemRequest(history, index);
+    handleHistoryItemRequest(history, item, index);
   });
 }
 
@@ -54,19 +54,18 @@ function createHistoryItem(item, index) {
 
 // This function handles the post request when the user clicks on a course
 // to see its enrollment data again
-function handleHistoryItemRequest(history, index) {
+function handleHistoryItemRequest(history, item, index) {
   // Note: the data key stores the query that the user clicked on
   $("#history-item-" + index).on("click", function() {
     $.ajax({
       url: "/",
       method: "POST",
       contentType: "application/json",
-      data: JSON.stringify(history[index]),
+      data: JSON.stringify(item),
       success: function (res) {
         // Move the course to the beginning of the history array
-        const originalItem = history[index];
         history.splice(index, 1);
-        history.unshift(originalItem);
+        history.unshift(item);
         localStorage.setItem("searchHistory", JSON.stringify(history));
 
         // Render the new page

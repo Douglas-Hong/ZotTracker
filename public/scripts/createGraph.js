@@ -1,7 +1,7 @@
-import { externalTooltipHandler } from "./tooltipHandler.js";
+import * as Helper from "./enrollmentHelper.js";
 import { handleQuarterTab, handleTableTab } from "./enrollmentNav.js";
 import { createSearchHistory } from "./searchHistory.js";
-import * as Helper from "./enrollmentHelper.js";
+import { externalTooltipHandler } from "./tooltipHandler.js";
 
 
 // If "searchHistory" is not found in local storage or "searchHistory" is associated 
