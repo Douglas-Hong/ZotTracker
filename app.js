@@ -49,7 +49,8 @@ app.get("/feedback", function (req, res) {
 
 
 app.post("/", function (req, res) {
-  if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "")) {
+  if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "") 
+    && (req.body.courseTitle === "" || req.body.quarter === "")) {
     res.send({
       status: "EMPTY INPUT"
     });
@@ -60,8 +61,9 @@ app.post("/", function (req, res) {
       number: req.body.number
     };
 
-    // If the user specified a course code and quarter, then we 
-    // should use those inputs instead
+    // If the user specified a course code and quarter, then we should use those
+    // inputs instead; if a user specified a course title, then we should also use
+    // that input instead
     if (req.body.courseCode !== "" && req.body.quarter !== "") {
       query = {
         quarter: req.body.quarter,
@@ -69,6 +71,11 @@ app.post("/", function (req, res) {
           $in: req.body.courseCode
         }
       };
+    } else if (req.body.courseTitle !== "" && req.body.quarter !== "") {
+      query = {
+        quarter: req.body.quarter,
+        title: req.body.courseTitle
+      }
     }
 
     if (req.body.instructor !== "") {

@@ -22,15 +22,16 @@ $("#course-form").on("submit", function (event) {
   const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
   const quarter = $("#quarter").val();
   const instructor = $("#instructor").val();
+  const courseTitle = $("#course-title").val().toUpperCase();
   const courseCode = $("#course-code").val();
   const courseType = $("#course-type").val();
 
-  handleSearchRequest(dept, number, quarter, instructor, courseCode, courseType);
+  handleSearchRequest(dept, number, quarter, instructor, courseTitle, courseCode, courseType);
 });
 
 
 // This function handles the post request when the user submits a course to search
-function handleSearchRequest(dept, number, quarter, instructor, courseCode, courseType) {
+function handleSearchRequest(dept, number, quarter, instructor, courseTitle, courseCode, courseType) {
   $.ajax({
     url: "/",
     method: "POST",
@@ -40,6 +41,7 @@ function handleSearchRequest(dept, number, quarter, instructor, courseCode, cour
       number: number,
       quarter: quarter,
       instructor: instructor,
+      courseTitle: courseTitle,
       courseCode: courseCode,
       courseType: courseType
     }),

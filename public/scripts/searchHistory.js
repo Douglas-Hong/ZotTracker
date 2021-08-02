@@ -34,10 +34,16 @@ function createHistoryHeader() {
 // This function creates the history item, i.e. the heading and subheading that describes
 // the original query
 function createHistoryItem(item, index) {
-    if (item.courseCode !== "") {
+    if (item.courseCode) {
       $(".offcanvas-body").append(
         `<div class="history-item" id="history-item-${index}">
           <h5>Course Code: ${item.courseCode} (${Helper.getQuarter(item.quarter)})</h5>
+        </div>`
+      );
+    } else if (item.courseTitle) {
+      $(".offcanvas-body").append(
+        `<div class="history-item" id="history-item-${index}">
+          <h5>${item.courseTitle} (${Helper.getQuarter(item.quarter)})</h5>
         </div>`
       );
     } else {

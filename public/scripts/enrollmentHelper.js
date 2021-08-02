@@ -111,6 +111,9 @@ export function formatDates(dates) {
     }
 
     let day = date.slice(8, 10);
+    if (day.startsWith("0")) {
+      day = day.slice(1, 2);
+    }
     return `${month}/${day}/${year}`;
   });
 }

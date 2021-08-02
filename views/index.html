@@ -64,7 +64,7 @@
       <form id="course-form">
         <div class="row">
           <div class="col-md-6">
-            <label for="dept" class="form-label selection-label">Department</label>
+            <label for="dept" class="form-label first-selection-label">Department</label>
             <select class="form-control selectpicker" data-style="" data-style-base="form-control" data-live-search="true"
               data-live-search-style="startsWith" id="dept" name="dept" title="Choose a Department...">
             </select>
@@ -81,17 +81,21 @@
           </div>
         </div> 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label for="instructor" class="form-label selection-label">Instructor</label>
             <select class="form-control selectpicker" data-style="" data-style-base="form-control" data-live-search="true" 
               data-live-search-style="startsWith" id="instructor" name="instructor" title="Choose a name from WebSoc...">
             </select>
           </div>
           <div class="col-md-3">
+            <label for="course-title" class="form-label selection-label">Course Title</label>
+            <input type="text" class="form-control" id="course-title" name="courseTitle" placeholder="CRITICAL WRITING">
+          </div>
+          <div class="col-md-2">
             <label for="course-code" class="form-label selection-label">Course Code</label>
             <input type="text" class="form-control" id="course-code" name="courseCode" placeholder="35870">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label for="course-type" class="form-label selection-label">Course Type</label>
             <select class="form-select" id="course-type" name="courseType">
               <option value="all">All Types</option>
@@ -113,7 +117,7 @@
           <button type="reset" class="btn btn-primary reset-button">Reset</button>
           <button type="button" class="btn btn-primary history-button" data-bs-toggle="offcanvas" data-bs-target="#history">History</button>
           <i class="far fa-question-circle fa-2x question-icon" data-bs-toggle="tooltip" data-bs-placement="right" 
-            title="To successfully submit a course, select a Department, Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter."></i>
+            title="You don't have to fill in everything! To successfully submit a course, select a Department, Course Number, and Quarter. You can also just enter a Course Code and Quarter."></i>
         </div>
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="history">
           <div class="offcanvas-header">
