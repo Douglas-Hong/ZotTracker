@@ -89,8 +89,8 @@ export function createPage(res) {
       Helper.createError("No data could be generated. Double-check your Course Type!");
     }
   } else if (res.status === "EMPTY INPUT") {
-    Helper.createError("You need to specify more information! To successfully submit a course, select a Department, " +
-      "Course Number, and Quarter. Alternatively, you can just enter a Course Code and Quarter.");
+    Helper.createError(`You need to specify more information! To successfully submit a course, select a Department, Course Number, and Quarter. 
+      For more help, check out the <a class="link "href="/about.html">About</a> page!`);
   } else if (res.status === "NOT FOUND") {
     Helper.createError("That specific course does not exist. Please try again!");
   } else {

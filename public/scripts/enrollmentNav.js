@@ -45,19 +45,15 @@ export function handleQuarterTab(res) {
     $("#enrollment-data").append(createQuarterTable(res.quarters));
     
     res.quarters.forEach((quarter) => {
+      let query = JSON.parse(JSON.stringify(res.originalQuery));
+      query.quarter = quarter;
+
       $("#" + quarter).on("click", function() {
         $.ajax({
           url: "/",
           method: "POST",
           contentType: "application/json",
-          data: JSON.stringify({
-            dept: res.courseData.dept,
-            quarter: quarter,
-            number: res.courseData.number,
-            courseType: res.courseType,
-            instructor: res.instructor,
-            courseCode: res.courseCode
-          }),
+          data: JSON.stringify(query),
           success: function (res) {
             let history = JSON.parse(localStorage.getItem("searchHistory"));
             history.unshift(res.originalQuery);

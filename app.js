@@ -64,21 +64,21 @@ app.post("/", function (req, res) {
     // If the user specified a course code and quarter, then we should use those
     // inputs instead; if a user specified a course title, then we should also use
     // that input instead
-    if (req.body.courseCode !== "" && req.body.quarter !== "") {
+    if (req.body.courseCode && req.body.quarter) {
       query = {
         quarter: req.body.quarter,
         course_codes: {
           $in: req.body.courseCode
         }
       };
-    } else if (req.body.courseTitle !== "" && req.body.quarter !== "") {
+    } else if (req.body.courseTitle && req.body.quarter) {
       query = {
         quarter: req.body.quarter,
         title: req.body.courseTitle
       }
     }
 
-    if (req.body.instructor !== "") {
+    if (req.body.instructor) {
       query.instructors = {
         $in: req.body.instructor
       };
