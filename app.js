@@ -55,33 +55,24 @@ app.post("/", function (req, res) {
       status: "EMPTY INPUT"
     });
   } else {
-    let query = {
-      quarter: req.body.quarter,
-      dept: req.body.dept,
-      number: req.body.number
-    };
+    let query = {};
 
-    // If the user specified a course code and quarter, then we should use those
-    // inputs instead; if a user specified a course title, then we should also use
-    // that input instead
-    if (req.body.courseCode && req.body.quarter) {
-      query = {
-        quarter: req.body.quarter,
-        course_codes: {
-          $in: req.body.courseCode
+    for (let key in req.body) {
+      if (req.body.hasOwnProperty(key) && req.body[key] && key !== "courseType") {
+        if (key === "courseCode") {
+          query.course_codes = {
+            $in: req.body.courseCode
+          };
+        } else if (key === "courseTitle") {
+          query.title = req.body.courseTitle
+        } else if (key === "instructor") {
+          query.instructors = {
+            $in: req.body.instructor
+          };
+        } else {
+          query[key] = req.body[key];
         }
-      };
-    } else if (req.body.courseTitle && req.body.quarter) {
-      query = {
-        quarter: req.body.quarter,
-        title: req.body.courseTitle
       }
-    }
-
-    if (req.body.instructor) {
-      query.instructors = {
-        $in: req.body.instructor
-      };
     }
 
     Course.findOne(query, function (err, course) {
@@ -129,5 +120,4 @@ app.listen(process.env.PORT || 3000, function () {
 
 
 // TODO:
-// Google Analytics
 // Navigation to other quarters when no quarter is specified
