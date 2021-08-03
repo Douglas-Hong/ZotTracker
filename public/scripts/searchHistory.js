@@ -6,11 +6,19 @@ import * as Helper from "./enrollmentHelper.js";
 // from local storage in order to get the user's previous queries
 export function createSearchHistory() {
   createHistoryHeader();
-  let history = JSON.parse(localStorage.getItem("searchHistory"));
-  history.forEach((item, index) => {
-    createHistoryItem(item, index);
-    handleHistoryItemRequest(history, item, index);
-  });
+
+  // If "searchHistory" is not found in local storage or "searchHistory" is associated 
+  // with an empty array, then inform the user that their search history is empty
+  if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("searchHistory")).length === 0) {
+    localStorage.setItem("searchHistory", JSON.stringify([]));
+    $(".offcanvas-body").html("You haven't searched anything yet!");
+  } else {
+    let history = JSON.parse(localStorage.getItem("searchHistory"));
+    history.forEach((item, index) => {
+      createHistoryItem(item, index);
+      handleHistoryItemRequest(history, item, index);
+    });
+  }
 }
 
 

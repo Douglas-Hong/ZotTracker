@@ -31,12 +31,12 @@ if you want to narrow down your search, you can add an Instructor and/or Course 
 
 <p align="center">Course Search</p>
 
-![Course Search](https://i.imgur.com/Hd8XaVH.jpg)
+![Course Search](https://i.imgur.com/aufsvIh.jpg)
 
 <p align="center">Enrollment Data</p>
 
-![Enrollment Data](https://i.imgur.com/qg89MVO.jpg)
+![Enrollment Data](https://i.imgur.com/gwpQnfo.jpg)
 
 <p align="center">Search History</p>
 
-<p align="center"><img src="https://i.imgur.com/2XdkE8L.jpg" alt="Search History"></p>
+<p align="center"><img src="https://i.imgur.com/TO2Fy0R.jpg" alt="Search History"></p>

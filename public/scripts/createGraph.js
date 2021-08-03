@@ -4,15 +4,7 @@ import { createSearchHistory } from "./searchHistory.js";
 import { externalTooltipHandler } from "./tooltipHandler.js";
 
 
-// If "searchHistory" is not found in local storage or "searchHistory" is associated 
-// with an empty array, then inform the user that their search history is empty
-if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("searchHistory")).length === 0) {
-  localStorage.setItem("searchHistory", JSON.stringify([]));
-  $(".offcanvas-body").html("You haven't searched anything yet!");
-} else {
-  createSearchHistory();
-}
-
+createSearchHistory();
 
 $("#course-form").on("submit", function (event) {
   event.preventDefault();
