@@ -126,3 +126,8 @@ app.post("/", function (req, res) {
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port 3000.");
 });
+
+
+// TODO:
+// Google Analytics
+// Navigation to other quarters when no quarter is specified
