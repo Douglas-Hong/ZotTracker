@@ -15,7 +15,7 @@ export function handleTableTab(res) {
     let numTables = 0;
 
     Helper.createEnrollmentTitle(res);
-    $("#tables-radio").attr("checked", "checked");
+    $("#tables-radio").prop("checked", true);
     $("#graphs-radio").on("click", function () {
       createPage(res);
     });
@@ -36,7 +36,7 @@ export function handleTableTab(res) {
 export function handleQuarterTab(res) {
   $("#quarters-radio").on("click", function() {    
     Helper.createEnrollmentTitle(res);
-    $("#quarters-radio").attr("checked", "checked");
+    $("#quarters-radio").prop("checked", true);
     $("#graphs-radio").on("click", function () {
       createPage(res);
     });

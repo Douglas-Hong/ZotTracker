@@ -11,8 +11,10 @@ export function createSearchHistory() {
   // with an empty array, then inform the user that their search history is empty
   if (!localStorage.getItem("searchHistory") || JSON.parse(localStorage.getItem("searchHistory")).length === 0) {
     localStorage.setItem("searchHistory", JSON.stringify([]));
+    $(".offcanvas-sticky").empty();
     $(".offcanvas-body").html("You haven't searched anything yet!");
   } else {
+    $(".offcanvas-body").empty();
     let history = JSON.parse(localStorage.getItem("searchHistory"));
     history.forEach((item, index) => {
       createHistoryItem(item, index);
@@ -26,15 +28,16 @@ export function createSearchHistory() {
 // This function creates the top of the offcanvas tab, i.e. the clear history button
 // and the directions
 function createHistoryHeader() {
-  $(".offcanvas-body").html(
+  $(".offcanvas-sticky").html(
     `<div class="text-center">
       <button type="button" class="btn btn-danger clear-history-button">Clear History</button>
-    </div> 
+      </div> 
     <p>Click a course below to see its enrollment data again!</p>`
   );
 
   $(".clear-history-button").on("click", function() {
     localStorage.setItem("searchHistory", JSON.stringify([]));
+    $(".offcanvas-sticky").empty();
     $(".offcanvas-body").html("You haven't searched anything yet!");
   });
 }

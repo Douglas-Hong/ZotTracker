@@ -19,7 +19,7 @@ export function createPage(res) {
     let numGraphs = 0;
 
     Helper.createEnrollmentTitle(res);
-    $("#graphs-radio").attr("checked", "checked");
+    $("#graphs-radio").prop("checked", true);
     handleTableTab(res);
     handleQuarterTab(res);
 
@@ -28,7 +28,7 @@ export function createPage(res) {
         Helper.hasCourseCode(course.course_code, res.courseCode)) {
         createCourse(course, numGraphs);
         // The number of graphs will be used to keep track of the index of each graph
-        createGraph(`enrollment-chart-${numGraphs}`, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
+        createGraph(`enrollment-chart-${numGraphs}`, numGraphs, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
         numGraphs++;
       }
     });
@@ -69,7 +69,7 @@ function createCourse(course, courseIndex) {
 
 
 // This function creates a course section's graph by configuring the Chart.js graph
-function createGraph(graphID, dates, max, enrolled, waitlist) {
+function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
   // To make a line, we need at least two data points; thus, if there is only one 
   // data, we have to duplicate data points
   if (dates.length === 1) {
@@ -84,15 +84,15 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
         label: "Enrolled",
         data: enrolled,
         fill: false,
-        borderColor: "rgb(71,185,200)",
-        backgroundColor: "rgb(71,185,200)",
+        borderColor: "#0d6efd",
+        backgroundColor: "#0d6efd",
       },
       {
         label: "Max",
         data: max,
         fill: false,
-        borderColor: "rgb(201,71,47)",
-        backgroundColor: "rgb(201,71,47)",
+        borderColor: "#dc3545",
+        backgroundColor: "#dc3545",
       },
     ]
   };
@@ -116,6 +116,9 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
     options: {
       responsive: true,
       maintainAspectRatio: true,
+      animation: {
+        duration: 2000
+      },
       layout: {
         padding: 10
       },
@@ -174,6 +177,13 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
       window[graphID].options.aspectRatio = 1;
     } else {
       window[graphID].options.aspectRatio = 2;
+    }
+  });
+
+  $("#show-data-button-" + numGraphs).on("click", function () {
+    if ($(this).text() === "Close") {
+      window[graphID].destroy();
+      window[graphID] = new Chart(document.getElementById(graphID), config);
     }
   });
 }

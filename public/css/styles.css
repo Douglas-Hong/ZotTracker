@@ -41,7 +41,18 @@
   margin-left: 20px;
 }
 
+.offcanvas-sticky {
+  position: sticky;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.offcanvas-sticky p {
+  margin-bottom: 0;
+}
+
 .clear-history-button {
+  margin-top: 15px;
   margin-bottom: 25px;
 }
 
@@ -101,7 +112,6 @@
 
 .chart-container {
   padding: 0 25%;
-  margin-bottom: 60px;
 }
 
 .chart {
