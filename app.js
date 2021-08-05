@@ -10,6 +10,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 app.use(express.static("public"));
+app.set("view engine", "ejs");
 
 
 mongoose.connect(uri, {
@@ -29,7 +30,9 @@ let Course = mongoose.model("Course", courseSchema, "enrollments");
 
 
 app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/views/index.html");
+  res.render("index.ejs", {
+    enrollment: JSON.stringify({})
+  });
 });
 
 
@@ -51,8 +54,11 @@ app.get("/feedback", function (req, res) {
 app.post("/", function (req, res) {
   if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "") 
     && (req.body.courseTitle === "" || req.body.quarter === "")) {
-    res.send({
-      status: "EMPTY INPUT"
+    res.render("index.ejs", {
+      enrollment: JSON.stringify({
+        status: "EMPTY INPUT",
+        originalQuery: req.body
+      })
     });
   } else {
     let query = {};
@@ -64,11 +70,13 @@ app.post("/", function (req, res) {
             $in: req.body.courseCode
           };
         } else if (key === "courseTitle") {
-          query.title = req.body.courseTitle
+          query.title = req.body.courseTitle;
         } else if (key === "instructor") {
           query.instructors = {
             $in: req.body.instructor
           };
+        } else if (key === "number") {
+          query.number = req.body.number.toUpperCase().replace(/\ /g, "");
         } else {
           query[key] = req.body[key];
         }
@@ -77,34 +85,44 @@ app.post("/", function (req, res) {
 
     Course.findOne(query, function (err, course) {
       if (err) {
-        res.send({
-          status: "ERROR"
+        res.render("index.ejs", {
+          enrollment: JSON.stringify({
+            status: "ERROR",
+            originalQuery: req.body
+          })
         });
       } else if (!course) {
-        res.send({
-          status: "NOT FOUND"
+        res.render("index.ejs", {
+          enrollment: JSON.stringify({
+            status: "NOT FOUND",
+            originalQuery: req.body
+          })
         });
       } else {
-        const quarterQuery = query;
-        delete quarterQuery.quarter;
+        let quartersQuery = JSON.parse(JSON.stringify(query));
+        delete quartersQuery.quarter;
 
-        Course.find(quarterQuery, function (err, courses) {
+        Course.find(quartersQuery, function (err, courses) {
           if (err) {
-            res.send({
-              status: "ERROR"
+            res.render("index.ejs", {
+              enrollment: JSON.stringify({
+                status: "ERROR",
+                originalQuery: req.body
+              })
             });
           } else {
             const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-            
             // We store the original query in case the user clicks on this course in their search history
-            res.send({
-              status: "FOUND",
-              originalQuery: req.body,
-              courseData: course,
-              courseType: req.body.courseType,
-              instructor: req.body.instructor,
-              courseCode: req.body.courseCode,
-              quarters: uniqueQuarters
+            res.render("index.ejs", {
+              enrollment: JSON.stringify({
+                status: "FOUND",
+                originalQuery: req.body,
+                courseData: course,
+                courseType: req.body.courseType,
+                instructor: req.body.instructor,
+                courseCode: req.body.courseCode,
+                quarters: uniqueQuarters
+              })
             });
           }
         });
@@ -121,3 +139,4 @@ app.listen(process.env.PORT || 3000, function () {
 
 // TODO:
 // Navigation to other quarters when no quarter is specified
+// Add better animations to graphs

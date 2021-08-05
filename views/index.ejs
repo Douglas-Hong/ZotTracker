@@ -71,7 +71,7 @@
   <section id="selection">
     <div class="container-fluid">
       <h1 class="heading">Select a Course</h1>
-      <form id="course-form">
+      <form method="post" action="/" id="selection-form">
         <div class="row">
           <div class="col-md-5">
             <label for="dept" class="form-label first-selection-label">Department</label>
@@ -81,11 +81,11 @@
           </div>
           <div class="col-md-3">
             <label for="course-num" class="form-label selection-label">Course Number</label>
-            <input type="text" class="form-control" id="course-num" name="courseNum" placeholder="139W">
+            <input type="text" class="form-control" id="course-num" name="number" placeholder="139W">
           </div>
           <div class="col-md-4">
             <label for="quarter" class="form-label selection-label">Quarter</label>
-            <select class="form-select" id="quarter" name="quarter">
+            <select class="form-select" style="color: gray;" id="quarter" name="quarter">
               <option value="" hidden>Choose a Quarter...</option>
             </select>
           </div>
@@ -162,6 +162,31 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     });
+  </script>
+  <script type="module">
+    import { createPage } from "/scripts/createGraph.js";
+
+    function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+    }
+
+    if ("<%= enrollment %>" !== "{}") {
+      let enrollment = JSON.parse(decodeHtml("<%= enrollment %>"));
+
+      if (enrollment.status === "FOUND") {
+        let history = JSON.parse(localStorage.getItem("searchHistory"));
+        history.unshift(enrollment.originalQuery);
+        localStorage.setItem("searchHistory", JSON.stringify(history));
+      }
+
+      createPage(enrollment);
+    } else {
+      window.addEventListener("pageshow", () => {
+        $(".reset-button").click();
+      });
+    }
   </script>
 </body>
 

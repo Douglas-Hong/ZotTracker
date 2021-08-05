@@ -6,58 +6,15 @@ import { externalTooltipHandler } from "./tooltipHandler.js";
 
 createSearchHistory();
 
-$("#course-form").on("submit", function (event) {
-  event.preventDefault();
-
-  const dept = $("#dept").val();
-  // This makes the course number case-insensitive and whitespace-insensitive
-  const number = $("#course-num").val().toUpperCase().replace(/\ /g, "");
-  const quarter = $("#quarter").val();
-  const instructor = $("#instructor").val();
-  const courseTitle = $("#course-title").val().toUpperCase();
-  const courseCode = $("#course-code").val();
-  const courseType = $("#course-type").val();
-
-  handleSearchRequest(dept, number, quarter, instructor, courseTitle, courseCode, courseType);
-});
-
-
-// This function handles the post request when the user submits a course to search
-function handleSearchRequest(dept, number, quarter, instructor, courseTitle, courseCode, courseType) {
-  $.ajax({
-    url: "/",
-    method: "POST",
-    contentType: "application/json",
-    data: JSON.stringify({
-      dept: dept,
-      number: number,
-      quarter: quarter,
-      instructor: instructor,
-      courseTitle: courseTitle,
-      courseCode: courseCode,
-      courseType: courseType
-    }),
-    success: function (res) {
-      // If we can find one course, update the search history with the query
-      // the user used to get that course
-      if (res.status === "FOUND") {
-        let history = JSON.parse(localStorage.getItem("searchHistory"));
-        history.unshift(res.originalQuery);
-        localStorage.setItem("searchHistory", JSON.stringify(history));
-      }
-      createPage(res);
-      // Scroll down to the enrollment data section
-      $("html, body").animate({
-        scrollTop: $("#enrollment-data").offset().top
-      }, 250);
-    }
-  });
-}
-
 
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
+  populateForm(res.originalQuery);
+  window.addEventListener("pageshow", () => {
+    populateForm(res.originalQuery);
+  });
+
   if (res.status === "FOUND") {
     let numGraphs = 0;
 
@@ -219,4 +176,19 @@ function createGraph(graphID, dates, max, enrolled, waitlist) {
       window[graphID].options.aspectRatio = 2;
     }
   });
+}
+
+
+function populateForm(query) {
+  $("#dept").val(query.dept);
+  $("#course-num").val(query.number);
+  $("#quarter").val(query.quarter);
+  $("#instructor").val(query.instructor);
+  $("#course-title").val(query.courseTitle);
+  $("#course-code").val(query.courseCode);
+  $("#course-type").val(query.courseType);
+
+  if ($("#quarter").val() !== "") {
+    $("#quarter").css("color", "black");
+  }
 }

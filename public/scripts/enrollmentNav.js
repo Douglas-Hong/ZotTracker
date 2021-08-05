@@ -41,26 +41,16 @@ export function handleQuarterTab(res) {
       createPage(res);
     });
     handleTableTab(res);
-
-    $("#enrollment-data").append(createQuarterTable(res.quarters));
     
     res.quarters.forEach((quarter) => {
-      let query = JSON.parse(JSON.stringify(res.originalQuery));
-      query.quarter = quarter;
+      createHiddenForm(JSON.parse(JSON.stringify(res.originalQuery)), quarter);
+    });
 
+    $("#enrollment-data").append(createQuarterTable(res.quarters));
+
+    res.quarters.forEach((quarter) => {
       $("#" + quarter).on("click", function() {
-        $.ajax({
-          url: "/",
-          method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify(query),
-          success: function (res) {
-            let history = JSON.parse(localStorage.getItem("searchHistory"));
-            history.unshift(res.originalQuery);
-            localStorage.setItem("searchHistory", JSON.stringify(history));
-            createPage(res);
-          }
-        });
+        $(`#form-${quarter}`).submit();
       });
     });
   });
@@ -186,6 +176,21 @@ function createQuarterBody(quarters) {
   });
 
   return body;
+}
+
+
+function createHiddenForm(query, quarter) {
+  $("#enrollment-data").append(
+    `<form id="form-${quarter}" method="post" action="/" style="display:none;">
+      <input name="dept" value="${query.dept}">
+      <input name="number" value="${query.number}">
+      <input name="quarter" value="${quarter}">
+      <input name="instructor" value="${query.instructor}">
+      <input name="courseTitle" value="${query.courseTitle}">
+      <input name="courseCode" value="${query.courseCode}">
+      <input name="courseType" value="${query.courseType}">
+    </form>`
+  );
 }
 
 

@@ -16,6 +16,7 @@ export function createSearchHistory() {
     let history = JSON.parse(localStorage.getItem("searchHistory"));
     history.forEach((item, index) => {
       createHistoryItem(item, index);
+      createHiddenForm(item, index);
       handleHistoryItemRequest(history, item, index);
     });
   }
@@ -57,7 +58,7 @@ function createHistoryItem(item, index) {
     } else {
       $(".offcanvas-body").append(
         `<div class="history-item" id="history-item-${index}">
-          <h5>${item.dept} ${item.number} (${Helper.getQuarter(item.quarter)})</h5>
+          <h5>${item.dept} ${item.number.toUpperCase().replace(/\ /g, "")} (${Helper.getQuarter(item.quarter)})</h5>
         </div>`
       );
     }
@@ -66,29 +67,29 @@ function createHistoryItem(item, index) {
 }
 
 
+function createHiddenForm(item, index) {
+  $(".offcanvas-body").append(
+    `<form id="history-form-${index}" method="post" action="/" style="display:none;">
+      <input name="dept" value="${item.dept}">
+      <input name="number" value="${item.number}">
+      <input name="quarter" value="${item.quarter}">
+      <input name="instructor" value="${item.instructor}">
+      <input name="courseTitle" value="${item.courseTitle}">
+      <input name="courseCode" value="${item.courseCode}">
+      <input name="courseType" value="${item.courseType}">
+    </form>`
+  );
+}
+
+
 // This function handles the post request when the user clicks on a course
 // to see its enrollment data again
 function handleHistoryItemRequest(history, item, index) {
   // Note: the data key stores the query that the user clicked on
   $("#history-item-" + index).on("click", function() {
-    $.ajax({
-      url: "/",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(item),
-      success: function (res) {
-        // Move the course to the beginning of the history array
-        history.splice(index, 1);
-        history.unshift(item);
-        localStorage.setItem("searchHistory", JSON.stringify(history));
-
-        // Render the new page
-        createPage(res);
-        $("#close-history-button").trigger("click");
-        $("html, body").animate({
-          scrollTop: $("#enrollment-data").offset().top
-        }, 250);
-      }
-    });
+    // Move the course to the beginning of the history array
+    history.splice(index, 1);
+    localStorage.setItem("searchHistory", JSON.stringify(history));
+    $(`#history-form-${index}`).submit();
   });
 }
