@@ -1,4 +1,3 @@
-import { createPage } from "./createGraph.js";
 import * as Helper from "./enrollmentHelper.js";
 
 
@@ -19,7 +18,7 @@ export function createSearchHistory() {
     history.forEach((item, index) => {
       createHistoryItem(item, index);
       createHiddenForm(item, index);
-      handleHistoryItemRequest(history, item, index);
+      handleHistoryItemRequest(history, index);
     });
   }
 }
@@ -87,7 +86,7 @@ function createHiddenForm(item, index) {
 
 // This function handles the post request when the user clicks on a course
 // to see its enrollment data again
-function handleHistoryItemRequest(history, item, index) {
+function handleHistoryItemRequest(history, index) {
   // Note: the data key stores the query that the user clicked on
   $("#history-item-" + index).on("click", function() {
     // Move the course to the beginning of the history array

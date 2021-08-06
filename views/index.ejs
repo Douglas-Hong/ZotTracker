@@ -113,12 +113,12 @@
               <option value="LAB">Lab</option>
               <option value="DIS">Discussion</option>
               <option value="SEM">Seminar</option>
+              <option value="ACT">Activity</option>
+              <option value="COL">Colloquium</option>
               <option value="FLD">Field Work</option>
               <option value="RES">Research</option>
-              <option value="ACT">Activity</option>
-              <option value="TUT">Tutorial</option>
-              <option value="COL">Colloquium</option>
               <option value="STU">Studio</option>
+              <option value="TUT">Tutorial</option>
             </select>
           </div>
         </div>
@@ -173,13 +173,19 @@
       return txt.value;
     }
 
+    function removeDuplicates(history) {
+      let newHistory = history.slice(1, history.length).filter((item) => JSON.stringify(item) !== JSON.stringify(history[0]));
+      newHistory.unshift(history[0]);
+      return newHistory;
+    }
+
     if ("<%= enrollment %>" !== "{}") {
       let enrollment = JSON.parse(decodeHtml("<%= enrollment %>"));
 
       if (enrollment.status === "FOUND") {
         let history = JSON.parse(localStorage.getItem("searchHistory"));
         history.unshift(enrollment.originalQuery);
-        localStorage.setItem("searchHistory", JSON.stringify(history));
+        localStorage.setItem("searchHistory", JSON.stringify(removeDuplicates(history)));
       }
 
       createPage(enrollment);
