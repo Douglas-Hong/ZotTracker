@@ -5,10 +5,17 @@
 // the "Enrollment Data" heading, the title of the course, and the Graphs/Tables/Quarters buttons
 export function createEnrollmentTitle(res) {
   const courseData = res.courseData;
-  const title = res.courseCode === "" ? `${courseData.dept} ${courseData.number} - ${courseData.title} (${getQuarter(courseData.quarter)})`
-    : `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
-  const subtitle = res.courseCode === "" ? `${res.instructor === "" ? "" : res.instructor + ", "}${getCourseType(res.courseType)}`
-    : `${courseData.dept} ${courseData.number} - ${courseData.title}`;
+
+  if (res.courseCode !== "") {
+    var title = `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
+    var subtitle = `${courseData.dept} ${courseData.number} - ${courseData.title}`;
+  } else if (res.originalQuery.courseTitle !== "") {
+    var title = `${courseData.title} (${getQuarter(courseData.quarter)})`;
+    var subtitle = getCourseType(res.courseType);
+  } else {
+    var title = `${courseData.dept} ${courseData.number} (${getQuarter(courseData.quarter)})`;
+    var subtitle = `${res.instructor === "" ? "" : res.instructor + ", "}${getCourseType(res.courseType)}`;
+  }
   
   $("#enrollment-data").html(
     `<div class="container-fluid">
