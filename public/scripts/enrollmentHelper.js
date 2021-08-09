@@ -5,16 +5,17 @@
 // the "Enrollment Data" heading, the title of the course, and the Graphs/Tables/Quarters buttons
 export function createEnrollmentTitle(res) {
   const courseData = res.courseData;
+  const query = res.originalQuery;
 
-  if (res.courseCode !== "") {
-    var title = `Course Code: ${res.courseCode} (${getQuarter(courseData.quarter)})`;
+  if (query.courseCode !== "") {
+    var title = `Course Code: ${query.courseCode} (${getQuarter(courseData.quarter)})`;
     var subtitle = `${courseData.dept} ${courseData.number} - ${courseData.title}`;
-  } else if (res.originalQuery.courseTitle !== "") {
+  } else if (query.courseTitle !== "") {
     var title = `${courseData.title} (${getQuarter(courseData.quarter)})`;
-    var subtitle = getCourseType(res.courseType);
+    var subtitle = `${query.instructor === "" ? "" : query.instructor + ", "}${getCourseType(query.courseType)}`;
   } else {
     var title = `${courseData.dept} ${courseData.number} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${res.instructor === "" ? "" : res.instructor + ", "}${getCourseType(res.courseType)}`;
+    var subtitle = `${query.instructor === "" ? "" : query.instructor + ", "}${getCourseType(query.courseType)}`;
   }
   
   $("#enrollment-data").html(
@@ -92,17 +93,14 @@ export function getCourseType(type) {
 }
 
 
-// This function determines if a certain course section has the given instructor;
-// if the instructor is empty, true will still be returned
-export function hasInstructor(instructors, instructor) {
-  return instructor === "" || instructors.some((person) => person === instructor);
-}
-
-
-// This function determines if a certain course section has the given course code;
-// if the course code is empty, true will still be returned
-export function hasCourseCode(actualCourseCode, courseCode) {
-  return courseCode === "" || actualCourseCode === courseCode;
+// This function returns true if the course should be shown in the enrollment data section;
+// a course will be shown if the course type is applicable, the instructor teaches the course,
+// and/or the course code matches
+export function isInterestingCourse(course, query) {
+  const hasCourseType = query.courseType === "all" || query.courseType === course.type;
+  const hasInstructor = query.instructor === "" || course.instructor.some((person) => person === query.instructor);
+  const hasCourseCode = query.courseCode === "" || course.course_code === query.courseCode;
+  return hasCourseType && hasInstructor && hasCourseCode;
 }
 
 

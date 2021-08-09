@@ -1,18 +1,17 @@
 import * as Helper from "./enrollmentHelper.js";
 import { handleQuarterTab, handleTableTab } from "./enrollmentNav.js";
-import { createSearchHistory } from "./searchHistory.js";
+import { createSearchHistory, popHistoryItem } from "./searchHistory.js";
 import { externalTooltipHandler } from "./tooltipHandler.js";
-
-
-createSearchHistory();
 
 
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
-  populateForm(res.originalQuery);
+  const query = res.originalQuery;
+
+  populateForm(query);
   window.addEventListener("pageshow", () => {
-    populateForm(res.originalQuery);
+    populateForm(query);
   });
 
   if (res.status === "FOUND") {
@@ -24,8 +23,7 @@ export function createPage(res) {
     handleQuarterTab(res);
 
     res.courseData.courses.forEach((course) => {
-      if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
-        Helper.hasCourseCode(course.course_code, res.courseCode)) {
+      if (Helper.isInterestingCourse(course, query)) {
         createCourse(course, numGraphs);
         // The number of graphs will be used to keep track of the index of each graph
         createGraph(`enrollment-chart-${numGraphs}`, numGraphs, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
@@ -35,9 +33,7 @@ export function createPage(res) {
 
     if (numGraphs === 0) {
       Helper.createError("No data could be generated. Double-check your Course Type!");
-      let history = JSON.parse(localStorage.getItem("searchHistory"));
-      history.shift();
-      localStorage.setItem("searchHistory", JSON.stringify(history));
+      popHistoryItem();
     }
 
     createSearchHistory();
@@ -48,6 +44,23 @@ export function createPage(res) {
     Helper.createError("That specific course does not exist. Please try again!");
   } else {
     Helper.createError("An error happened! Please try again!");
+  }
+}
+
+
+// This function fills in the form with all the user's original inputs; this is useful
+// because the page refreshes when the user submits the form or clicks the back/forward button
+function populateForm(query) {
+  $("#dept").val(query.dept);
+  $("#course-num").val(query.number);
+  $("#quarter").val(query.quarter);
+  $("#instructor").val(query.instructor);
+  $("#course-title").val(query.courseTitle);
+  $("#course-code").val(query.courseCode);
+  $("#course-type").val(query.courseType);
+
+  if ($("#quarter").val() !== "") {
+    $("#quarter").css("color", "black");
   }
 }
 
@@ -172,7 +185,7 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
 
   // If the screen is small, use an aspect ratio where the height is the 
   // same as the width; otherwise, make the graph wider
-  $(window).resize(function () {
+  $(window).resize(() => {
     if ($(window).width() < "576") {
       window[graphID].options.aspectRatio = 1;
     } else {
@@ -186,19 +199,4 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
       window[graphID] = new Chart(document.getElementById(graphID), config);
     }
   });
-}
-
-
-function populateForm(query) {
-  $("#dept").val(query.dept);
-  $("#course-num").val(query.number);
-  $("#quarter").val(query.quarter);
-  $("#instructor").val(query.instructor);
-  $("#course-title").val(query.courseTitle);
-  $("#course-code").val(query.courseCode);
-  $("#course-type").val(query.courseType);
-
-  if ($("#quarter").val() !== "") {
-    $("#quarter").css("color", "black");
-  }
 }

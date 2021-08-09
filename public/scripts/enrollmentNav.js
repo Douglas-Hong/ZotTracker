@@ -11,19 +11,19 @@ const years = ["2021", "2020", "2019", "2018", "2017", "2016"];
 
 // This function handles the event where the Tables button is clicked
 export function handleTableTab(res) {
-  $("#tables-radio").on("click", function () {
+  $("#tables-radio").on("click", () => {
     let numTables = 0;
+    const query = res.originalQuery;
 
     Helper.createEnrollmentTitle(res);
     $("#tables-radio").prop("checked", true);
-    $("#graphs-radio").on("click", function () {
+    $("#graphs-radio").on("click", () => {
       createPage(res);
     });
     handleQuarterTab(res);
 
     res.courseData.courses.forEach((course) => {
-      if ((res.courseType === "all" || res.courseType === course.type) && Helper.hasInstructor(course.instructor, res.instructor) &&
-        Helper.hasCourseCode(course.course_code, res.courseCode)) {
+      if (Helper.isInterestingCourse(course, query)) {
         createCourse(course, numTables);
         numTables++;
       }
@@ -34,10 +34,10 @@ export function handleTableTab(res) {
 
 // This function handles the event where the Quarters button is clicked
 export function handleQuarterTab(res) {
-  $("#quarters-radio").on("click", function() {    
+  $("#quarters-radio").on("click", () => {    
     Helper.createEnrollmentTitle(res);
     $("#quarters-radio").prop("checked", true);
-    $("#graphs-radio").on("click", function () {
+    $("#graphs-radio").on("click", () => {
       createPage(res);
     });
     handleTableTab(res);
@@ -49,7 +49,7 @@ export function handleQuarterTab(res) {
     $("#enrollment-data").append(createQuarterTable(res.quarters));
 
     res.quarters.forEach((quarter) => {
-      $("#" + quarter).on("click", function() {
+      $("#" + quarter).on("click", () => {
         $(`#form-${quarter}`).submit();
       });
     });
@@ -57,7 +57,8 @@ export function handleQuarterTab(res) {
 }
 
 
-// This function inserts the given course into the "Enrollment Data" section
+// This function inserts the given course into the "Enrollment Data" section; this includes
+// the course's summary and all the relevant enrollment data
 function createCourse(course, courseIndex) {
   Helper.createCourseSummary(course, courseIndex, false);
 
@@ -179,6 +180,8 @@ function createQuarterBody(quarters) {
 }
 
 
+// This function creates a hidden form; if the specific quarter is clicked, this form
+// will be submitted and the new enrollment data will be displayed
 function createHiddenForm(query, quarter) {
   $("#enrollment-data").append(
     `<form id="form-${quarter}" method="post" action="/" style="display:none;">

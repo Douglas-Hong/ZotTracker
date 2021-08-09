@@ -2,7 +2,7 @@
 // the department, quarter, and instructor select menu
 
 
-// If the value of the select menu is a placeholder, then the color of the text should be gray
+// If any quarter is selected, change the color of the select menu
 $("#quarter").on("change", function () {
   $(this).css("color", "black");
 });
@@ -51,8 +51,7 @@ function getQuarterValue(quarter) {
 
 // This function determines the color of the given quarter in the select menu
 function getQuarterColor(quarter) {
-  if ((quarter.indexOf("Fall") !== -1 && quarter.indexOf("Law") === -1) || quarter.indexOf("Winter") !== -1
-    || quarter.indexOf("Spring") !== -1) {
+  if ((quarter.indexOf("Fall") !== -1 && quarter.indexOf("Law") === -1) || quarter.indexOf("Winter") !== -1 || quarter.indexOf("Spring") !== -1) {
     return "purple";
   } else if (quarter.indexOf("Summer") !== -1 && quarter.indexOf("COM") === -1) {
     return "#744a00";
@@ -72,7 +71,7 @@ instructors.forEach((instructor) => {
 
 // If the reset button is clicked, we have to make sure that all
 // select menus are gray and properly reset
-$(".reset-button").on("click", function () {
+$(".reset-button").on("click", () => {
   $(".selectpicker").val("default");
   $('.selectpicker').selectpicker("refresh");
   $("#quarter").css("color", "gray");

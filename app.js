@@ -29,29 +29,29 @@ const courseSchema = new mongoose.Schema({
 let Course = mongoose.model("Course", courseSchema, "enrollments");
 
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.render("index.ejs", {
-    enrollment: JSON.stringify({})
+    enrollment: "{}"
   });
 });
 
 
-app.get("/about", function (req, res) {
+app.get("/about", (req, res) => {
   res.sendFile(__dirname + "/views/about.html");
 });
 
 
-app.get("/announcements", function (req, res) {
+app.get("/announcements", (req, res) => {
   res.sendFile(__dirname + "/views/announcements.html");
 });
 
 
-app.get("/feedback", function (req, res) {
+app.get("/feedback", (req, res) => {
   res.sendFile(__dirname + "/views/feedback.html");
 });
 
 
-app.post("/", function (req, res) {
+app.post("/", (req, res) => {
   if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "") 
     && (req.body.courseTitle === "" || req.body.quarter === "")) {
     res.render("index.ejs", {
@@ -70,12 +70,14 @@ app.post("/", function (req, res) {
             $in: req.body.courseCode
           };
         } else if (key === "courseTitle") {
-          query.title = req.body.courseTitle;
+          // All course titles in WebSoc are uppercase
+          query.title = req.body.courseTitle.toUpperCase();
         } else if (key === "instructor") {
           query.instructors = {
             $in: req.body.instructor
           };
         } else if (key === "number") {
+          // The course number should be case-insensitive and whitespace-insensitive
           query.number = req.body.number.toUpperCase().replace(/\ /g, "");
         } else {
           query[key] = req.body[key];
@@ -83,7 +85,7 @@ app.post("/", function (req, res) {
       }
     }
 
-    Course.findOne(query, function (err, course) {
+    Course.findOne(query, (err, course) => {
       if (err) {
         res.render("index.ejs", {
           enrollment: JSON.stringify({
@@ -102,7 +104,7 @@ app.post("/", function (req, res) {
         let quartersQuery = JSON.parse(JSON.stringify(query));
         delete quartersQuery.quarter;
 
-        Course.find(quartersQuery, function (err, courses) {
+        Course.find(quartersQuery, (err, courses) => {
           if (err) {
             res.render("index.ejs", {
               enrollment: JSON.stringify({
@@ -118,9 +120,6 @@ app.post("/", function (req, res) {
                 status: "FOUND",
                 originalQuery: req.body,
                 courseData: course,
-                courseType: req.body.courseType,
-                instructor: req.body.instructor,
-                courseCode: req.body.courseCode,
                 quarters: uniqueQuarters
               })
             });
@@ -132,7 +131,7 @@ app.post("/", function (req, res) {
 });
 
 
-app.listen(process.env.PORT || 3000, function () {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Server started on port 3000.");
 });
 
@@ -140,3 +139,5 @@ app.listen(process.env.PORT || 3000, function () {
 // TODO:
 // Navigation to other quarters when no quarter is specified
 // Add better animations to graphs
+// Update search history subheadings
+// Quarter search does not work with course type (try ICS 31 Lecture in 2018)

@@ -134,8 +134,7 @@
             <button type="button" class="btn-close text-reset" id="close-history-button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-sticky"></div>
-          <div class="offcanvas-body">
-          </div>
+          <div class="offcanvas-body"></div>
         </div>
       </form>
     </div>
@@ -165,6 +164,7 @@
   </script>
   <script type="module">
     import { createPage } from "/scripts/createGraph.js";
+    import { createSearchHistory, addHistoryItem } from "/scripts/searchHistory.js";
 
     function decodeHtml(html) {
       var txt = document.createElement("textarea");
@@ -172,16 +172,13 @@
       return txt.value;
     }
 
+    createSearchHistory();
+
     if ("<%= enrollment %>" !== "{}") {
       let enrollment = JSON.parse(decodeHtml("<%= enrollment %>"));
-
       if (enrollment.status === "FOUND") {
-        let history = JSON.parse(localStorage.getItem("searchHistory"));
-        history.unshift(enrollment.originalQuery);
-        history = history.filter((item, index) => JSON.stringify(item) !== JSON.stringify(history[0]) || index === 0);
-        localStorage.setItem("searchHistory", JSON.stringify(history));
+        addHistoryItem(enrollment.originalQuery);
       }
-
       createPage(enrollment);
     } else {
       window.addEventListener("pageshow", () => {
