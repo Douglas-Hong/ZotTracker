@@ -1,4 +1,4 @@
-// This scripts contains the functions that are used for more than one enrollment data tab
+// This script contains the functions that are used for more than one enrollment data tab
 
 
 // This function creates the title of the "Enrollment Data" section; it inserts 

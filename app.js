@@ -64,21 +64,19 @@ app.post("/", (req, res) => {
     let query = {};
 
     for (let key in req.body) {
-      if (req.body.hasOwnProperty(key) && req.body[key] && key !== "courseType") {
+      if (req.body.hasOwnProperty(key) && req.body[key] && !(key === "courseType" && req.body.courseType === "all")) {
         if (key === "courseCode") {
-          query.course_codes = {
-            $in: req.body.courseCode
-          };
+          query["courses.course_code"] = req.body.courseCode;
         } else if (key === "courseTitle") {
           // All course titles in WebSoc are uppercase
           query.title = req.body.courseTitle.toUpperCase();
         } else if (key === "instructor") {
-          query.instructors = {
-            $in: req.body.instructor
-          };
+          query["courses.instructor"] = req.body.instructor;
         } else if (key === "number") {
           // The course number should be case-insensitive and whitespace-insensitive
           query.number = req.body.number.toUpperCase().replace(/\ /g, "");
+        } else if (key === "courseType") {
+          query["courses.type"] = req.body.courseType;
         } else {
           query[key] = req.body[key];
         }
@@ -141,3 +139,4 @@ app.listen(process.env.PORT || 3000, () => {
 // Add better animations to graphs
 // Update search history subheadings
 // Quarter search does not work with course type (try ICS 31 Lecture in 2018)
+// Note: test what happens if the instructor of a course changes from STAFF to a real name; try 33301
