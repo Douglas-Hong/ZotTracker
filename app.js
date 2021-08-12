@@ -37,17 +37,17 @@ app.get("/", (req, res) => {
 
 
 app.get("/about", (req, res) => {
-  res.sendFile(__dirname + "/views/about.html");
+  res.render("about.ejs");
 });
 
 
 app.get("/announcements", (req, res) => {
-  res.sendFile(__dirname + "/views/announcements.html");
+  res.render("announcements.ejs");
 });
 
 
 app.get("/feedback", (req, res) => {
-  res.sendFile(__dirname + "/views/feedback.html");
+  res.render("feedback.ejs");
 });
 
 
