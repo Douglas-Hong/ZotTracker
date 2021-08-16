@@ -111,16 +111,16 @@
 }
 
 .custom-table thead tr {
-  background-color: #d5e5ff;
+  background-color:#D5E5FF;
   font-weight: bold;
 }
 
 .custom-table tbody tr td {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDDDDD;
 }
 
 .custom-table tbody tr:nth-of-type(odd) {
-  background-color: #ededed;
+  background-color: #EDEDED;
 }
 
 .custom-table tbody tr:nth-of-type(even) {
@@ -129,6 +129,10 @@
 
 .custom-table th, .custom-table td {
   padding: 5px;
+}
+
+#enrollment-data div:nth-child(4n + 1) .summary-table tbody tr {
+  background-color: lightgray;
 }
 
 .quarter-table {
