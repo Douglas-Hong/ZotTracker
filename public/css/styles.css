@@ -175,7 +175,7 @@
     padding: 0 16%;
   }
 
-  table, .enrollment-table, .show-data-button {
+  .summary-table, .enrollment-table, .show-data-button {
     font-size: 0.65rem;
   }
 }
@@ -197,7 +197,7 @@
     padding: 0 6%;
   }
 
-  table, .enrollment-table, .show-data-button {
+  .summary-table, .enrollment-table, .show-data-button {
     font-size: 0.6rem;
   }
 
