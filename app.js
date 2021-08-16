@@ -139,4 +139,4 @@ app.listen(process.env.PORT || 3000, () => {
 // Add better animations to graphs
 // Update search history subheadings
 // Quarter search does not work with course type (try ICS 31 Lecture in 2018)
-// Note: test what happens if the instructor of a course changes from STAFF to a real name; try 33301
+// Note: test what happens if the instructor of a course changes from STAFF to a real name; try 33303

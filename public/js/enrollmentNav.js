@@ -74,7 +74,7 @@ function createCourse(course, courseIndex) {
 // This function  creates the table associated with the given course section; it will
 // include all the recorded dates, enrolled/max/req/waitlist/nor statistics, and statuses
 function createTable(course) {
-  return `<table class="table table-sm table-light table-striped table-bordered enrollment-table">
+  return `<table class="enrollment-table custom-table">
     <thead>
       <tr>
         <th scope="col">Date</th>
@@ -134,19 +134,17 @@ function getStatusColor(status) {
 // a specific course
 function createQuarterTable(quarters) {
   return `<div class="container-fluid">
-    <div class="table-responsiveness quarter-table">
-      <table class="table table-sm table-light table-striped table-bordered">
-        <thead>
-          <tr class="text-center">
-            <th scope="col">Year</th>
-            <th scope="col">Quarters Offered</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${createQuarterBody(quarters)}
-        </tbody>
-      </table>
-    </div>
+    <table class="quarter-table custom-table">
+      <thead>
+        <tr class="text-center">
+          <th scope="col">Year</th>
+          <th scope="col">Quarters Offered</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${createQuarterBody(quarters)}
+      </tbody>
+    </table>
   </div>`;
 }
 

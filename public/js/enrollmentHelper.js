@@ -139,37 +139,35 @@ export function createError(message) {
 // course location, and a button that allows the user to switch between graphs and tables
 export function createCourseSummary(course, courseIndex, isGraph) {
   $("#enrollment-data").append(
-    `<div class="container-fluid">
-      <div class="table-responsiveness summary-table">
-        <table class="table table-sm table-light table-striped table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Code</th>
-              <th scope="col">Type</th>
-              <th scope="col">Sec</th>
-              <th scope="col">Instructor</th>
-              <th scope="col">Time</th>
-              <th scope="col">Place</th>
-              <th scope="col">${isGraph ? "Graph" : "Table"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>${course["course_code"]}</td>
-              <td>${course.type}</td>
-              <td>${course.section}</td>
-              <td class="table-list">${formatArray(course.instructor)}</td>
-              <td class="table-list">${formatArray(course.time)}</td>
-              <td class="table-list">${formatArray(course.place)}</td>
-              <td class="text-center align-middle">
-                <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
-                  type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    `<div class="course-summary">
+      <table class="summary-table custom-table">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Type</th>
+            <th scope="col">Sec</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">Time</th>
+            <th scope="col">Place</th>
+            <th scope="col">${isGraph ? "Graph" : "Table"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${course["course_code"]}</td>
+            <td>${course.type}</td>
+            <td>${course.section}</td>
+            <td class="table-list">${formatArray(course.instructor)}</td>
+            <td class="table-list">${formatArray(course.time)}</td>
+            <td class="table-list">${formatArray(course.place)}</td>
+            <td class="text-center align-middle">
+              <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
+                type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>`
   );
 

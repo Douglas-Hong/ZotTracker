@@ -15,7 +15,7 @@
 }
 
 .selection-label, .first-selection-label {
-  margin-top: 25px;
+  margin-top: 20px;
 }
 
 .bootstrap-select>.dropdown-toggle.bs-placeholder, 
@@ -30,7 +30,7 @@
 }
 
 .button-row {
-  margin-top: 40px;
+  margin-top: 35px;
 }
 
 .submit-button {
@@ -92,14 +92,55 @@
   text-align: center;
 }
 
+.course-summary {
+  padding: 0 20%;
+}
+
 .summary-table {
-  font-size: 0.8rem;
   margin-top: 50px;
+  margin-bottom: 25px;
+}
+
+.custom-table {
+  border-collapse: collapse;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.custom-table thead tr {
+  background-color: #d5e5ff;
+  font-weight: bold;
+}
+
+.custom-table tbody tr td {
+  border-bottom: 1px solid #dddddd;
+}
+
+.custom-table tbody tr:nth-of-type(odd) {
+  background-color: #ededed;
+}
+
+.custom-table tbody tr:nth-of-type(even) {
+  background-color: lightgray;
+}
+
+.custom-table th, .custom-table td {
+  padding: 5px;
+}
+
+.quarter-table {
+  font-size: 1.1rem;
 }
 
 .enrollment-table {
   font-size: 0.8rem;
-  margin: 0;
+}
+
+.enrollment-table tbody tr td:first-child {
+  font-weight: bold;
 }
 
 .table-list p {
@@ -126,11 +167,15 @@
     padding: 0 12%;
   }
 
+  .course-summary {
+    padding: 0 14%;
+  }
+
   .chart-container {
     padding: 0 16%;
   }
 
-  .summary-table, .enrollment-table, .show-data-button {
+  table, .enrollment-table, .show-data-button {
     font-size: 0.65rem;
   }
 }
@@ -138,6 +183,10 @@
 @media (max-width: 576px) {
   .container-fluid {
     padding: 0 8%;
+  }
+
+  .course-summary {
+    padding: 0 4%;
   }
 
   .selection-label {
@@ -148,7 +197,7 @@
     padding: 0 6%;
   }
 
-  .summary-table, .enrollment-table, .show-data-button {
+  table, .enrollment-table, .show-data-button {
     font-size: 0.6rem;
   }
 
