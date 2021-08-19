@@ -104,7 +104,7 @@
 .custom-table {
   border-collapse: collapse;
   border-radius: 5px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   font-size: 0.85rem;
   overflow: hidden;
   width: 100%;
@@ -160,10 +160,8 @@
 }
 
 .chart {
-  border: solid;
-  border-color: silver;
+  border: 1px solid silver;
   border-radius: 15px;
-  border-width: 2px;
 }
 
 @media (min-width: 577px) and (max-width: 992px) {
