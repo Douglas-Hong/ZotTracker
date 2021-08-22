@@ -138,28 +138,8 @@
     });
   </script>
   <script type="module">
-    import { createPage } from "/js/createGraph.js";
-    import { createSearchHistory, addHistoryItem } from "/js/searchHistory.js";
-
-    function decodeHtml(html) {
-      var txt = document.createElement("textarea");
-      txt.innerHTML = html;
-      return txt.value;
-    }
-
-    createSearchHistory();
-
-    if ("<%= enrollment %>" !== "{}") {
-      let enrollment = JSON.parse(decodeHtml("<%= enrollment %>"));
-      if (enrollment.status === "FOUND") {
-        addHistoryItem(enrollment.originalQuery);
-      }
-      createPage(enrollment);
-    } else {
-      window.addEventListener("pageshow", () => {
-        $(".reset-button").click();
-      });
-    }
+    import { handleRefresh, decodeHtml } from "/js/handleRefresh.js";
+    handleRefresh(JSON.parse(decodeHtml("<%= enrollment %>")));
   </script>
 </body>
 

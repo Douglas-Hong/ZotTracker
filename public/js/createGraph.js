@@ -7,13 +7,6 @@ import { externalTooltipHandler } from "./tooltipHandler.js";
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
-  const query = res.originalQuery;
-
-  populateForm(query);
-  window.addEventListener("pageshow", () => {
-    populateForm(query);
-  });
-
   if (res.status === "FOUND") {
     let numGraphs = 0;
 
@@ -23,7 +16,7 @@ export function createPage(res) {
     handleQuarterTab(res);
 
     res.courseData.courses.forEach((course) => {
-      if (Helper.isInterestingCourse(course, query)) {
+      if (Helper.isInterestingCourse(course, res.originalQuery)) {
         createCourse(course, numGraphs);
         // The number of graphs will be used to keep track of the index of each graph
         createGraph(`enrollment-chart-${numGraphs}`, numGraphs, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
@@ -44,23 +37,6 @@ export function createPage(res) {
     Helper.createError("That specific course does not exist. Please try again!");
   } else {
     Helper.createError("An error happened! Please try again!");
-  }
-}
-
-
-// This function fills in the form with all the user's original inputs; this is useful
-// because the page refreshes when the user submits the form or clicks the back/forward button
-function populateForm(query) {
-  $("#dept").val(query.dept);
-  $("#course-num").val(query.number);
-  $("#quarter").val(query.quarter);
-  $("#instructor").val(query.instructor);
-  $("#course-title").val(query.courseTitle);
-  $("#course-code").val(query.courseCode);
-  $("#course-type").val(query.courseType);
-
-  if ($("#quarter").val() !== "") {
-    $("#quarter").css("color", "black");
   }
 }
 
