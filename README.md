@@ -39,7 +39,7 @@ View the enrollment data of any course at UC Irvine!
 
 <p align="center">Enrollment Data</p>
 
-![Enrollment Data](https://i.imgur.com/gwpQnfo.jpg)
+![Enrollment Data](https://i.imgur.com/8N7oaCT.jpg)
 
 <p align="center">Search History</p>
 

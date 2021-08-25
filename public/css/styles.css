@@ -101,7 +101,7 @@
   margin-bottom: 25px;
 }
 
-.custom-table {
+.data-table {
   border-collapse: collapse;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
@@ -110,41 +110,56 @@
   width: 100%;
 }
 
-.custom-table thead tr {
+.data-table thead tr {
   background-color:#D5E5FF;
   font-weight: bold;
 }
 
-.custom-table tbody tr td {
-  border-bottom: 1px solid #DDDDDD;
+.data-table th {
+  padding: 5px;
 }
 
-.custom-table tbody tr:nth-of-type(odd) {
+.data-table tbody tr:nth-of-type(odd) {
   background-color: #EDEDED;
 }
 
-.custom-table tbody tr:nth-of-type(even) {
-  background-color: lightgray;
+.data-table tbody tr:nth-of-type(even) {
+  background-color: #D3D3D3;
 }
 
-.custom-table th, .custom-table td {
+.data-table td {
+  border-bottom: 1px solid #DDDDDD;
   padding: 5px;
 }
 
 #enrollment-data div:nth-child(4n + 1) .summary-table tbody tr {
-  background-color: lightgray;
-}
-
-.quarter-table {
-  font-size: 1.1rem;
+  background-color: #D3D3D3;
 }
 
 .enrollment-table {
   font-size: 0.8rem;
 }
 
-.enrollment-table tbody tr td:first-child {
+.enrollment-table td:first-child {
   font-weight: bold;
+}
+
+.course-status {
+  font-weight: bold;
+}
+
+.quarter-table {
+  font-size: 1.1rem;
+  margin-top: 50px;
+}
+
+.quarter-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.quarter-link:hover {
+  text-decoration: underline;
 }
 
 .table-list p {
@@ -214,23 +229,6 @@
   .history-button {
     margin-left: 10px;
   }
-}
-
-.course-status {
-  font-weight: bold;
-}
-
-.quarter-table {
-  margin-top: 50px;
-}
-
-.quarter-link {
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.quarter-link:hover {
-  text-decoration: underline;
 }
 
 .error-message {

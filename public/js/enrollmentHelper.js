@@ -140,7 +140,7 @@ export function createError(message) {
 export function createCourseSummary(course, courseIndex, isGraph) {
   $("#enrollment-data").append(
     `<div class="course-summary">
-      <table class="summary-table custom-table">
+      <table class="data-table summary-table">
         <thead>
           <tr>
             <th scope="col">Code</th>
