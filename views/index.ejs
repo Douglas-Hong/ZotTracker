@@ -22,7 +22,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:ital,wght@0,800;1,900&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/1c9ad4b785.js" crossorigin="anonymous"></script>
@@ -139,7 +139,7 @@
   </script>
   <script type="module">
     import { handleRefresh, decodeHtml } from "/js/handleRefresh.js";
-    handleRefresh(JSON.parse(decodeHtml("<%= enrollment %>")));
+    handleRefresh(decodeHtml("<%= enrollment %>"));
   </script>
 </body>
 

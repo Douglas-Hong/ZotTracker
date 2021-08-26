@@ -73,15 +73,15 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
         label: "Enrolled",
         data: enrolled,
         fill: false,
-        borderColor: "#0d6efd",
-        backgroundColor: "#0d6efd",
+        borderColor: "#457B9D",
+        backgroundColor: "#457B9D",
       },
       {
         label: "Max",
         data: max,
         fill: false,
-        borderColor: "#dc3545",
-        backgroundColor: "#dc3545",
+        borderColor: "#E63946",
+        backgroundColor: "#E63946",
       },
     ]
   };
@@ -99,6 +99,7 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
     });
   }
 
+  Chart.defaults.font.family = "Inter";
   const config = {
     type: 'line',
     data: data,

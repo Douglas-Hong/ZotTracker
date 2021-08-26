@@ -25,7 +25,7 @@ export function createEnrollmentTitle(res) {
       <p class="enrollment-subheading">${subtitle}</p>
     </div>
     <div class="text-center">
-      <div class="btn-group" role="group">
+      <div class="btn-group tab-group" role="group">
         <input type="radio" class="btn-check" id="graphs-radio" autocomplete="off">
         <label class="btn btn-outline-primary" for="graphs-radio">Graphs</label>
         <input type="radio" class="btn-check" id="tables-radio" autocomplete="off">

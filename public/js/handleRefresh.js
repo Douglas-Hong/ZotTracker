@@ -6,6 +6,8 @@ export function handleRefresh(enrollment) {
   createSearchHistory();
 
   if (enrollment !== "{}") {
+    enrollment = JSON.parse(enrollment);
+
     if (enrollment.status === "FOUND") {
       addHistoryItem(enrollment.originalQuery);
     }

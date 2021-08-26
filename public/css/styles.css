@@ -1,15 +1,30 @@
+body {
+  background-color: #F9FDF8;
+  font-family: "Inter", sans-serif;
+}
+
 .container-fluid {
   padding: 0 18%;
+}
+
+#navigation {
+  background-color: #1D3557;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
 }
 
 .title {
   font-family: "Montserrat", sans-serif;
   font-size: 2rem;
   font-style: italic;
+  font-weight: 900;
 }
 
 .heading {
   font-family: "Montserrat", sans-serif;
+  font-weight: 800;
   margin-top: 50px;
   text-align: center;
 }
@@ -92,6 +107,10 @@
   text-align: center;
 }
 
+.tab-group {
+  background-color: white;
+}
+
 .course-summary {
   padding: 0 20%;
 }
@@ -111,7 +130,7 @@
 }
 
 .data-table thead tr {
-  background-color:#D5E5FF;
+  background-color:#A8DADC;
   font-weight: bold;
 }
 
@@ -176,6 +195,7 @@
 
 .chart {
   border: 1px solid silver;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
 }
 
