@@ -16,7 +16,7 @@ export function handleTableTab(res) {
     const query = res.originalQuery;
 
     Helper.createEnrollmentTitle(res);
-    $("#tables-radio").prop("checked", true);
+    Helper.handleTabStyling("#tables-radio", "#tables-button");
     $("#graphs-radio").on("click", () => {
       createPage(res);
     });
@@ -36,7 +36,7 @@ export function handleTableTab(res) {
 export function handleQuarterTab(res) {
   $("#quarters-radio").on("click", () => {    
     Helper.createEnrollmentTitle(res);
-    $("#quarters-radio").prop("checked", true);
+    Helper.handleTabStyling("#quarters-radio", "#quarters-button");
     $("#graphs-radio").on("click", () => {
       createPage(res);
     });

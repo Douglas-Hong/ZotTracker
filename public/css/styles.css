@@ -48,6 +48,16 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 35px;
 }
 
+.custom-button, .custom-button:active, .custom-button:focus {
+  background-color: #45789D;
+  border-color: #45789D;
+}
+
+.custom-button:hover {
+  background-color: #2B4B62;
+  transition: background-color 0.15s ease-in-out;
+}
+
 .submit-button {
   margin-right: 20px;
 }
@@ -78,7 +88,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .history-item:hover {
   background-color: #DCDCDC;
-  transition: background-color 0.5s ease;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.history-heading {
+  font-weight: 600;
 }
 
 .history-subheading {
@@ -107,8 +121,28 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-.tab-group {
+.current-tab {
+  background-color: #45789D !important;
+  border-color: #45789D;
+  color: white;
+}
+
+.other-tab {
   background-color: white;
+  border-color: #45789D;
+  color: #45789D;
+}
+
+.other-tab:active, .other-tab:focus {
+  background-color: #45789D !important;
+  color: white;
+}
+
+.other-tab:hover {
+  background-color: #45789D;
+  color: white;
+  transition: background-color 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out;
 }
 
 .course-summary {
@@ -194,7 +228,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chart {
-  border: 1px solid silver;
+  border: 1px solid #DDDDDD;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
 }

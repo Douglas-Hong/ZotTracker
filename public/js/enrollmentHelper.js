@@ -27,11 +27,11 @@ export function createEnrollmentTitle(res) {
     <div class="text-center">
       <div class="btn-group tab-group" role="group">
         <input type="radio" class="btn-check" id="graphs-radio" autocomplete="off">
-        <label class="btn btn-outline-primary" for="graphs-radio">Graphs</label>
+        <label class="btn btn-outline-secondary" id="graphs-button" for="graphs-radio">Graphs</label>
         <input type="radio" class="btn-check" id="tables-radio" autocomplete="off">
-        <label class="btn btn-outline-primary" for="tables-radio">Tables</label>
+        <label class="btn btn-outline-secondary" id="tables-button" for="tables-radio">Tables</label>
         <input type="radio" class="btn-check" id="quarters-radio" autocomplete="off">
-        <label class="btn btn-outline-primary" for="quarters-radio">Quarters</label>
+        <label class="btn btn-outline-secondary" id="quarters-button" for="quarters-radio">Quarters</label>
       </div>
     </div>`
   );
@@ -161,7 +161,7 @@ export function createCourseSummary(course, courseIndex, isGraph) {
             <td class="table-list">${formatArray(course.time)}</td>
             <td class="table-list">${formatArray(course.place)}</td>
             <td class="text-center align-middle">
-              <button class="btn btn-primary show-data-button" id="show-data-button-${courseIndex}"
+              <button class="btn btn-secondary show-data-button custom-button" id="show-data-button-${courseIndex}"
                 type="button" data-bs-toggle="collapse" data-bs-target="#chart-collapse-${courseIndex}">Open
               </button>
             </td>
@@ -191,4 +191,27 @@ function formatArray(array) {
   });
 
   return arrayHTML;
+}
+
+
+export function handleTabStyling(currentTabRadio, currentTabButton) {
+  $(currentTabRadio).prop("checked", true);
+
+  replaceClass("#graphs-button", "current-tab", "other-tab");
+  replaceClass("#tables-button", "current-tab", "other-tab");
+  replaceClass("#quarters-button", "current-tab", "other-tab");
+
+  if (currentTabButton === "#graphs-button") {
+    replaceClass(currentTabButton, "other-tab", "current-tab");
+  } else if (currentTabButton === "#tables-button") {
+    replaceClass(currentTabButton, "other-tab", "current-tab");
+  } else {
+    replaceClass(currentTabButton, "other-tab", "current-tab");  
+  }
+}
+
+
+function replaceClass(id, classToRemove, classToAdd) {
+  $(id).removeClass(classToRemove);
+  $(id).addClass(classToAdd);
 }

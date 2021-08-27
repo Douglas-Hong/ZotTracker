@@ -60,7 +60,7 @@ function createHistoryItem(item, index) {
 
   $(".offcanvas-body").append(
     `<div class="history-item" id="history-item-${index}">
-      <h5>${heading}</h5>
+      <h5 class="history-heading">${heading}</h5>
       <p class="history-subheading">${item.instructor === "" ? "" : item.instructor + ", "}${Helper.getCourseType(item.courseType)}</p>
     </div>`
   );

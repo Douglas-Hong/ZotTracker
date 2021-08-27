@@ -11,7 +11,7 @@ export function createPage(res) {
     let numGraphs = 0;
 
     Helper.createEnrollmentTitle(res);
-    $("#graphs-radio").prop("checked", true);
+    Helper.handleTabStyling("#graphs-radio", "#graphs-button");
     handleTableTab(res);
     handleQuarterTab(res);
 
