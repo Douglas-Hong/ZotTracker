@@ -71,7 +71,7 @@ app.post("/", (req, res) => {
           // All course titles in WebSoc are uppercase
           query.title = req.body.courseTitle.toUpperCase();
         } else if (key === "instructor") {
-          query["courses.instructor"] = req.body.instructor;
+          query["courses.instructor"] = req.body.instructor.toUpperCase();
         } else if (key === "number") {
           // The course number should be case-insensitive and whitespace-insensitive
           query.number = req.body.number.toUpperCase().replace(/\ /g, "");
