@@ -3,8 +3,8 @@
 
 
 // If any quarter is selected, change the color of the select menu
-$("#quarter").on("change", function () {
-  $(this).css("color", "black");
+$('#quarter').on('change', function () {
+  $(this).css('color', 'black');
 });
 
 
@@ -12,7 +12,7 @@ const depts = ['AC ENG . . . . . .Academic English', 'AFAM . . . . . . . African
 
 
 depts.forEach((dept) => {
-  $("#dept").append(`<option value="${dept.slice(0, dept.indexOf(".") - 1)}">${dept}</option>`);
+  $('#dept').append(`<option value="${dept.slice(0, dept.indexOf('.') - 1)}">${dept}</option>`);
 });
 
 
@@ -20,7 +20,7 @@ const quarters = ['2021  Fall Quarter', '2021  Fall Semester (Law)', '2021  Summ
 
 
 quarters.forEach((quar) => {
-  $("#quarter").append(`<option value="${getQuarterValue(quar)}" style="color: ${getQuarterColor(quar)}">${quar}</option>`);
+  $('#quarter').append(`<option value="${getQuarterValue(quar)}" style="color: ${getQuarterColor(quar)}">${quar}</option>`);
 });
 
 
@@ -29,19 +29,19 @@ quarters.forEach((quar) => {
 function getQuarterValue(quarter) {
   const year = quarter.slice(0, 4);
 
-  if (quarter.indexOf("Fall") !== -1 && quarter.indexOf("Law") === -1) {
+  if (quarter.indexOf('Fall') !== -1 && quarter.indexOf('Law') === -1) {
     return `${year}-92`;
-  } else if (quarter.indexOf("Fall") !== -1) {
+  } else if (quarter.indexOf('Fall') !== -1) {
     return `${year}-8F`;
-  } else if (quarter.indexOf("Winter") !== -1) {
+  } else if (quarter.indexOf('Winter') !== -1) {
     return `${year}-03`;
-  } else if (quarter.indexOf("Spring") !== -1) {
+  } else if (quarter.indexOf('Spring') !== -1) {
     return `${year}-14`;
-  } else if (quarter.indexOf("Summer Session 1") !== -1) {
+  } else if (quarter.indexOf('Summer Session 1') !== -1) {
     return `${year}-25`;
-  } else if (quarter.indexOf("Summer Session 2") !== -1) {
+  } else if (quarter.indexOf('Summer Session 2') !== -1) {
     return `${year}-76`;
-  } else if (quarter.indexOf("COM") !== -1) {
+  } else if (quarter.indexOf('COM') !== -1) {
     return `${year}-51`;
   } else {
     return `${year}-39`;
@@ -51,20 +51,21 @@ function getQuarterValue(quarter) {
 
 // This function determines the color of the given quarter in the select menu
 function getQuarterColor(quarter) {
-  if ((quarter.indexOf("Fall") !== -1 && quarter.indexOf("Law") === -1) || quarter.indexOf("Winter") !== -1 || quarter.indexOf("Spring") !== -1) {
-    return "purple";
-  } else if (quarter.indexOf("Summer") !== -1 && quarter.indexOf("COM") === -1) {
-    return "#744a00";
+  if ((quarter.indexOf('Fall') !== -1 && quarter.indexOf('Law') === -1) 
+    || quarter.indexOf('Winter') !== -1 || quarter.indexOf('Spring') !== -1) {
+    return '#800080';
+  } else if (quarter.indexOf('Summer') !== -1 && quarter.indexOf('COM') === -1) {
+    return '#744a00';
   } else {
-    return "#555";
+    return '#555';
   }
 }
 
 
 // If the reset button is clicked, we have to make sure that all
 // select menus are gray and properly reset
-$(".reset-button").on("click", () => {
-  $(".selectpicker").val("default");
-  $('.selectpicker').selectpicker("refresh");
-  $("#quarter").css("color", "gray");
+$('.reset-button').on('click', () => {
+  $('.selectpicker').val('default');
+  $('.selectpicker').selectpicker('refresh');
+  $('#quarter').css('color', 'gray');
 });

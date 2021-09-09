@@ -1,42 +1,40 @@
-import * as Helper from "./enrollmentHelper.js";
-import { handleQuarterTab, handleTableTab } from "./enrollmentNav.js";
-import { createSearchHistory, popHistoryItem } from "./searchHistory.js";
-import { externalTooltipHandler } from "./tooltipHandler.js";
+import * as Helper from './enrollmentHelper.js';
+import { handleQuarterTab, handleTableTab } from './enrollmentNav.js';
+import { createSearchHistory, popHistoryItem } from './searchHistory.js';
+import { externalTooltipHandler } from './tooltipHandler.js';
 
 
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
-  if (res.status === "FOUND") {
+  if (res.status === 'FOUND') {
     let numGraphs = 0;
 
     Helper.createEnrollmentTitle(res);
-    Helper.handleTabStyling("#graphs-radio", "#graphs-button");
+    Helper.handleTabStyling('#graphs-radio', '#graphs-button');
     handleTableTab(res);
     handleQuarterTab(res);
 
     res.courseData.courses.forEach((course) => {
       if (Helper.isInterestingCourse(course, res.originalQuery)) {
         createCourse(course, numGraphs);
-        // The number of graphs will be used to keep track of the index of each graph
-        createGraph(`enrollment-chart-${numGraphs}`, numGraphs, Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
         numGraphs++;
       }
     });
 
     if (numGraphs === 0) {
-      Helper.createError("No data could be generated. Double-check your Course Type!");
+      Helper.createError('No data could be generated. Double-check your Course Type!');
       popHistoryItem();
     }
 
     createSearchHistory();
-  } else if (res.status === "EMPTY INPUT") {
+  } else if (res.status === 'EMPTY INPUT') {
     Helper.createError(`You need to specify more information! To successfully submit a course, select a Department, Course Number, and Quarter. 
-      For more help, check out the <a class="link "href="about" target="_blank">About</a> page!`);
-  } else if (res.status === "NOT FOUND") {
-    Helper.createError("That specific course does not exist. Please try again!");
+      For more help, check out the <a class="link" href="about" target="_blank">About</a> page!`);
+  } else if (res.status === 'NOT FOUND') {
+    Helper.createError('That specific course does not exist. Please try again!');
   } else {
-    Helper.createError("An error happened! Please try again!");
+    Helper.createError('An error happened! Please try again!');
   }
 }
 
@@ -46,14 +44,18 @@ export function createPage(res) {
 function createCourse(course, courseIndex) {
   Helper.createCourseSummary(course, courseIndex, true);
 
-  $("#enrollment-data").append(
+  $('#enrollment-data').append(
     `<div class="collapse" id="chart-collapse-${courseIndex}">
       <div class="chart-container">
         <div class="chart">
           <canvas id="enrollment-chart-${courseIndex}"></canvas>
         </div>
       </div>
-    </div>`);
+    </div>`
+  );
+
+  createGraph(`enrollment-chart-${courseIndex}`, courseIndex, 
+    Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
 }
 
 
@@ -70,18 +72,18 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
   let data = {
     labels: dates,
     datasets: [{
-        label: "Enrolled",
+        label: 'Enrolled',
         data: enrolled,
         fill: false,
-        borderColor: "#457B9D",
-        backgroundColor: "#457B9D",
+        borderColor: '#457B9D',
+        backgroundColor: '#457B9D',
       },
       {
-        label: "Max",
+        label: 'Max',
         data: max,
         fill: false,
-        borderColor: "#E63946",
-        backgroundColor: "#E63946",
+        borderColor: '#E63946',
+        backgroundColor: '#E63946',
       },
     ]
   };
@@ -91,15 +93,15 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
   // is n/a or nonexistent on a certain day
   if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
     data.datasets.push({
-      label: "Waitlist",
+      label: 'Waitlist',
       data: waitlist.map((item) => (!isNaN(item) && !isNaN(parseFloat(item))) ? Number(item) : null),
       fill: false,
-      borderColor: "gray",
-      backgroundColor: "gray",
+      borderColor: 'gray',
+      backgroundColor: 'gray',
     });
   }
 
-  Chart.defaults.font.family = "Inter";
+  Chart.defaults.font.family = 'Inter';
   const config = {
     type: 'line',
     data: data,
@@ -130,10 +132,10 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
         x: {
           title: {
             display: true,
-            text: "Date",
+            text: 'Date',
             font: {
               size: 12,
-              weight: "bold",
+              weight: 'bold',
               padding: 10
             }
           }
@@ -142,10 +144,10 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
           beginAtZero: true,
           title: {
             display: true,
-            text: "Number of Students",
+            text: 'Number of Students',
             font: {
               size: 12,
-              weight: "bold",
+              weight: 'bold',
               padding: 10
             }
           }
@@ -156,22 +158,22 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
 
   window[graphID] = new Chart(document.getElementById(graphID), config);
 
-  if ($(window).width() < "576") {
+  if ($(window).width() < '576') {
     window[graphID].options.aspectRatio = 1;
   }
 
   // If the screen is small, use an aspect ratio where the height is the 
   // same as the width; otherwise, make the graph wider
   $(window).resize(() => {
-    if ($(window).width() < "576") {
+    if ($(window).width() < '576') {
       window[graphID].options.aspectRatio = 1;
     } else {
       window[graphID].options.aspectRatio = 2;
     }
   });
 
-  $("#show-data-button-" + numGraphs).on("click", function () {
-    if ($(this).text() === "Close") {
+  $('#show-data-button-' + numGraphs).on('click', function () {
+    if ($(this).text() === 'Close') {
       window[graphID].destroy();
       window[graphID] = new Chart(document.getElementById(graphID), config);
     }

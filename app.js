@@ -1,6 +1,6 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
 const uri = process.env.MONGODB_URI;
 
 
@@ -9,8 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
-app.use(express.static("public"));
-app.set("view engine", "ejs");
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
 
 
 mongoose.connect(uri, {
@@ -26,37 +26,37 @@ const courseSchema = new mongoose.Schema({
   instructors: [String],
   courses: {}
 });
-let Course = mongoose.model("Course", courseSchema, "enrollments");
+let Course = mongoose.model('Course', courseSchema, 'enrollments');
 
 
-app.get("/", (req, res) => {
-  res.render("index.ejs", {
-    enrollment: "{}"
+app.get('/', (req, res) => {
+  res.render('index.ejs', {
+    enrollment: '{}'
   });
 });
 
 
-app.get("/about", (req, res) => {
-  res.render("about.ejs");
+app.get('/about', (req, res) => {
+  res.render('about.ejs');
 });
 
 
-app.get("/announcements", (req, res) => {
-  res.render("announcements.ejs");
+app.get('/announcements', (req, res) => {
+  res.render('announcements.ejs');
 });
 
 
-app.get("/feedback", (req, res) => {
-  res.render("feedback.ejs");
+app.get('/feedback', (req, res) => {
+  res.render('feedback.ejs');
 });
 
 
-app.post("/", (req, res) => {
-  if ((req.body.quarter === "" || req.body.dept === "" || req.body.number === "") && (req.body.quarter === "" || req.body.courseCode === "") 
-    && (req.body.courseTitle === "" || req.body.quarter === "")) {
-    res.render("index.ejs", {
+app.post('/', (req, res) => {
+  if ((req.body.quarter === '' || req.body.dept === '' || req.body.number === '') && (req.body.quarter === '' || req.body.courseCode === '') 
+    && (req.body.courseTitle === '' || req.body.quarter === '')) {
+    res.render('index.ejs', {
       enrollment: JSON.stringify({
-        status: "EMPTY INPUT",
+        status: 'EMPTY INPUT',
         originalQuery: req.body
       })
     });
@@ -64,19 +64,19 @@ app.post("/", (req, res) => {
     let query = {};
 
     for (let key in req.body) {
-      if (req.body.hasOwnProperty(key) && req.body[key] && !(key === "courseType" && req.body.courseType === "all")) {
-        if (key === "courseCode") {
-          query["courses.course_code"] = req.body.courseCode;
-        } else if (key === "courseTitle") {
+      if (req.body.hasOwnProperty(key) && req.body[key] && !(key === 'courseType' && req.body.courseType === 'all')) {
+        if (key === 'courseCode') {
+          query['courses.course_code'] = req.body.courseCode;
+        } else if (key === 'courseTitle') {
           // All course titles in WebSoc are uppercase
           query.title = req.body.courseTitle.toUpperCase();
-        } else if (key === "instructor") {
-          query["courses.instructor"] = req.body.instructor.toUpperCase();
-        } else if (key === "number") {
+        } else if (key === 'instructor') {
+          query['courses.instructor'] = req.body.instructor.toUpperCase();
+        } else if (key === 'number') {
           // The course number should be case-insensitive and whitespace-insensitive
-          query.number = req.body.number.toUpperCase().replace(/\ /g, "");
-        } else if (key === "courseType") {
-          query["courses.type"] = req.body.courseType;
+          query.number = req.body.number.toUpperCase().replace(/\ /g, '');
+        } else if (key === 'courseType') {
+          query['courses.type'] = req.body.courseType;
         } else {
           query[key] = req.body[key];
         }
@@ -85,16 +85,16 @@ app.post("/", (req, res) => {
 
     Course.findOne(query, (err, course) => {
       if (err) {
-        res.render("index.ejs", {
+        res.render('index.ejs', {
           enrollment: JSON.stringify({
-            status: "ERROR",
+            status: 'ERROR',
             originalQuery: req.body
           })
         });
       } else if (!course) {
-        res.render("index.ejs", {
+        res.render('index.ejs', {
           enrollment: JSON.stringify({
-            status: "NOT FOUND",
+            status: 'NOT FOUND',
             originalQuery: req.body
           })
         });
@@ -104,18 +104,18 @@ app.post("/", (req, res) => {
 
         Course.find(quartersQuery, (err, courses) => {
           if (err) {
-            res.render("index.ejs", {
+            res.render('index.ejs', {
               enrollment: JSON.stringify({
-                status: "ERROR",
+                status: 'ERROR',
                 originalQuery: req.body
               })
             });
           } else {
             const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
             // We store the original query in case the user clicks on this course in their search history
-            res.render("index.ejs", {
+            res.render('index.ejs', {
               enrollment: JSON.stringify({
-                status: "FOUND",
+                status: 'FOUND',
                 originalQuery: req.body,
                 courseData: course,
                 quarters: uniqueQuarters
@@ -130,7 +130,7 @@ app.post("/", (req, res) => {
 
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Server started on port 3000.");
+  console.log('Server started on port 3000.');
 });
 
 

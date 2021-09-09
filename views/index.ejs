@@ -10,7 +10,7 @@
   <title>ZotTracker</title>
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <!-- bootstrap-select CSS (CDN currently does not support Bootstrap 5) -->
@@ -22,7 +22,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:ital,wght@0,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:ital,wght@0,800;1,900&display=swap">
 
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/1c9ad4b785.js" crossorigin="anonymous"></script>
@@ -36,14 +36,12 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-22YWF7CXKB');
   </script>
 </head>
 
 <body>
 <%- include("partials/navbar") -%>
-
   <section id="selection">
     <div class="container-fluid">
       <h1 class="heading">Select a Course</h1>
@@ -97,16 +95,20 @@
           </div>
         </div>
         <div class="text-center button-row">
-          <button type="submit" class="btn btn-secondary submit-button custom-button">Submit</button>
-          <button type="reset" class="btn btn-secondary reset-button custom-button">Reset</button>
-          <button type="button" class="btn btn-secondary history-button custom-button" data-bs-toggle="offcanvas" data-bs-target="#history">History</button>
+          <button type="submit" class="btn btn-secondary custom-button submit-button">Submit</button>
+          <button type="reset" class="btn btn-secondary custom-button reset-button">Reset</button>
+          <button type="button" class="btn btn-secondary custom-button history-button" 
+            data-bs-toggle="offcanvas" data-bs-target="#history">History
+          </button>
           <i class="far fa-question-circle fa-2x question-icon" data-bs-toggle="tooltip" data-bs-placement="right" 
-            title="You don't have to fill in everything! To successfully submit a course, select a Department, Course Number, and Quarter. For more help, check out the About page!"></i>
+            title="You don't have to fill in everything! To successfully submit a course, select a Department, Course Number,
+            and Quarter. For more help, check out the About page!">
+          </i>
         </div>
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="history">
           <div class="offcanvas-header">
             <h5 class="offcanvas-title">Search History</h5>
-            <button type="button" class="btn-close text-reset" id="close-history-button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset" id="close-history-button" data-bs-dismiss="offcanvas"></button>
           </div>
           <div class="offcanvas-sticky"></div>
           <div class="offcanvas-body"></div>
@@ -115,8 +117,7 @@
     </div>
   </section>
   
-  <section id="enrollment-data">
-  </section>
+  <section id="enrollment-data"></section>
 
   <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -138,8 +139,8 @@
     });
   </script>
   <script type="module">
-    import { handleRefresh, decodeHtml } from "/js/handleRefresh.js";
-    handleRefresh(decodeHtml("<%= enrollment %>"));
+    import { handleRefresh } from "/js/handleRefresh.js";
+    handleRefresh("<%= enrollment %>");
   </script>
 </body>
 

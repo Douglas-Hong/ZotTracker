@@ -1,24 +1,24 @@
 // This script contains the functions that have broad uses (e.g., they are used for multiple enrollment tabs)
 
 
-// This function creates the title of the "Enrollment Data" section; it inserts 
-// the "Enrollment Data" heading, the title of the course, and the Graphs/Tables/Quarters buttons
+// This function creates the title of the 'Enrollment Data' section; it inserts 
+// the 'Enrollment Data' heading, the title of the course, and the Graphs/Tables/Quarters buttons
 export function createEnrollmentTitle(res) {
   const courseData = res.courseData;
   const query = res.originalQuery;
 
-  if (query.courseCode !== "") {
+  if (query.courseCode !== '') {
     var title = `Course Code: ${query.courseCode} (${getQuarter(courseData.quarter)})`;
     var subtitle = `${courseData.dept} ${courseData.number} - ${courseData.title}`;
-  } else if (query.courseTitle !== "") {
+  } else if (query.courseTitle !== '') {
     var title = `${courseData.title} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${query.instructor === "" ? "" : query.instructor.toUpperCase() + ", "}${getCourseType(query.courseType)}`;
+    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(query.courseType)}`;
   } else {
     var title = `${courseData.dept} ${courseData.number} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${query.instructor === "" ? "" : query.instructor.toUpperCase() + ", "}${getCourseType(query.courseType)}`;
+    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(query.courseType)}`;
   }
   
-  $("#enrollment-data").html(
+  $('#enrollment-data').html(
     `<div class="container-fluid">
       <h1 class="heading">Enrollment Data</h1>
       <h4 class="enrollment-heading">${title}</h4>
@@ -43,21 +43,21 @@ export function getQuarter(quarter) {
   const year = quarter.slice(0, 4);
 
   switch (quarter.slice(5, 7)) {
-    case "92":
+    case '92':
       return `Fall ${year}`;
-    case "03":
+    case '03':
       return `Winter ${year}`;
-    case "14":
+    case '14':
       return `Spring ${year}`;
-    case "25":
+    case '25':
       return `SS1 ${year}`;
-    case "39":
+    case '39':
       return `10-wk Summer ${year}`;
-    case "51":
+    case '51':
       return `Summer COM ${year}`;
-    case "76":
+    case '76':
       return `SS2 ${year}`;
-    case "8F":
+    case '8F':
       return `Law Fall ${year}`;
   }
 }
@@ -67,28 +67,28 @@ export function getQuarter(quarter) {
 // more readable
 export function getCourseType(type) {
   switch (type) {
-    case "all":
-      return "All Course Types";
-    case "LEC":
-      return "Lecture";
-    case "LAB":
-      return "Lab";
-    case "DIS":
-      return "Discussion";
-    case "SEM":
-      return "Seminar";
-    case "FLD":
-      return "Field Work";
-    case "RES":
-      return "Research";
-    case "ACT":
-      return "Activity";
-    case "TUT":
-      return "Tutorial";
-    case "COL":
-      return "Colloquium";
-    case "STU":
-      return "Studio";
+    case 'all':
+      return 'All Course Types';
+    case 'LEC':
+      return 'Lecture';
+    case 'LAB':
+      return 'Lab';
+    case 'DIS':
+      return 'Discussion';
+    case 'SEM':
+      return 'Seminar';
+    case 'FLD':
+      return 'Field Work';
+    case 'RES':
+      return 'Research';
+    case 'ACT':
+      return 'Activity';
+    case 'TUT':
+      return 'Tutorial';
+    case 'COL':
+      return 'Colloquium';
+    case 'STU':
+      return 'Studio';
   }
 }
 
@@ -97,9 +97,9 @@ export function getCourseType(type) {
 // a course will be shown if the course type is applicable, the instructor teaches the course,
 // and/or the course code matches
 export function isInterestingCourse(course, query) {
-  const hasCourseType = query.courseType === "all" || query.courseType === course.type;
-  const hasInstructor = query.instructor === "" || course.instructor.some((person) => person === query.instructor.toUpperCase());
-  const hasCourseCode = query.courseCode === "" || course.course_code === query.courseCode;
+  const hasCourseType = query.courseType === 'all' || query.courseType === course.type;
+  const hasInstructor = query.instructor === '' || course.instructor.some((person) => person === query.instructor.toUpperCase());
+  const hasCourseCode = query.courseCode === '' || course.course_code === query.courseCode;
   return hasCourseType && hasInstructor && hasCourseCode;
 }
 
@@ -111,14 +111,15 @@ export function formatDates(dates) {
     let year = date.slice(2, 4);
 
     let month = date.slice(5, 7);
-    if (month.startsWith("0")) {
+    if (month.startsWith('0')) {
       month = month.slice(1, 2);
     }
 
     let day = date.slice(8, 10);
-    if (day.startsWith("0")) {
+    if (day.startsWith('0')) {
       day = day.slice(1, 2);
     }
+
     return `${month}/${day}/${year}`;
   });
 }
@@ -126,7 +127,7 @@ export function formatDates(dates) {
 
 // This function uses the given string to create an error message
 export function createError(message) {
-  $("#enrollment-data").html(
+  $('#enrollment-data').html(
     `<div class="container-fluid">
       <div class="alert alert-danger alert-dismissible fade show error-message" role="alert">${message}</div>
     </div>`
@@ -134,11 +135,11 @@ export function createError(message) {
 }
 
 
-// This function adds the course summary to the "Enrollment Data" section; it inserts
-// a table with the course code, course type, course section, course instructor(s), course time
-// course location, and a button that allows the user to switch between graphs and tables
+// This function adds the course summary to the 'Enrollment Data' section; it inserts
+// a table with the course code, course type, course section, course instructor(s), course time,
+// course location, and a button that allows the user to view/close data
 export function createCourseSummary(course, courseIndex, isGraph) {
-  $("#enrollment-data").append(
+  $('#enrollment-data').append(
     `<div class="course-summary">
       <table class="data-table summary-table">
         <thead>
@@ -171,11 +172,11 @@ export function createCourseSummary(course, courseIndex, isGraph) {
     </div>`
   );
 
-  $("#show-data-button-" + courseIndex).on("click", function () {
-    if ($(this).text().trim() === "Open") {
-      $(this).text("Close");
+  $('#show-data-button-' + courseIndex).on('click', function () {
+    if ($(this).text().trim() === 'Open') {
+      $(this).text('Close');
     } else {
-      $(this).text("Open");
+      $(this).text('Open');
     }
   });
 }
@@ -184,7 +185,7 @@ export function createCourseSummary(course, courseIndex, isGraph) {
 // This function returns a string where each element in the given array is its own
 // line; this is used for formatting multiple instructors/times/finals in a table cell
 function formatArray(array) {
-  let arrayHTML = "";
+  let arrayHTML = '';
 
   array.forEach((item) => {
     arrayHTML += `<p>${item}</p>`;
@@ -194,23 +195,27 @@ function formatArray(array) {
 }
 
 
+// This function handles the styling for the Graphs, Tables, and Quarters
+// tabs; the current tab will have a different styling than the two other
+// tabs 
 export function handleTabStyling(currentTabRadio, currentTabButton) {
-  $(currentTabRadio).prop("checked", true);
+  $(currentTabRadio).prop('checked', true);
 
-  replaceClass("#graphs-button", "current-tab", "other-tab");
-  replaceClass("#tables-button", "current-tab", "other-tab");
-  replaceClass("#quarters-button", "current-tab", "other-tab");
+  replaceClass('#graphs-button', 'current-tab', 'other-tab');
+  replaceClass('#tables-button', 'current-tab', 'other-tab');
+  replaceClass('#quarters-button', 'current-tab', 'other-tab');
 
-  if (currentTabButton === "#graphs-button") {
-    replaceClass(currentTabButton, "other-tab", "current-tab");
-  } else if (currentTabButton === "#tables-button") {
-    replaceClass(currentTabButton, "other-tab", "current-tab");
+  if (currentTabButton === '#graphs-button') {
+    replaceClass(currentTabButton, 'other-tab', 'current-tab');
+  } else if (currentTabButton === '#tables-button') {
+    replaceClass(currentTabButton, 'other-tab', 'current-tab');
   } else {
-    replaceClass(currentTabButton, "other-tab", "current-tab");  
+    replaceClass(currentTabButton, 'other-tab', 'current-tab');  
   }
 }
 
 
+// This function removes a class from an element and adds another class
 function replaceClass(id, classToRemove, classToAdd) {
   $(id).removeClass(classToRemove);
   $(id).addClass(classToAdd);

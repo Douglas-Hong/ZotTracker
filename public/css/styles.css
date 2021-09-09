@@ -1,29 +1,29 @@
 body {
-  background-color: #F9FDF8;
-  font-family: "Inter", sans-serif;
+  background-color: #f9fdf8;
+  font-family: 'Inter', sans-serif;
+}
+
+#navigation {
+  background-color: #1d3557;
 }
 
 .container-fluid {
   padding: 0 18%;
 }
 
-#navigation {
-  background-color: #1D3557;
-}
-
 h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .title {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-style: italic;
   font-weight: 900;
 }
 
 .heading {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   margin-top: 50px;
   text-align: center;
@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6 {
 .bootstrap-select>.dropdown-toggle.bs-placeholder:active, 
 .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, 
 .bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
-  color: gray;
+  color: #808080;
 }
 
 .dropdown-menu {
@@ -49,12 +49,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .custom-button, .custom-button:active, .custom-button:focus {
-  background-color: #45789D;
-  border-color: #45789D;
+  background-color: #45789d;
+  border-color: #45789d;
 }
 
 .custom-button:hover {
-  background-color: #2B4B62;
+  background-color: #2b4b62;
   transition: background-color 0.15s ease-in-out;
 }
 
@@ -67,9 +67,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .offcanvas-sticky {
-  position: sticky;
   padding-left: 20px;
   padding-right: 20px;
+  position: sticky;
 }
 
 .offcanvas-sticky p {
@@ -77,17 +77,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .clear-history-button {
-  margin-top: 15px;
   margin-bottom: 25px;
+  margin-top: 15px;
 }
 
 .history-item {
-  padding: 10px 0 3px 10px;
   cursor: pointer;
+  padding: 10px 0 3px 10px;
 }
 
 .history-item:hover {
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   transition: background-color 0.15s ease-in-out;
 }
 
@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .history-subheading {
-  color: gray;
+  color: #808080;
 }
 
 .question-icon {
@@ -115,32 +115,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .enrollment-subheading {
-  margin-top: 6px;
+  color: #808080;
   margin-bottom: 12px;
-  color: gray;
+  margin-top: 6px;
   text-align: center;
 }
 
 .current-tab {
-  background-color: #45789D !important;
-  border-color: #45789D;
-  color: white;
+  background-color: #45789d !important;
+  border-color: #45789d;
+  color: #fff;
 }
 
 .other-tab {
-  background-color: white;
-  border-color: #45789D;
-  color: #45789D;
+  background-color: #fff;
+  border-color: #45789d;
+  color: #45789d;
 }
 
 .other-tab:active, .other-tab:focus {
-  background-color: #45789D !important;
-  color: white;
+  background-color: #45789d !important;
+  color: #fff;
 }
 
 .other-tab:hover {
-  background-color: #45789D;
-  color: white;
+  background-color: #45789d;
+  color: #fff;
   transition: background-color 0.15s ease-in-out;
   transition: color 0.15s ease-in-out;
 }
@@ -150,8 +150,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .summary-table {
-  margin-top: 50px;
   margin-bottom: 25px;
+  margin-top: 50px;
 }
 
 .data-table {
@@ -164,8 +164,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .data-table thead tr {
-  background-color:#A8DADC;
-  font-weight: bold;
+  background-color:#a8dadC;
+  font-weight: 700;
 }
 
 .data-table th {
@@ -173,20 +173,38 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .data-table tbody tr:nth-of-type(odd) {
-  background-color: #EDEDED;
+  background-color: #ededed;
 }
 
 .data-table tbody tr:nth-of-type(even) {
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
 }
 
 .data-table td {
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
   padding: 5px;
 }
 
+.table-list p {
+  margin: 0;
+}
+
+.show-data-button {
+  font-size: 0.8rem;
+}
+
+.chart-container {
+  padding: 0 25%;
+}
+
+.chart {
+  border: 1px solid #dddddd;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3); 
+  border-radius: 15px;
+}
+
 #enrollment-data div:nth-child(4n + 1) .summary-table tbody tr {
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
 }
 
 .enrollment-table {
@@ -194,11 +212,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .enrollment-table td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .course-status {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .quarter-table {
@@ -215,22 +233,19 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: underline;
 }
 
-.table-list p {
-  margin: 0;
+.error-message {
+  font-size: 1.25rem;
+  margin-top: 75px;
+  text-align: center;
 }
 
-.show-data-button {
-  font-size: 0.8rem;
+.text-section {
+  margin-bottom: 60px;
+  margin-top: 35px;
 }
 
-.chart-container {
-  padding: 0 25%;
-}
-
-.chart {
-  border: 1px solid #DDDDDD;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3); 
-  border-radius: 15px;
+.link {
+  text-decoration: none;
 }
 
 @media (min-width: 577px) and (max-width: 992px) {
@@ -283,19 +298,4 @@ h1, h2, h3, h4, h5, h6 {
   .history-button {
     margin-left: 10px;
   }
-}
-
-.error-message {
-  font-size: 1.25rem;
-  margin-top: 75px;
-  text-align: center;
-}
-
-.text-section {
-  margin-bottom: 60px;
-  margin-top: 35px;
-}
-
-.link {
-  text-decoration: none;
 }
