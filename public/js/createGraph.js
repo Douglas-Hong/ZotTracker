@@ -3,7 +3,6 @@ import { handleQuarterTab, handleTableTab } from './enrollmentNav.js';
 import { createSearchHistory, popHistoryItem } from './searchHistory.js';
 import { externalTooltipHandler } from './tooltipHandler.js';
 
-
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
@@ -23,7 +22,9 @@ export function createPage(res) {
     });
 
     if (numGraphs === 0) {
-      Helper.createError('No data could be generated. Double-check your Course Type!');
+      Helper.createError(
+        'No data could be generated. Double-check your Course Type!'
+      );
       popHistoryItem();
     }
 
@@ -32,12 +33,13 @@ export function createPage(res) {
     Helper.createError(`You need to specify more information! To successfully submit a course, select a Department, Course Number, and Quarter. 
       For more help, check out the <a class="link" href="about" target="_blank">About</a> page!`);
   } else if (res.status === 'NOT FOUND') {
-    Helper.createError('That specific course does not exist. Please try again!');
+    Helper.createError(
+      'That specific course does not exist. Please try again!'
+    );
   } else {
     Helper.createError('An error happened! Please try again!');
   }
 }
-
 
 // This function inserts the course summary and graph for a particular
 // course section (e.g., one of a course's lectures, discussions, labs, etc.)
@@ -54,14 +56,19 @@ function createCourse(course, courseIndex) {
     </div>`
   );
 
-  createGraph(`enrollment-chart-${courseIndex}`, courseIndex, 
-    Helper.formatDates(course.dates), course.max, course.enrolled, course.waitlist);
+  createGraph(
+    `enrollment-chart-${courseIndex}`,
+    courseIndex,
+    Helper.formatDates(course.dates),
+    course.max,
+    course.enrolled,
+    course.waitlist
+  );
 }
-
 
 // This function creates a course section's graph by configuring the Chart.js graph
 function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
-  // To make a line, we need at least two data points; thus, if there is only one 
+  // To make a line, we need at least two data points; thus, if there is only one
   // data, we have to duplicate data points
   if (dates.length === 1) {
     dates.push(dates[0]);
@@ -71,7 +78,8 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
 
   let data = {
     labels: dates,
-    datasets: [{
+    datasets: [
+      {
         label: 'Enrolled',
         data: enrolled,
         fill: false,
@@ -85,16 +93,21 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
         borderColor: '#E63946',
         backgroundColor: '#E63946',
       },
-    ]
+    ],
   };
 
-  // If the waitlist array has at least one number, create a line on the graph that 
-  // is dedicated to the waitlist; note that a null data point means the waitlist 
+  // If the waitlist array has at least one number, create a line on the graph that
+  // is dedicated to the waitlist; note that a null data point means the waitlist
   // is n/a or nonexistent on a certain day
-  if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
+  if (
+    waitlist &&
+    waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))
+  ) {
     data.datasets.push({
       label: 'Waitlist',
-      data: waitlist.map((item) => (!isNaN(item) && !isNaN(parseFloat(item))) ? Number(item) : null),
+      data: waitlist.map((item) =>
+        !isNaN(item) && !isNaN(parseFloat(item)) ? Number(item) : null
+      ),
       fill: false,
       borderColor: 'gray',
       backgroundColor: 'gray',
@@ -109,10 +122,10 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
       responsive: true,
       maintainAspectRatio: true,
       animation: {
-        duration: 2000
+        duration: 2000,
       },
       layout: {
-        padding: 10
+        padding: 10,
       },
       interaction: {
         mode: 'index',
@@ -125,8 +138,8 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
         tooltip: {
           enabled: false,
           position: 'nearest',
-          external: externalTooltipHandler
-        }
+          external: externalTooltipHandler,
+        },
       },
       scales: {
         x: {
@@ -136,9 +149,9 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
             font: {
               size: 12,
               weight: 'bold',
-              padding: 10
-            }
-          }
+              padding: 10,
+            },
+          },
         },
         y: {
           beginAtZero: true,
@@ -148,12 +161,12 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
             font: {
               size: 12,
               weight: 'bold',
-              padding: 10
-            }
-          }
-        }
-      }
-    }
+              padding: 10,
+            },
+          },
+        },
+      },
+    },
   };
 
   window[graphID] = new Chart(document.getElementById(graphID), config);
@@ -162,7 +175,7 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
     window[graphID].options.aspectRatio = 1;
   }
 
-  // If the screen is small, use an aspect ratio where the height is the 
+  // If the screen is small, use an aspect ratio where the height is the
   // same as the width; otherwise, make the graph wider
   $(window).resize(() => {
     if ($(window).width() < '576') {

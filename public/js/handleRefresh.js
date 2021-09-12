@@ -1,9 +1,8 @@
 import { createPage } from '/js/createGraph.js';
 import { createSearchHistory, addHistoryItem } from '/js/searchHistory.js';
 
-
 // This function handles the page after the POST request; it renders the
-// search history, displays the new enrollment data, and makes sure the form 
+// search history, displays the new enrollment data, and makes sure the form
 // does not change when the user refreshes or clicks the back/forward button
 export function handleRefresh(enrollment) {
   enrollment = decodeHtml(enrollment);
@@ -31,14 +30,12 @@ export function handleRefresh(enrollment) {
   }
 }
 
-
 // This function decodes the HTML-encoded EJS object
 function decodeHtml(html) {
   let txt = document.createElement('textarea');
   txt.innerHTML = html;
   return txt.value;
 }
-
 
 // This function fills in the user's query; this is used when the user
 // refreshes the page or clicks the back/forward button

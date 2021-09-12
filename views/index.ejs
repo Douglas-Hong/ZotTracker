@@ -1,147 +1,247 @@
 <!DOCTYPE html>
 
 <html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="View the enrollment data of any UCI class!"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ZotTracker</title>
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="description" content="View the enrollment data of any UCI class!">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZotTracker</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- bootstrap-select CSS (CDN currently does not support Bootstrap 5) -->
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" />
 
-  <!-- bootstrap-select CSS (CDN currently does not support Bootstrap 5) -->
-  <link rel="stylesheet" href="css/bootstrap-select.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:ital,wght@0,800;1,900&display=swap"
+    />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:ital,wght@0,800;1,900&display=swap">
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/1c9ad4b785.js"
+      crossorigin="anonymous"
+    ></script>
 
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/1c9ad4b785.js" crossorigin="anonymous"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="favicon/favicon.ico" />
 
-  <!-- Favicon -->
-  <link rel="icon" href="favicon/favicon.ico">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-22YWF7CXKB"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-22YWF7CXKB');
+    </script>
+  </head>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-22YWF7CXKB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-22YWF7CXKB');
-  </script>
-</head>
-
-<body>
-<%- include("partials/navbar") -%>
-  <section id="selection">
-    <div class="container-fluid">
-      <h1 class="heading">Select a Course</h1>
-      <form method="post" action="/" id="selection-form">
-        <div class="row">
-          <div class="col-md-5">
-            <label for="dept" class="form-label first-selection-label">Department</label>
-            <select class="selectpicker form-control" data-style="" data-style-base="form-control" data-live-search="true"
-              data-live-search-style="startsWith" id="dept" name="dept" title="Choose a Department...">
-            </select>
+  <body>
+    <%- include("partials/navbar") -%>
+    <section id="selection">
+      <div class="container-fluid">
+        <h1 class="heading">Select a Course</h1>
+        <form method="post" action="/" id="selection-form">
+          <div class="row">
+            <div class="col-md-5">
+              <label for="dept" class="form-label first-selection-label"
+                >Department</label
+              >
+              <select
+                class="selectpicker form-control"
+                data-style=""
+                data-style-base="form-control"
+                data-live-search="true"
+                data-live-search-style="startsWith"
+                id="dept"
+                name="dept"
+                title="Choose a Department..."
+              ></select>
+            </div>
+            <div class="col-md-3">
+              <label for="course-num" class="form-label selection-label"
+                >Course Number</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="course-num"
+                name="number"
+                placeholder="139W"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="quarter" class="form-label selection-label"
+                >Quarter</label
+              >
+              <select
+                class="form-select"
+                style="color: gray"
+                id="quarter"
+                name="quarter"
+              >
+                <option value="" hidden>Choose a Quarter...</option>
+              </select>
+            </div>
           </div>
-          <div class="col-md-3">
-            <label for="course-num" class="form-label selection-label">Course Number</label>
-            <input type="text" class="form-control" id="course-num" name="number" placeholder="139W">
+          <div class="row">
+            <div class="col-md-5">
+              <label for="instructor" class="form-label selection-label"
+                >Instructor</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="instructor"
+                name="instructor"
+                placeholder="Copy a name from WebSoc..."
+              />
+            </div>
+            <div class="col-md-3">
+              <label for="course-title" class="form-label selection-label"
+                >Course Title</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="course-title"
+                name="courseTitle"
+                placeholder="CRITICAL WRITING"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="course-code" class="form-label selection-label"
+                >Course Code</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="course-code"
+                name="courseCode"
+                placeholder="35870"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="course-type" class="form-label selection-label"
+                >Course Type</label
+              >
+              <select class="form-select" id="course-type" name="courseType">
+                <option value="all">All Types</option>
+                <option value="LEC">Lecture</option>
+                <option value="LAB">Lab</option>
+                <option value="DIS">Discussion</option>
+                <option value="SEM">Seminar</option>
+                <option value="ACT">Activity</option>
+                <option value="COL">Colloquium</option>
+                <option value="FLD">Field Work</option>
+                <option value="RES">Research</option>
+                <option value="STU">Studio</option>
+                <option value="TUT">Tutorial</option>
+              </select>
+            </div>
           </div>
-          <div class="col-md-4">
-            <label for="quarter" class="form-label selection-label">Quarter</label>
-            <select class="form-select" style="color: gray;" id="quarter" name="quarter">
-              <option value="" hidden>Choose a Quarter...</option>
-            </select>
+          <div class="text-center button-row">
+            <button
+              type="submit"
+              class="btn btn-secondary custom-button submit-button"
+            >
+              Submit
+            </button>
+            <button
+              type="reset"
+              class="btn btn-secondary custom-button reset-button"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary custom-button history-button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#history"
+            >
+              History
+            </button>
+            <i
+              class="far fa-question-circle fa-2x question-icon"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="You don't have to fill in everything! To successfully submit a course, select a Department, Course Number,
+            and Quarter. For more help, check out the About page!"
+            >
+            </i>
           </div>
-        </div> 
-        <div class="row">
-          <div class="col-md-5">
-            <label for="instructor" class="form-label selection-label">Instructor</label>
-            <input type="text" class="form-control" id="instructor" name="instructor" placeholder="Copy a name from WebSoc...">
+          <div
+            class="offcanvas offcanvas-start"
+            data-bs-scroll="true"
+            tabindex="-1"
+            id="history"
+          >
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title">Search History</h5>
+              <button
+                type="button"
+                class="btn-close text-reset"
+                id="close-history-button"
+                data-bs-dismiss="offcanvas"
+              ></button>
+            </div>
+            <div class="offcanvas-sticky"></div>
+            <div class="offcanvas-body"></div>
           </div>
-          <div class="col-md-3">
-            <label for="course-title" class="form-label selection-label">Course Title</label>
-            <input type="text" class="form-control" id="course-title" name="courseTitle" placeholder="CRITICAL WRITING">
-          </div>
-          <div class="col-md-2">
-            <label for="course-code" class="form-label selection-label">Course Code</label>
-            <input type="text" class="form-control" id="course-code" name="courseCode" placeholder="35870">
-          </div>
-          <div class="col-md-2">
-            <label for="course-type" class="form-label selection-label">Course Type</label>
-            <select class="form-select" id="course-type" name="courseType">
-              <option value="all">All Types</option>
-              <option value="LEC">Lecture</option>
-              <option value="LAB">Lab</option>
-              <option value="DIS">Discussion</option>
-              <option value="SEM">Seminar</option>
-              <option value="ACT">Activity</option>
-              <option value="COL">Colloquium</option>
-              <option value="FLD">Field Work</option>
-              <option value="RES">Research</option>
-              <option value="STU">Studio</option>
-              <option value="TUT">Tutorial</option>
-            </select>
-          </div>
-        </div>
-        <div class="text-center button-row">
-          <button type="submit" class="btn btn-secondary custom-button submit-button">Submit</button>
-          <button type="reset" class="btn btn-secondary custom-button reset-button">Reset</button>
-          <button type="button" class="btn btn-secondary custom-button history-button" 
-            data-bs-toggle="offcanvas" data-bs-target="#history">History
-          </button>
-          <i class="far fa-question-circle fa-2x question-icon" data-bs-toggle="tooltip" data-bs-placement="right" 
-            title="You don't have to fill in everything! To successfully submit a course, select a Department, Course Number,
-            and Quarter. For more help, check out the About page!">
-          </i>
-        </div>
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="history">
-          <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Search History</h5>
-            <button type="button" class="btn-close text-reset" id="close-history-button" data-bs-dismiss="offcanvas"></button>
-          </div>
-          <div class="offcanvas-sticky"></div>
-          <div class="offcanvas-body"></div>
-        </div>
-      </form>
-    </div>
-  </section>
-  
-  <section id="enrollment-data"></section>
+        </form>
+      </div>
+    </section>
 
-  <!-- jQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <!-- Bootstrap Bundle w/ Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <!-- bootstrap-select JavaScript -->
-  <script src="js/bootstrap-select.min.js"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Custom scripts -->
-  <script type="module" src="js/createGraph.js"></script>
-  <script src="js/inputBehavior.js"></script>
-  <script>
-    // Bootstrap Tooltip
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-  </script>
-  <script type="module">
-    import { handleRefresh } from "/js/handleRefresh.js";
-    handleRefresh("<%= enrollment %>");
-  </script>
-</body>
+    <section id="enrollment-data"></section>
 
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap Bundle w/ Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- bootstrap-select JavaScript -->
+    <script src="js/bootstrap-select.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom scripts -->
+    <script type="module" src="js/createGraph.js"></script>
+    <script src="js/inputBehavior.js"></script>
+    <script>
+      // Bootstrap Tooltip
+      var tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      );
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    </script>
+    <script type="module">
+      import { handleRefresh } from '/js/handleRefresh.js';
+      handleRefresh('<%= enrollment %>');
+    </script>
+  </body>
 </html>

@@ -1,13 +1,10 @@
 // This script handles the other parts of the enrollment data section:
 // the tables and quarters tab
 
-
 import { createPage } from './createGraph.js';
 import * as Helper from './enrollmentHelper.js';
 
-
 const years = ['2021', '2020', '2019', '2018', '2017', '2016'];
-
 
 // This function handles the event where the Tables button is clicked
 export function handleTableTab(res) {
@@ -31,10 +28,9 @@ export function handleTableTab(res) {
   });
 }
 
-
 // This function handles the event where the Quarters button is clicked
 export function handleQuarterTab(res) {
-  $('#quarters-radio').on('click', () => {    
+  $('#quarters-radio').on('click', () => {
     Helper.createEnrollmentTitle(res);
     Helper.handleTabStyling('#quarters-radio', '#quarters-button');
     $('#graphs-radio').on('click', () => {
@@ -52,7 +48,6 @@ export function handleQuarterTab(res) {
   });
 }
 
-
 // This function inserts the given course into the 'Enrollment Data' section; this includes
 // the course's summary and all the relevant enrollment data
 function createCourse(course, courseIndex) {
@@ -67,12 +62,10 @@ function createCourse(course, courseIndex) {
   );
 }
 
-
 // This function  creates the table associated with the given course section; it will
 // include all the recorded dates, enrolled/max/req/waitlist/nor statistics, and statuses
 function createTable(course) {
-  return (
-    `<table class="data-table enrollment-table">
+  return `<table class="data-table enrollment-table">
       <thead>
         <tr>
           <th scope="col">Date</th>
@@ -87,10 +80,8 @@ function createTable(course) {
       <tbody>
         ${createTableBody(course)}
       </tbody>
-    </table>`
-  );
+    </table>`;
 }
-
 
 // This function generates the table body for a certain course section; each row contains
 // all the enrollment data for one day
@@ -99,21 +90,25 @@ function createTableBody(course) {
   let formattedDates = Helper.formatDates(course.dates);
 
   for (let i = 0; i < formattedDates.length; i++) {
-    body += 
-      `<tr>
+    body += `<tr>
         <td>${formattedDates[i]}</td>
         <td>${course.enrolled[i]}</td>
         <td>${course.max[i]}</td>
         ${course.waitlist ? `<td>${course.waitlist[i]}</td>` : ''}
         <td>${course.requested[i]}</td>
         ${course.nor ? `<td>${course.nor[i]}</td>` : ''}
-        ${course.status ? `<td class="course-status" style="color: ${getStatusColor(course.status[i])}">${course.status[i]}</td>` : ''}
+        ${
+          course.status
+            ? `<td class="course-status" style="color: ${getStatusColor(
+                course.status[i]
+              )}">${course.status[i]}</td>`
+            : ''
+        }
       </tr>`;
   }
 
   return body;
 }
-
 
 // This function returns the color of the given status (according to WebSoc)
 function getStatusColor(status) {
@@ -128,11 +123,9 @@ function getStatusColor(status) {
   }
 }
 
-
 // This function creates the table that shows which quarters offered a specific course
 function createQuarterTable(quarters) {
-  return (
-    `<div class="container-fluid">
+  return `<div class="container-fluid">
       <table class="data-table quarter-table">
         <thead>
           <tr class="text-center">
@@ -144,10 +137,8 @@ function createQuarterTable(quarters) {
           ${createQuarterBody(quarters)}
         </tbody>
       </table>
-    </div>`
-  );
+    </div>`;
 }
-
 
 // This function iterates through the quarters a specific course is available and
 // inserts them into the proper table cell
@@ -155,28 +146,31 @@ function createQuarterBody(quarters) {
   let body = '';
 
   years.forEach((year) => {
-    body +=
-      `<tr>
+    body += `<tr>
         <td scope="row">${year}</td>
         <td>`;
 
-    const currYearQuarters = quarters.filter((quarter) => quarter.startsWith(year)).sort();
+    const currYearQuarters = quarters
+      .filter((quarter) => quarter.startsWith(year))
+      .sort();
     currYearQuarters.forEach((quarter, index) => {
       if (index === currYearQuarters.length - 1) {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>`;
+        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(
+          quarter
+        )}</a>`;
       } else {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>, `;
+        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(
+          quarter
+        )}</a>, `;
       }
     });
-    
-    body += 
-      `  </td>
+
+    body += `  </td>
       </tr>`;
   });
 
   return body;
 }
-
 
 // This function creates a hidden form; if the specific quarter is clicked, this form
 // will be submitted and the new enrollment data will be displayed
@@ -193,7 +187,6 @@ function createHiddenForm(query, quarter) {
     </form>`
   );
 }
-
 
 // This functions converts the given WebSoc quarter value into its proper name (excluding the year)
 function getSimpleQuarter(quarter) {

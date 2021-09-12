@@ -1,23 +1,30 @@
 // This script contains the functions that have broad uses (e.g., they are used for multiple enrollment tabs)
 
-
-// This function creates the title of the 'Enrollment Data' section; it inserts 
+// This function creates the title of the 'Enrollment Data' section; it inserts
 // the 'Enrollment Data' heading, the title of the course, and the Graphs/Tables/Quarters buttons
 export function createEnrollmentTitle(res) {
   const courseData = res.courseData;
   const query = res.originalQuery;
 
   if (query.courseCode !== '') {
-    var title = `Course Code: ${query.courseCode} (${getQuarter(courseData.quarter)})`;
+    var title = `Course Code: ${query.courseCode} (${getQuarter(
+      courseData.quarter
+    )})`;
     var subtitle = `${courseData.dept} ${courseData.number} - ${courseData.title}`;
   } else if (query.courseTitle !== '') {
     var title = `${courseData.title} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(query.courseType)}`;
+    var subtitle = `${
+      query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '
+    }${getCourseType(query.courseType)}`;
   } else {
-    var title = `${courseData.dept} ${courseData.number} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(query.courseType)}`;
+    var title = `${courseData.dept} ${courseData.number} (${getQuarter(
+      courseData.quarter
+    )})`;
+    var subtitle = `${
+      query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '
+    }${getCourseType(query.courseType)}`;
   }
-  
+
   $('#enrollment-data').html(
     `<div class="container-fluid">
       <h1 class="heading">Enrollment Data</h1>
@@ -36,7 +43,6 @@ export function createEnrollmentTitle(res) {
     </div>`
   );
 }
-
 
 // This functions converts the given WebSoc quarter value into its proper name
 export function getQuarter(quarter) {
@@ -61,7 +67,6 @@ export function getQuarter(quarter) {
       return `Law Fall ${year}`;
   }
 }
-
 
 // This function translates the course type that WebSoc uses into something
 // more readable
@@ -92,17 +97,21 @@ export function getCourseType(type) {
   }
 }
 
-
 // This function returns true if the course should be shown in the enrollment data section;
 // a course will be shown if the course type is applicable, the instructor teaches the course,
 // and/or the course code matches
 export function isInterestingCourse(course, query) {
-  const hasCourseType = query.courseType === 'all' || query.courseType === course.type;
-  const hasInstructor = query.instructor === '' || course.instructor.some((person) => person === query.instructor.toUpperCase());
-  const hasCourseCode = query.courseCode === '' || course.course_code === query.courseCode;
+  const hasCourseType =
+    query.courseType === 'all' || query.courseType === course.type;
+  const hasInstructor =
+    query.instructor === '' ||
+    course.instructor.some(
+      (person) => person === query.instructor.toUpperCase()
+    );
+  const hasCourseCode =
+    query.courseCode === '' || course.course_code === query.courseCode;
   return hasCourseType && hasInstructor && hasCourseCode;
 }
-
 
 // This function translates each date in the given array of strings
 // to a more readable form (month/day/year)
@@ -124,7 +133,6 @@ export function formatDates(dates) {
   });
 }
 
-
 // This function uses the given string to create an error message
 export function createError(message) {
   $('#enrollment-data').html(
@@ -133,7 +141,6 @@ export function createError(message) {
     </div>`
   );
 }
-
 
 // This function adds the course summary to the 'Enrollment Data' section; it inserts
 // a table with the course code, course type, course section, course instructor(s), course time,
@@ -150,12 +157,12 @@ export function createCourseSummary(course, courseIndex, isGraph) {
             <th scope="col">Instructor</th>
             <th scope="col">Time</th>
             <th scope="col">Place</th>
-            <th scope="col">${isGraph ? "Graph" : "Table"}</th>
+            <th scope="col">${isGraph ? 'Graph' : 'Table'}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>${course["course_code"]}</td>
+            <td>${course['course_code']}</td>
             <td>${course.type}</td>
             <td>${course.section}</td>
             <td class="table-list">${formatArray(course.instructor)}</td>
@@ -181,7 +188,6 @@ export function createCourseSummary(course, courseIndex, isGraph) {
   });
 }
 
-
 // This function returns a string where each element in the given array is its own
 // line; this is used for formatting multiple instructors/times/finals in a table cell
 function formatArray(array) {
@@ -194,10 +200,9 @@ function formatArray(array) {
   return arrayHTML;
 }
 
-
 // This function handles the styling for the Graphs, Tables, and Quarters
 // tabs; the current tab will have a different styling than the two other
-// tabs 
+// tabs
 export function handleTabStyling(currentTabRadio, currentTabButton) {
   $(currentTabRadio).prop('checked', true);
 
@@ -210,10 +215,9 @@ export function handleTabStyling(currentTabRadio, currentTabButton) {
   } else if (currentTabButton === '#tables-button') {
     replaceClass(currentTabButton, 'other-tab', 'current-tab');
   } else {
-    replaceClass(currentTabButton, 'other-tab', 'current-tab');  
+    replaceClass(currentTabButton, 'other-tab', 'current-tab');
   }
 }
-
 
 // This function removes a class from an element and adds another class
 function replaceClass(id, classToRemove, classToAdd) {

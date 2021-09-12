@@ -22,8 +22,6 @@ const courseSchema = new mongoose.Schema({
   dept: String,
   number: String,
   title: String,
-  course_codes: [String],
-  instructors: [String],
   courses: {}
 });
 let Course = mongoose.model('Course', courseSchema, 'enrollments');

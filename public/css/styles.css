@@ -11,7 +11,12 @@ body {
   padding: 0 18%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
 }
 
@@ -29,14 +34,15 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-.selection-label, .first-selection-label {
+.selection-label,
+.first-selection-label {
   margin-top: 20px;
 }
 
-.bootstrap-select>.dropdown-toggle.bs-placeholder, 
-.bootstrap-select>.dropdown-toggle.bs-placeholder:active, 
-.bootstrap-select>.dropdown-toggle.bs-placeholder:focus, 
-.bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+.bootstrap-select > .dropdown-toggle.bs-placeholder,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:active,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover {
   color: #808080;
 }
 
@@ -48,7 +54,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 35px;
 }
 
-.custom-button, .custom-button:active, .custom-button:focus {
+.custom-button,
+.custom-button:active,
+.custom-button:focus {
   background-color: #45789d;
   border-color: #45789d;
 }
@@ -133,7 +141,8 @@ h1, h2, h3, h4, h5, h6 {
   color: #45789d;
 }
 
-.other-tab:active, .other-tab:focus {
+.other-tab:active,
+.other-tab:focus {
   background-color: #45789d !important;
   color: #fff;
 }
@@ -157,14 +166,14 @@ h1, h2, h3, h4, h5, h6 {
 .data-table {
   border-collapse: collapse;
   border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15); 
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
   font-size: 0.85rem;
   overflow: hidden;
   width: 100%;
 }
 
 .data-table thead tr {
-  background-color:#a8dadC;
+  background-color: #a8dadc;
   font-weight: 700;
 }
 
@@ -199,7 +208,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .chart {
   border: 1px solid #dddddd;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3); 
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
   border-radius: 15px;
 }
 
@@ -261,7 +270,9 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 16%;
   }
 
-  .summary-table, .enrollment-table, .show-data-button {
+  .summary-table,
+  .enrollment-table,
+  .show-data-button {
     font-size: 0.65rem;
   }
 }
@@ -283,11 +294,15 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 6%;
   }
 
-  .summary-table, .enrollment-table, .show-data-button {
+  .summary-table,
+  .enrollment-table,
+  .show-data-button {
     font-size: 0.6rem;
   }
 
-  .submit-button, .reset-button, .history-button {
+  .submit-button,
+  .reset-button,
+  .history-button {
     font-size: 0.75rem;
   }
 
