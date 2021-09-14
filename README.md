@@ -35,12 +35,12 @@ View the enrollment data of any course at UC Irvine!
 
 <p align="center">Course Search</p>
 
-![Course Search](https://i.imgur.com/aufsvIh.jpg)
+![Course Search](https://i.imgur.com/TCTCnTV.jpg)
 
 <p align="center">Enrollment Data</p>
 
-![Enrollment Data](https://i.imgur.com/8N7oaCT.jpg)
+![Enrollment Data](https://i.imgur.com/62NgAp4.jpg)
 
 <p align="center">Search History</p>
 
-<p align="center"><img src="https://i.imgur.com/TO2Fy0R.jpg" alt="Search History"></p>
+<p align="center"><img src="https://i.imgur.com/IxmZnep.jpg" alt="Search History"></p>
