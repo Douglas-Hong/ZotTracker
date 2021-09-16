@@ -96,7 +96,7 @@ function createTableBody(course) {
         <td>${course.max[i]}</td>
         ${course.waitlist ? `<td>${course.waitlist[i]}</td>` : ''}
         <td>${course.requested[i]}</td>
-        ${course.nor ? `<td>${course.nor[i]}</td>` : ''}
+        ${course.nor ? `<td>${course.nor[i] == null ? 'N/A' : course.nor[i]}</td>` : ''}
         ${
           course.status
             ? `<td class="course-status" style="color: ${getStatusColor(

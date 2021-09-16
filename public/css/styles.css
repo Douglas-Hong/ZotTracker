@@ -8,7 +8,7 @@ body {
 }
 
 .container-fluid {
-  padding: 0 18%;
+  padding: 0 16%;
 }
 
 h1,
@@ -154,10 +154,6 @@ h6 {
   transition: color 0.15s ease-in-out;
 }
 
-.course-summary {
-  padding: 0 20%;
-}
-
 .summary-table {
   margin-bottom: 25px;
   margin-top: 50px;
@@ -262,10 +258,6 @@ h6 {
     padding: 0 12%;
   }
 
-  .course-summary {
-    padding: 0 14%;
-  }
-
   .chart-container {
     padding: 0 16%;
   }
@@ -280,10 +272,6 @@ h6 {
 @media (max-width: 576px) {
   .container-fluid {
     padding: 0 8%;
-  }
-
-  .course-summary {
-    padding: 0 4%;
   }
 
   .selection-label {

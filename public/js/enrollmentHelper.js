@@ -147,7 +147,7 @@ export function createError(message) {
 // course location, and a button that allows the user to view/close data
 export function createCourseSummary(course, courseIndex, isGraph) {
   $('#enrollment-data').append(
-    `<div class="course-summary">
+    `<div class="container-fluid">
       <table class="data-table summary-table">
         <thead>
           <tr>
