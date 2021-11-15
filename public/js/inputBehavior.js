@@ -165,6 +165,7 @@ depts.forEach((dept) => {
 });
 
 const quarters = [
+  '2022  Winter Quarter',
   '2021  Fall Quarter',
   '2021  Fall Semester (Law)',
   '2021  Summer Session 2',

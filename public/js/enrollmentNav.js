@@ -4,7 +4,7 @@
 import { createPage } from './createGraph.js';
 import * as Helper from './enrollmentHelper.js';
 
-const years = ['2021', '2020', '2019', '2018', '2017', '2016'];
+const years = ['2022', '2021', '2020', '2019', '2018', '2017', '2016'];
 
 // This function handles the event where the Tables button is clicked
 export function handleTableTab(res) {
