@@ -29,7 +29,7 @@ let Course = mongoose.model('Course', courseSchema, 'enrollments');
 
 app.get('/', (req, res) => {
   if (JSON.stringify(req.query) !== JSON.stringify({})) {
-    processQuery(res, req.query);
+    processQuery(res, fillQuery(req.query));
   } else {
     res.render('index.ejs', {
       enrollment: '{}'
@@ -61,6 +61,19 @@ app.post('/', (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server started on port 3000.');
 });
+
+
+function fillQuery(query) {
+  const parameters = ['dept', 'number', 'quarter', 'instructor', 'courseTitle', 'courseCode', 'courseType'];
+
+  parameters.forEach((param) => {
+    if (!(param in query)) {
+      query[param] = '';
+    }
+  })
+
+  return query;
+}
 
 
 function processQuery(res, queryBody) {
