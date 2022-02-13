@@ -28,9 +28,13 @@ let Course = mongoose.model('Course', courseSchema, 'enrollments');
 
 
 app.get('/', (req, res) => {
-  res.render('index.ejs', {
-    enrollment: '{}'
-  });
+  if (JSON.stringify(req.query) !== JSON.stringify({})) {
+    processQuery(res, req.query);
+  } else {
+    res.render('index.ejs', {
+      enrollment: '{}'
+    });
+  }
 });
 
 
@@ -50,33 +54,43 @@ app.get('/feedback', (req, res) => {
 
 
 app.post('/', (req, res) => {
-  if ((req.body.quarter === '' || req.body.dept === '' || req.body.number === '') && (req.body.quarter === '' || req.body.courseCode === '') 
-    && (req.body.courseTitle === '' || req.body.quarter === '')) {
+  processQuery(res, req.body);
+});
+
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Server started on port 3000.');
+});
+
+
+function processQuery(res, queryBody) {
+  if ((queryBody.quarter === '' || queryBody.dept === '' || queryBody.number === '') && (queryBody.quarter === '' || queryBody.courseCode === '') 
+    && (queryBody.courseTitle === '' || queryBody.quarter === '')) {
     res.render('index.ejs', {
       enrollment: JSON.stringify({
         status: 'EMPTY INPUT',
-        originalQuery: req.body
+        originalQuery: queryBody
       })
     });
   } else {
     let query = {};
 
-    for (let key in req.body) {
-      if (req.body.hasOwnProperty(key) && req.body[key] && !(key === 'courseType' && req.body.courseType === 'all')) {
+    for (let key in queryBody) {
+      if (queryBody.hasOwnProperty(key) && queryBody[key] && !(key === 'courseType' && queryBody.courseType === 'all')) {
         if (key === 'courseCode') {
-          query['courses.course_code'] = req.body.courseCode;
+          query['courses.course_code'] = queryBody.courseCode;
         } else if (key === 'courseTitle') {
           // All course titles in WebSoc are uppercase
-          query.title = req.body.courseTitle.toUpperCase();
+          query.title = queryBody.courseTitle.toUpperCase();
         } else if (key === 'instructor') {
-          query['courses.instructor'] = req.body.instructor.toUpperCase();
+          query['courses.instructor'] = queryBody.instructor.toUpperCase();
         } else if (key === 'number') {
           // The course number should be case-insensitive and whitespace-insensitive
-          query.number = req.body.number.toUpperCase().replace(/\ /g, '');
+          query.number = queryBody.number.toUpperCase().replace(/\ /g, '');
         } else if (key === 'courseType') {
-          query['courses.type'] = req.body.courseType;
+          query['courses.type'] = queryBody.courseType;
         } else {
-          query[key] = req.body[key];
+          query[key] = queryBody[key];
         }
       }
     }
@@ -86,14 +100,14 @@ app.post('/', (req, res) => {
         res.render('index.ejs', {
           enrollment: JSON.stringify({
             status: 'ERROR',
-            originalQuery: req.body
+            originalQuery: queryBody
           })
         });
       } else if (!course) {
         res.render('index.ejs', {
           enrollment: JSON.stringify({
             status: 'NOT FOUND',
-            originalQuery: req.body
+            originalQuery: queryBody
           })
         });
       } else {
@@ -105,7 +119,7 @@ app.post('/', (req, res) => {
             res.render('index.ejs', {
               enrollment: JSON.stringify({
                 status: 'ERROR',
-                originalQuery: req.body
+                originalQuery: queryBody
               })
             });
           } else {
@@ -114,7 +128,7 @@ app.post('/', (req, res) => {
             res.render('index.ejs', {
               enrollment: JSON.stringify({
                 status: 'FOUND',
-                originalQuery: req.body,
+                originalQuery: queryBody,
                 courseData: course,
                 quarters: uniqueQuarters
               })
@@ -124,13 +138,7 @@ app.post('/', (req, res) => {
       }
     });
   }
-});
-
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Server started on port 3000.');
-});
-
+}
 
 // TODO:
 // Navigation to other quarters when no quarter is specified
