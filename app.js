@@ -24,7 +24,7 @@ const courseSchema = new mongoose.Schema({
   title: String,
   courses: {}
 });
-let Course = mongoose.model('Course', courseSchema, 'enrollments');
+let Enrollment = mongoose.model('Course', courseSchema, 'enrollments');
 
 
 app.get('/', (req, res) => {
@@ -126,25 +126,24 @@ function renderResults(course, quarters, res, queryBody) {
 
 
 function processQuery(res, queryBody) {
-  if ((queryBody.dept === '' || queryBody.number === '') && (queryBody.courseCode === '') && (queryBody.courseTitle === '')) {
+  // Valid minimum input combinations: dept/course number, course code, course title, instructor/course number
+  if ((queryBody.dept === '' || queryBody.number === '') && (queryBody.courseCode === '') && (queryBody.courseTitle === '') && (queryBody.instructor === '' || queryBody.number === '')) {
     renderError('EMPTY INPUT', res, queryBody);
   } else {
-    console.log(queryBody);
     let query = formatQuery(queryBody);
-    console.log(query);
 
-    Course.find(query, (err, courses) => {
+    Enrollment.find(query, (err, courses) => {
       if (err) {
         renderError('ERROR', res, queryBody);
       } else if (courses.length === 0) {
         renderError('NOT FOUND', res, queryBody);
       } else {
-        // If the user specified a quarter, delete it to get a broader query
         if (!('quarter' in query)) {
+          // If the user specified a quarter, delete it to get a broader query
           let quartersQuery = JSON.parse(JSON.stringify(query));
           delete quartersQuery.quarter;
   
-          Course.find(quartersQuery, (err, quarterCourses) => {
+          Enrollment.find(quartersQuery, (err, quarterCourses) => {
             if (err) {
               renderError('NOT FOUND', res, queryBody);
             } else {
