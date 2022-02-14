@@ -30,7 +30,7 @@ export function createPage(res) {
 
     createSearchHistory();
   } else if (res.status === 'EMPTY INPUT') {
-    Helper.createError(`You need to specify more information! To successfully submit a course, select a Department, Course Number, and Quarter. 
+    Helper.createError(`You need to specify more information! To successfully submit a course, select a Department and Course Number. 
       For more help, check out the <a class="link" href="about" target="_blank">About</a> page!`);
   } else if (res.status === 'NOT FOUND') {
     Helper.createError(

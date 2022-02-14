@@ -50,17 +50,13 @@ function clearHistory() {
 // a previous query
 function createHistoryItem(item, index) {
   if (item.courseCode) {
-    var heading = `Course Code: ${item.courseCode} (${Helper.getQuarter(
-      item.quarter
-    )})`;
+    var heading = `Course Code: ${item.courseCode}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;
   } else if (item.courseTitle) {
-    var heading = `${item.courseTitle.toUpperCase()} (${Helper.getQuarter(
-      item.quarter
-    )})`;
+    var heading = `${item.courseTitle.toUpperCase()}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;
   } else {
     var heading = `${item.dept} ${item.number
       .toUpperCase()
-      .replace(/\ /g, '')} (${Helper.getQuarter(item.quarter)})`;
+      .replace(/\ /g, '')}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;;
   }
 
   $('.offcanvas-body').append(

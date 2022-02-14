@@ -76,78 +76,88 @@ function fillQuery(query) {
 }
 
 
-function processQuery(res, queryBody) {
-  if ((queryBody.quarter === '' || queryBody.dept === '' || queryBody.number === '') && (queryBody.quarter === '' || queryBody.courseCode === '') 
-    && (queryBody.courseTitle === '' || queryBody.quarter === '')) {
-    res.render('index.ejs', {
-      enrollment: JSON.stringify({
-        status: 'EMPTY INPUT',
-        originalQuery: queryBody
-      })
-    });
-  } else {
-    let query = {};
+function formatQuery(queryBody) {
+  let query = {};
 
-    for (let key in queryBody) {
-      if (queryBody.hasOwnProperty(key) && queryBody[key] && !(key === 'courseType' && queryBody.courseType === 'all')) {
-        if (key === 'courseCode') {
-          query['courses.course_code'] = queryBody.courseCode;
-        } else if (key === 'courseTitle') {
-          // All course titles in WebSoc are uppercase
-          query.title = queryBody.courseTitle.toUpperCase();
-        } else if (key === 'instructor') {
-          query['courses.instructor'] = queryBody.instructor.toUpperCase();
-        } else if (key === 'number') {
-          // The course number should be case-insensitive and whitespace-insensitive
-          query.number = queryBody.number.toUpperCase().replace(/\ /g, '');
-        } else if (key === 'courseType') {
-          query['courses.type'] = queryBody.courseType;
-        } else {
-          query[key] = queryBody[key];
-        }
+  for (let key in queryBody) {
+    if (queryBody.hasOwnProperty(key) && queryBody[key] && !(key === 'courseType' && queryBody.courseType === 'all')) {
+      if (key === 'courseCode') {
+        query['courses.course_code'] = queryBody.courseCode;
+      } else if (key === 'courseTitle') {
+        // All course titles in WebSoc are uppercase
+        query.title = queryBody.courseTitle.toUpperCase();
+      } else if (key === 'instructor') {
+        query['courses.instructor'] = queryBody.instructor.toUpperCase();
+      } else if (key === 'number') {
+        // The course number should be case-insensitive and whitespace-insensitive
+        query.number = queryBody.number.toUpperCase().replace(/\ /g, '');
+      } else if (key === 'courseType') {
+        query['courses.type'] = queryBody.courseType;
+      } else {
+        query[key] = queryBody[key];
       }
     }
+  }
 
-    Course.findOne(query, (err, course) => {
+  return query;
+}
+
+
+function renderError(errorMessage, res, queryBody) {
+  res.render('index.ejs', {
+    enrollment: JSON.stringify({
+      status: errorMessage,
+      originalQuery: queryBody
+    })
+  });
+}
+
+
+function renderResults(course, quarters, res, queryBody) {
+  res.render('index.ejs', {
+    enrollment: JSON.stringify({
+      status: 'FOUND',
+      originalQuery: queryBody,
+      courseData: course,
+      quarters: quarters
+    })
+  });
+}
+
+
+function processQuery(res, queryBody) {
+  if ((queryBody.dept === '' || queryBody.number === '') && (queryBody.courseCode === '') && (queryBody.courseTitle === '')) {
+    renderError('EMPTY INPUT', res, queryBody);
+  } else {
+    console.log(queryBody);
+    let query = formatQuery(queryBody);
+    console.log(query);
+
+    Course.find(query, (err, courses) => {
       if (err) {
-        res.render('index.ejs', {
-          enrollment: JSON.stringify({
-            status: 'ERROR',
-            originalQuery: queryBody
-          })
-        });
-      } else if (!course) {
-        res.render('index.ejs', {
-          enrollment: JSON.stringify({
-            status: 'NOT FOUND',
-            originalQuery: queryBody
-          })
-        });
+        renderError('ERROR', res, queryBody);
+      } else if (courses.length === 0) {
+        renderError('NOT FOUND', res, queryBody);
       } else {
-        let quartersQuery = JSON.parse(JSON.stringify(query));
-        delete quartersQuery.quarter;
-
-        Course.find(quartersQuery, (err, courses) => {
-          if (err) {
-            res.render('index.ejs', {
-              enrollment: JSON.stringify({
-                status: 'ERROR',
-                originalQuery: queryBody
-              })
-            });
-          } else {
-            const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-            // We store the original query in case the user clicks on this course in their search history
-            res.render('index.ejs', {
-              enrollment: JSON.stringify({
-                status: 'FOUND',
-                originalQuery: queryBody,
-                courseData: course,
-                quarters: uniqueQuarters
-              })
-            });
-          }
-        });
+        // If the user specified a quarter, delete it to get a broader query
+        if (!('quarter' in query)) {
+          let quartersQuery = JSON.parse(JSON.stringify(query));
+          delete quartersQuery.quarter;
+  
+          Course.find(quartersQuery, (err, quarterCourses) => {
+            if (err) {
+              renderError('NOT FOUND', res, queryBody);
+            } else {
+              const uniqueQuarters = quarterCourses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
+              // If the user didn't specify a quarter, just return the course in the latest quarter
+              renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
+            }
+          });
+        } else {
+          const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
+          // We store the original query in case the user clicks on this course in their search history
+          renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
+        }
       }
     });
   }
@@ -162,4 +172,4 @@ function processQuery(res, queryBody) {
 
 // Redo Google Analytics, and make query paramters less restrictive/able to leave out certain inputs/keys
 // If quarter is not immediately found, just search for the latest quarter the class is in
-// Move to Vercel
+// Move to Vercel, get rid of Announcements page and edit About page
