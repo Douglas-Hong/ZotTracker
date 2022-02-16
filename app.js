@@ -114,6 +114,7 @@ function renderError(errorMessage, res, queryBody) {
 
 
 function renderResults(course, quarters, res, queryBody) {
+  // We store the original query in case the user clicks on this course in their search history
   res.render('index.ejs', {
     enrollment: JSON.stringify({
       status: 'FOUND',
@@ -138,7 +139,7 @@ function processQuery(res, queryBody) {
       } else if (courses.length === 0) {
         renderError('NOT FOUND', res, queryBody);
       } else {
-        if (!('quarter' in query)) {
+        if ('quarter' in query) {
           // If the user specified a quarter, delete it to get a broader query
           let quartersQuery = JSON.parse(JSON.stringify(query));
           delete quartersQuery.quarter;
@@ -148,13 +149,12 @@ function processQuery(res, queryBody) {
               renderError('NOT FOUND', res, queryBody);
             } else {
               const uniqueQuarters = quarterCourses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-              // If the user didn't specify a quarter, just return the course in the latest quarter
               renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
             }
           });
         } else {
           const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-          // We store the original query in case the user clicks on this course in their search history
+          // If the user didn't specify a quarter, just return the most recent offering of the course
           renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
         }
       }
