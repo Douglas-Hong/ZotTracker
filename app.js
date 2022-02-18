@@ -172,3 +172,5 @@ function processQuery(res, queryBody) {
 // Redo Google Analytics, and make query paramters less restrictive/able to leave out certain inputs/keys
 // If quarter is not immediately found, just search for the latest quarter the class is in
 // Move to Vercel, get rid of Announcements page and edit About page
+
+// Update possible departments

@@ -137,7 +137,7 @@ const depts = [
   'PUBHLTH . . . . Public Health',
   'RADIO . . . . . . .Radiology',
   'REL STD . . . . . Religious Studies',
-  "ROTC . . . . . . . Reserve Officers' Training Corps",
+  'ROTC . . . . . . . Reserve Officers Training Corps',
   'RUSSIAN . . . . .Russian',
   'SOC SCI . . . . . Social Science',
   'SOCECOL . . . . Social Ecology',
@@ -155,7 +155,7 @@ const depts = [
   'UPPP . . . . . . . Urban Planning and Public Policy (started 2018 Fall)',
   'VIETMSE . . . . .Vietnamese',
   'VIS STD . . . . . .Visual Studies',
-  'WRITING . . . . . Writing',
+  'WRITING . . . . . Writing'
 ];
 
 depts.forEach((dept) => {
