@@ -51,7 +51,7 @@ h6 {
 }
 
 .button-row {
-  margin-top: 35px;
+  margin-top: 15px;
 }
 
 .custom-button,
@@ -114,7 +114,7 @@ h6 {
 }
 
 #enrollment-data {
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 .enrollment-heading {
@@ -156,7 +156,7 @@ h6 {
 
 .summary-table {
   margin-bottom: 25px;
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .data-table {
@@ -226,7 +226,7 @@ h6 {
 
 .quarter-table {
   font-size: 1.1rem;
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .quarter-link {

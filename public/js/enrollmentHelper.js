@@ -27,7 +27,6 @@ export function createEnrollmentTitle(res) {
 
   $('#enrollment-data').html(
     `<div class="container-fluid">
-      <h1 class="heading">Enrollment Data</h1>
       <h4 class="enrollment-heading">${title}</h4>
       <p class="enrollment-subheading">${subtitle}</p>
     </div>
