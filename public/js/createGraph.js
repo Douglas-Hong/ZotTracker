@@ -3,16 +3,22 @@ import { handleQuarterTab, handleTableTab } from './enrollmentNav.js';
 import { createSearchHistory, popHistoryItem } from './searchHistory.js';
 import { externalTooltipHandler } from './tooltipHandler.js';
 
+const earliestQuarterTracked = '2021-76';
+
 // This function creates the majority of the webpage; it displays the entire
 // enrollment section
 export function createPage(res) {
   if (res.status === 'FOUND') {
     let numGraphs = 0;
-
+    
     Helper.createEnrollmentTitle(res);
     Helper.handleTabStyling('#graphs-radio', '#graphs-button');
     handleTableTab(res);
     handleQuarterTab(res);
+
+    if (res.courseData.quarter < earliestQuarterTracked) {
+      Helper.createWarning('Warning: ZotTracker currently does not have the complete enrollment data for any quarter before 2021 Summer Session 2.');
+    }
 
     res.courseData.courses.forEach((course) => {
       if (Helper.isInterestingCourse(course, res.originalQuery)) {

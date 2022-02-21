@@ -25,6 +25,7 @@ const courseSchema = new mongoose.Schema({
   courses: {}
 });
 let Enrollment = mongoose.model('Course', courseSchema, 'enrollments');
+const quarterBeingTracked = '2022-14';
 
 
 app.get('/', (req, res) => {
@@ -154,8 +155,16 @@ function processQuery(res, queryBody) {
           });
         } else {
           const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
-          // If the user didn't specify a quarter, just return the most recent offering of the course
-          renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
+
+          // If the quarter isn't specified and the course is being offered in the quarter that
+          // is currently being tracked, render the results for the next most recent quarter because
+          // that quarter has a complete set of data
+          if (courses[courses.length - 1].quarter === quarterBeingTracked) {
+            renderResults(courses[courses.length === 1 ? courses.length - 1 : courses.length - 2], uniqueQuarters, res, queryBody);
+          } else {
+            // If the user didn't specify a quarter, just return the most recent offering of the course
+            renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
+          }
         }
       }
     });

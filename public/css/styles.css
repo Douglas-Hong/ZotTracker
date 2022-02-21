@@ -244,6 +244,12 @@ h6 {
   text-align: center;
 }
 
+.warning-message {
+  font-size: 1.25rem;
+  margin-top: 35px;
+  text-align: center;
+}
+
 .text-section {
   margin-bottom: 60px;
   margin-top: 35px;

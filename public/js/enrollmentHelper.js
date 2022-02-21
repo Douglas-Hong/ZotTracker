@@ -141,6 +141,16 @@ export function createError(message) {
   );
 }
 
+
+// This function uses the given string to create an warning message
+export function createWarning(message) {
+  $('#enrollment-data').append(
+    `<div class="container-fluid">
+      <div class="alert alert-warning alert-dismissible fade show warning-message" role="alert">${message}</div>
+    </div>`
+  );
+}
+
 // This function adds the course summary to the 'Enrollment Data' section; it inserts
 // a table with the course code, course type, course section, course instructor(s), course time,
 // course location, and a button that allows the user to view/close data
