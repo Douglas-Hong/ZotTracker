@@ -159,10 +159,15 @@ function processQuery(res, queryBody) {
           // If the quarter isn't specified and the course is being offered in the quarter that
           // is currently being tracked, render the results for the next most recent quarter because
           // that quarter has a complete set of data
-          if (courses[courses.length - 1].quarter === quarterBeingTracked) {
-            renderResults(courses[courses.length === 1 ? courses.length - 1 : courses.length - 2], uniqueQuarters, res, queryBody);
+          if (courses[courses.length - 1].quarter >= quarterBeingTracked) {
+            const notTrackedCourse = courses.slice().reverse().find((course) => course.quarter < quarterBeingTracked);
+
+            if (notTrackedCourse === undefined) {
+              renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
+            } else {
+              renderResults(notTrackedCourse, uniqueQuarters, res, queryBody);
+            }
           } else {
-            // If the user didn't specify a quarter, just return the most recent offering of the course
             renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
           }
         }
