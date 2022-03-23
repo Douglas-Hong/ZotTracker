@@ -177,14 +177,5 @@ function processQuery(res, queryBody) {
 }
 
 // TODO:
-// Navigation to other quarters when no quarter is specified
-// Add better animations to graphs
-// Update search history subheadings
-// Quarter search does not work with course type (try ICS 31 Lecture in 2018)
-// Note: test what happens if the instructor of a course changes from STAFF to a real name; try 33303
-
-// Redo Google Analytics, and make query paramters less restrictive/able to leave out certain inputs/keys
 // If quarter is not immediately found, just search for the latest quarter the class is in
-// Move to Vercel, get rid of Announcements page and edit About page
-
 // Update possible departments
