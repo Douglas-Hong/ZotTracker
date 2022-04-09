@@ -25,7 +25,7 @@ const courseSchema = new mongoose.Schema({
   courses: {}
 });
 let Enrollment = mongoose.model('Course', courseSchema, 'enrollments');
-const quarterBeingTracked = '2022-14';
+const quarterBeingTracked = '2022-25';
 
 
 app.get('/', (req, res) => {
