@@ -34,13 +34,14 @@ const depts = [
   'CHINESE . . . . .Chinese',
   'CLASSIC . . . . .Classics',
   'CLT&THY . . . . .Culture & Theory',
-  'COGS . . . . . . . Cognitive Sciences  (started 2016 Fall)',
+  'COGS . . . . . . . Cognitive Sciences ',
   'COM LIT . . . . . Comparative Literature',
   'COMPSCI . . . . Computer Science',
   'CRITISM . . . . . Criticism',
   'CRM/LAW . . . . Criminology, Law and Society',
   'CSE . . . . . . . . Computer Science and Engineering',
   'DANCE . . . . . . Dance',
+  'DATA . . . . . . . Data Science (started 2022 SS1)',
   'DERM . . . . . . .Dermatology',
   'DEV BIO . . . . . Developmental and Cell Biology',
   'DRAMA . . . . . .Drama',
@@ -69,7 +70,7 @@ const depts = [
   'GDIM . . . . . . . .Game Design and Interactive Media (started 2021 Fall)',
   'GEN&SEX . . . . Gender and Sexuality Studies',
   'GERMAN . . . . .German',
-  'GLBL ME . . . . .Global Middle East Studies (started 2016 Fall)',
+  'GLBL ME . . . . .Global Middle East Studies',
   'GLBLCLT . . . . .Global Cultures',
   'GREEK . . . . . . Greek',
   'HEBREW . . . . .Hebrew',
@@ -96,7 +97,7 @@ const depts = [
   'MATH . . . . . . . Mathematics',
   'MED . . . . . . . . Medicine',
   'MED ED . . . . . Medical Education',
-  'MED HUM . . . . Medical Humanities (started 2016 Fall)',
+  'MED HUM . . . . Medical Humanities',
   'MGMT . . . . . . .Management',
   'MGMT EP . . . . Executive MBA',
   'MGMT FE . . . . Fully Employed MBA',
@@ -132,12 +133,12 @@ const depts = [
   'PP&D . . . . . . . Planning, Policy, and Design (until 2018 SS2; see UPPP)',
   'PSCI . . . . . . . .Psychological Science (started 2019 Fall)',
   'PSY BEH . . . . .Psychology and Social Behavior (until 2019 SS2)',
-  'PSYCH . . . . . . Psychology',
+  'PSYCH . . . . . . Cognitive Sciences',
   'PUB POL . . . . .Public Policy',
   'PUBHLTH . . . . Public Health',
   'RADIO . . . . . . .Radiology',
   'REL STD . . . . . Religious Studies',
-  'ROTC . . . . . . . Reserve Officers Training Corps',
+  "ROTC . . . . . . . Reserve Officers' Training Corps",
   'RUSSIAN . . . . .Russian',
   'SOC SCI . . . . . Social Science',
   'SOCECOL . . . . Social Ecology',
@@ -155,7 +156,7 @@ const depts = [
   'UPPP . . . . . . . Urban Planning and Public Policy (started 2018 Fall)',
   'VIETMSE . . . . .Vietnamese',
   'VIS STD . . . . . .Visual Studies',
-  'WRITING . . . . . Writing'
+  'WRITING . . . . . Writing',
 ];
 
 depts.forEach((dept) => {
@@ -165,6 +166,7 @@ depts.forEach((dept) => {
 });
 
 const quarters = [
+  '2022  Fall Quarter',
   '2022  Summer Session 2',
   '2022  10-wk Summer',
   '2022  Summer Session 1',
