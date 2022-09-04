@@ -48,6 +48,6 @@ View the enrollment data of any course at UC Irvine!
 
 ## Special Thanks
 
-I would like to thank the [ICS Student Council]((https://studentcouncil.ics.uci.edu/)), especially the Projects Committee and the [AntAlmanac](https://antalmanac.com/) team, for using this website to provide enrollment data to UCI students!
+I would like to thank the [ICS Student Council](https://studentcouncil.ics.uci.edu/), especially the Projects Committee and the [AntAlmanac](https://antalmanac.com/) team, for using this website to provide enrollment data to UCI students!
 
 I would also like to thank [Zotistics](https://zotistics.com/) for being a major design inspiration!
