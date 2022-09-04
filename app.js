@@ -175,7 +175,3 @@ function processQuery(res, queryBody) {
     });
   }
 }
-
-// TODO:
-// If quarter is not immediately found, just search for the latest quarter the class is in
-// Update possible departments
