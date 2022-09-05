@@ -10,14 +10,16 @@ const earliestQuarterTracked = '2021-76';
 export function createPage(res) {
   if (res.status === 'FOUND') {
     let numGraphs = 0;
-    
+
     Helper.createEnrollmentTitle(res);
     Helper.handleTabStyling('#graphs-radio', '#graphs-button');
     handleTableTab(res);
     handleQuarterTab(res);
 
     if (res.courseData.quarter < earliestQuarterTracked) {
-      Helper.createWarning('Warning: ZotTracker currently does not have the complete enrollment data for any quarter before 2021 Summer Session 2.');
+      Helper.createWarning(
+        'Warning: ZotTracker currently does not have the complete enrollment data for any quarter before 2021 Summer Session 2.'
+      );
     }
 
     res.courseData.courses.forEach((course) => {
@@ -28,9 +30,7 @@ export function createPage(res) {
     });
 
     if (numGraphs === 0) {
-      Helper.createError(
-        'No data could be generated. Double-check your Course Type!'
-      );
+      Helper.createError('No data could be generated. Double-check your Course Type!');
       popHistoryItem();
     }
 
@@ -39,9 +39,7 @@ export function createPage(res) {
     Helper.createError(`You need to specify more information! To successfully submit a course, select a Department and Course Number. 
       For more help, check out the <a class="link" href="about" target="_blank">About</a> page!`);
   } else if (res.status === 'NOT FOUND') {
-    Helper.createError(
-      'That specific course does not exist. Please try again!'
-    );
+    Helper.createError('That specific course does not exist. Please try again!');
   } else {
     Helper.createError('An error happened! Please try again!');
   }
@@ -105,15 +103,10 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
   // If the waitlist array has at least one number, create a line on the graph that
   // is dedicated to the waitlist; note that a null data point means the waitlist
   // is n/a or nonexistent on a certain day
-  if (
-    waitlist &&
-    waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))
-  ) {
+  if (waitlist && waitlist.some((item) => !isNaN(item) && !isNaN(parseFloat(item)))) {
     data.datasets.push({
       label: 'Waitlist',
-      data: waitlist.map((item) =>
-        !isNaN(item) && !isNaN(parseFloat(item)) ? Number(item) : null
-      ),
+      data: waitlist.map((item) => (!isNaN(item) && !isNaN(parseFloat(item)) ? Number(item) : null)),
       fill: false,
       borderColor: 'gray',
       backgroundColor: 'gray',

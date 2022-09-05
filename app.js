@@ -3,66 +3,59 @@ const express = require('express');
 const mongoose = require('mongoose');
 const uri = process.env.MONGODB_URI;
 
-
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-
 mongoose.connect(uri, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 const courseSchema = new mongoose.Schema({
   quarter: String,
   dept: String,
   number: String,
   title: String,
-  courses: {}
+  courses: {},
 });
 let Enrollment = mongoose.model('Course', courseSchema, 'enrollments');
 const quarterBeingTracked = '2022-25';
-
 
 app.get('/', (req, res) => {
   if (JSON.stringify(req.query) !== JSON.stringify({})) {
     processQuery(res, fillQuery(req.query));
   } else {
     res.render('index.ejs', {
-      enrollment: '{}'
+      enrollment: '{}',
     });
   }
 });
-
 
 app.get('/about', (req, res) => {
   res.render('about.ejs');
 });
 
-
 app.get('/announcements', (req, res) => {
   res.render('announcements.ejs');
 });
-
 
 app.get('/feedback', (req, res) => {
   res.render('feedback.ejs');
 });
 
-
 app.post('/', (req, res) => {
   processQuery(res, req.body);
 });
 
-
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server started on port 3000.');
 });
-
 
 function fillQuery(query) {
   const parameters = ['dept', 'number', 'quarter', 'instructor', 'courseTitle', 'courseCode', 'courseType'];
@@ -71,11 +64,10 @@ function fillQuery(query) {
     if (!(param in query)) {
       query[param] = '';
     }
-  })
+  });
 
   return query;
 }
-
 
 function formatQuery(queryBody) {
   let query = {};
@@ -103,16 +95,14 @@ function formatQuery(queryBody) {
   return query;
 }
 
-
 function renderError(errorMessage, res, queryBody) {
   res.render('index.ejs', {
     enrollment: JSON.stringify({
       status: errorMessage,
-      originalQuery: queryBody
-    })
+      originalQuery: queryBody,
+    }),
   });
 }
-
 
 function renderResults(course, quarters, res, queryBody) {
   // We store the original query in case the user clicks on this course in their search history
@@ -121,15 +111,19 @@ function renderResults(course, quarters, res, queryBody) {
       status: 'FOUND',
       originalQuery: queryBody,
       courseData: course,
-      quarters: quarters
-    })
+      quarters: quarters,
+    }),
   });
 }
 
-
 function processQuery(res, queryBody) {
   // Valid minimum input combinations: dept/course number, course code, course title, instructor/course number
-  if ((queryBody.dept === '' || queryBody.number === '') && (queryBody.courseCode === '') && (queryBody.courseTitle === '') && (queryBody.instructor === '' || queryBody.number === '')) {
+  if (
+    (queryBody.dept === '' || queryBody.number === '') &&
+    queryBody.courseCode === '' &&
+    queryBody.courseTitle === '' &&
+    (queryBody.instructor === '' || queryBody.number === '')
+  ) {
     renderError('EMPTY INPUT', res, queryBody);
   } else {
     let query = formatQuery(queryBody);
@@ -144,23 +138,30 @@ function processQuery(res, queryBody) {
           // If the user specified a quarter, delete it to get a broader query
           let quartersQuery = JSON.parse(JSON.stringify(query));
           delete quartersQuery.quarter;
-  
+
           Enrollment.find(quartersQuery, (err, quarterCourses) => {
             if (err) {
               renderError('NOT FOUND', res, queryBody);
             } else {
-              const uniqueQuarters = quarterCourses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
+              const uniqueQuarters = quarterCourses
+                .map((c) => c.quarter)
+                .filter((quar, index, arr) => arr.indexOf(quar) === index);
               renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);
             }
           });
         } else {
-          const uniqueQuarters = courses.map((c) => c.quarter).filter((quar, index, arr) => arr.indexOf(quar) === index);
+          const uniqueQuarters = courses
+            .map((c) => c.quarter)
+            .filter((quar, index, arr) => arr.indexOf(quar) === index);
 
           // If the quarter isn't specified and the course is being offered in the quarter that
           // is currently being tracked, render the results for the next most recent quarter because
           // that quarter has a complete set of data
           if (courses[courses.length - 1].quarter >= quarterBeingTracked) {
-            const notTrackedCourse = courses.slice().reverse().find((course) => course.quarter < quarterBeingTracked);
+            const notTrackedCourse = courses
+              .slice()
+              .reverse()
+              .find((course) => course.quarter < quarterBeingTracked);
 
             if (notTrackedCourse === undefined) {
               renderResults(courses[courses.length - 1], uniqueQuarters, res, queryBody);

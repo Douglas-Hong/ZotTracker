@@ -160,9 +160,7 @@ const depts = [
 ];
 
 depts.forEach((dept) => {
-  $('#dept').append(
-    `<option value="${dept.slice(0, dept.indexOf('.') - 1)}">${dept}</option>`
-  );
+  $('#dept').append(`<option value="${dept.slice(0, dept.indexOf('.') - 1)}">${dept}</option>`);
 });
 
 const quarters = [
@@ -219,9 +217,7 @@ const quarters = [
 
 quarters.forEach((quar) => {
   $('#quarter').append(
-    `<option value="${getQuarterValue(quar)}" style="color: ${getQuarterColor(
-      quar
-    )}">${quar}</option>`
+    `<option value="${getQuarterValue(quar)}" style="color: ${getQuarterColor(quar)}">${quar}</option>`
   );
 });
 
@@ -257,10 +253,7 @@ function getQuarterColor(quarter) {
     quarter.indexOf('Spring') !== -1
   ) {
     return '#800080';
-  } else if (
-    quarter.indexOf('Summer') !== -1 &&
-    quarter.indexOf('COM') === -1
-  ) {
+  } else if (quarter.indexOf('Summer') !== -1 && quarter.indexOf('COM') === -1) {
     return '#744a00';
   } else {
     return '#555';

@@ -7,10 +7,7 @@ export function createSearchHistory() {
 
   // If 'searchHistory' is not found in local storage or 'searchHistory' is associated
   // with an empty array, then inform the user that their search history is empty
-  if (
-    !localStorage.getItem('searchHistory') ||
-    JSON.parse(localStorage.getItem('searchHistory')).length === 0
-  ) {
+  if (!localStorage.getItem('searchHistory') || JSON.parse(localStorage.getItem('searchHistory')).length === 0) {
     clearHistory();
   } else {
     $('.offcanvas-body').empty();
@@ -50,13 +47,15 @@ function clearHistory() {
 // a previous query
 function createHistoryItem(item, index) {
   if (item.courseCode) {
-    var heading = `Course Code: ${item.courseCode}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;
+    var heading = `Course Code: ${item.courseCode}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')' : ''}`;
   } else if (item.courseTitle) {
-    var heading = `${item.courseTitle.toUpperCase()}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;
+    var heading = `${item.courseTitle.toUpperCase()}${
+      item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')' : ''
+    }`;
   } else {
-    var heading = `${item.dept} ${item.number
-      .toUpperCase()
-      .replace(/\ /g, '')}${item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')': ''}`;;
+    var heading = `${item.dept} ${item.number.toUpperCase().replace(/\ /g, '')}${
+      item.quarter ? ' (' + Helper.getQuarter(item.quarter) + ')' : ''
+    }`;
   }
 
   $('.offcanvas-body').append(
@@ -101,10 +100,7 @@ function handleHistoryItemRequest(history, index) {
 export function addHistoryItem(query) {
   let history = JSON.parse(localStorage.getItem('searchHistory'));
   history.unshift(query);
-  history = history.filter(
-    (item, index) =>
-      JSON.stringify(item) !== JSON.stringify(history[0]) || index === 0
-  );
+  history = history.filter((item, index) => JSON.stringify(item) !== JSON.stringify(history[0]) || index === 0);
   localStorage.setItem('searchHistory', JSON.stringify(history));
 }
 

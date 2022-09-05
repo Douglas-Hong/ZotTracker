@@ -7,22 +7,18 @@ export function createEnrollmentTitle(res) {
   const query = res.originalQuery;
 
   if (query.courseCode !== '') {
-    var title = `Course Code: ${query.courseCode} (${getQuarter(
-      courseData.quarter
-    )})`;
+    var title = `Course Code: ${query.courseCode} (${getQuarter(courseData.quarter)})`;
     var subtitle = `${courseData.dept} ${courseData.number} - ${courseData.title}`;
   } else if (query.courseTitle !== '') {
     var title = `${courseData.title} (${getQuarter(courseData.quarter)})`;
-    var subtitle = `${
-      query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '
-    }${getCourseType(query.courseType)}`;
+    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(
+      query.courseType
+    )}`;
   } else {
-    var title = `${courseData.dept} ${courseData.number} (${getQuarter(
-      courseData.quarter
-    )})`;
-    var subtitle = `${
-      query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '
-    }${getCourseType(query.courseType)}`;
+    var title = `${courseData.dept} ${courseData.number} (${getQuarter(courseData.quarter)})`;
+    var subtitle = `${query.instructor === '' ? '' : query.instructor.toUpperCase() + ', '}${getCourseType(
+      query.courseType
+    )}`;
   }
 
   $('#enrollment-data').html(
@@ -100,15 +96,10 @@ export function getCourseType(type) {
 // a course will be shown if the course type is applicable, the instructor teaches the course,
 // and/or the course code matches
 export function isInterestingCourse(course, query) {
-  const hasCourseType =
-    query.courseType === 'all' || query.courseType === course.type;
+  const hasCourseType = query.courseType === 'all' || query.courseType === course.type;
   const hasInstructor =
-    query.instructor === '' ||
-    course.instructor.some(
-      (person) => person === query.instructor.toUpperCase()
-    );
-  const hasCourseCode =
-    query.courseCode === '' || course.course_code === query.courseCode;
+    query.instructor === '' || course.instructor.some((person) => person === query.instructor.toUpperCase());
+  const hasCourseCode = query.courseCode === '' || course.course_code === query.courseCode;
   return hasCourseType && hasInstructor && hasCourseCode;
 }
 
@@ -140,7 +131,6 @@ export function createError(message) {
     </div>`
   );
 }
-
 
 // This function uses the given string to create an warning message
 export function createWarning(message) {

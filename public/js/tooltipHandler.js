@@ -1,6 +1,5 @@
 // Source: https://www.chartjs.org/docs/latest/samples/tooltip/html.html
 
-
 const getOrCreateTooltip = (chart) => {
   let tooltipEl = chart.canvas.parentNode.querySelector('div');
 
@@ -25,13 +24,9 @@ const getOrCreateTooltip = (chart) => {
   return tooltipEl;
 };
 
-
 export const externalTooltipHandler = (context) => {
   // Tooltip Element
-  const {
-    chart,
-    tooltip
-  } = context;
+  const { chart, tooltip } = context;
   const tooltipEl = getOrCreateTooltip(chart);
 
   // Hide if no tooltip
@@ -43,11 +38,11 @@ export const externalTooltipHandler = (context) => {
   // Set Text
   if (tooltip.body) {
     const titleLines = tooltip.title || [];
-    const bodyLines = tooltip.body.map(b => b.lines);
+    const bodyLines = tooltip.body.map((b) => b.lines);
 
     const tableHead = document.createElement('thead');
 
-    titleLines.forEach(title => {
+    titleLines.forEach((title) => {
       const tr = document.createElement('tr');
       tr.style.borderWidth = 0;
 
@@ -100,10 +95,7 @@ export const externalTooltipHandler = (context) => {
     tableRoot.appendChild(tableBody);
   }
 
-  const {
-    offsetLeft: positionX,
-    offsetTop: positionY
-  } = chart.canvas;
+  const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
 
   // Display, position, and set styles for font
   tooltipEl.style.opacity = 1;

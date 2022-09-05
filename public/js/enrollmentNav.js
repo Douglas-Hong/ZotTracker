@@ -99,9 +99,7 @@ function createTableBody(course) {
         ${course.nor ? `<td>${course.nor[i] == null ? 'N/A' : course.nor[i]}</td>` : ''}
         ${
           course.status
-            ? `<td class="course-status" style="color: ${getStatusColor(
-                course.status[i]
-              )}">${course.status[i]}</td>`
+            ? `<td class="course-status" style="color: ${getStatusColor(course.status[i])}">${course.status[i]}</td>`
             : ''
         }
       </tr>`;
@@ -150,18 +148,12 @@ function createQuarterBody(quarters) {
         <td scope="row">${year}</td>
         <td>`;
 
-    const currYearQuarters = quarters
-      .filter((quarter) => quarter.startsWith(year))
-      .sort();
+    const currYearQuarters = quarters.filter((quarter) => quarter.startsWith(year)).sort();
     currYearQuarters.forEach((quarter, index) => {
       if (index === currYearQuarters.length - 1) {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(
-          quarter
-        )}</a>`;
+        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>`;
       } else {
-        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(
-          quarter
-        )}</a>, `;
+        body += `<a class="quarter-link" id="${quarter}">${getSimpleQuarter(quarter)}</a>, `;
       }
     });
 
