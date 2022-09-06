@@ -214,6 +214,9 @@ h6 {
 
 .enrollment-table {
   font-size: 0.8rem;
+  /* We should allow overflow for the date dropdown that allows the user to show
+  every day, week, or month */
+  overflow: visible; 
 }
 
 .enrollment-table td:first-child {
@@ -222,6 +225,29 @@ h6 {
 
 .course-status {
   font-weight: 700;
+}
+
+.date-col {
+  display: flex;
+  align-items: center;
+  overflow: visible !important;
+}
+
+.date-col-button {
+  margin-left: 5px;
+  padding: 0 5px;
+  background-color: inherit;
+  border: none;
+  color: #000;
+}
+
+.date-col-item {
+  font-size: 0.8rem;
+  min-height: 1rem;
+}
+
+.date-col-item:hover {
+  cursor: pointer;
 }
 
 .quarter-table {

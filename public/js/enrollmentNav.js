@@ -55,20 +55,44 @@ function createCourse(course, courseIndex) {
 
   $('#enrollment-data').append(
     `<div class="collapse" id="chart-collapse-${courseIndex}">
-      <div class="chart-container">
-        ${createTable(course)}
-      </div>
+      ${createCollapsibleTable(course, courseIndex, 1)}
     </div>`
   );
+
+  $('body').on('click', `#show-day-button-${courseIndex}`, () => {
+    $(`#chart-collapse-${courseIndex}`).html(createCollapsibleTable(course, courseIndex, 1));
+  });
+
+  $('body').on('click', `#show-week-button-${courseIndex}`, () => {
+    $(`#chart-collapse-${courseIndex}`).html(createCollapsibleTable(course, courseIndex, 7));
+  });
+
+  $('body').on('click', `#show-month-button-${courseIndex}`, () => {
+    $(`#chart-collapse-${courseIndex}`).html(createCollapsibleTable(course, courseIndex, 30));
+  });
+}
+
+function createCollapsibleTable(course, courseIndex, dayIncrement) {
+  return `<div class="chart-container">${createTable(course, courseIndex, dayIncrement)}</div>`;
 }
 
 // This function  creates the table associated with the given course section; it will
 // include all the recorded dates, enrolled/max/req/waitlist/nor statistics, and statuses
-function createTable(course) {
+function createTable(course, courseIndex, dayIncrement) {
   return `<table class="data-table enrollment-table">
       <thead>
         <tr>
-          <th scope="col">Date</th>
+          <th scope="col" class="date-col">
+            Date
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle date-col-button" type="button" id="date-dropdown-${courseIndex}" data-bs-toggle="dropdown" aria-expanded="false"></button>
+              <ul class="dropdown-menu" aria-labelledby="date-dropdown-${courseIndex}">
+                <li><a class="dropdown-item date-col-item" id="show-day-button-${courseIndex}">Show every day</a></li>
+                <li><a class="dropdown-item date-col-item" id="show-week-button-${courseIndex}">Show every week</a></li>
+                <li><a class="dropdown-item date-col-item" id="show-month-button-${courseIndex}">Show every month</a></li>
+              </ul>
+            </div>
+          </th>
           <th scope="col">Enrolled</th>
           <th scope="col">Max</th>
           ${course.waitlist ? '<th scope="col">Waitlist</th>' : ''}
@@ -78,18 +102,18 @@ function createTable(course) {
         </tr>
       </thead>
       <tbody>
-        ${createTableBody(course)}
+        ${createTableBody(course, dayIncrement)}
       </tbody>
     </table>`;
 }
 
 // This function generates the table body for a certain course section; each row contains
 // all the enrollment data for one day
-function createTableBody(course) {
+function createTableBody(course, dayIncrement) {
   let body = '';
   let formattedDates = Helper.formatDates(course.dates);
 
-  for (let i = 0; i < formattedDates.length; i++) {
+  for (let i = 0; i < formattedDates.length; i += dayIncrement) {
     body += `<tr>
         <td>${formattedDates[i]}</td>
         <td>${course.enrolled[i]}</td>
