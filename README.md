@@ -4,7 +4,7 @@ View the enrollment data of any course at UC Irvine!
 
 ## Features
 
-- Get detailed enrollment statistics for any UCI course from 2016 to the present:
+- Detailed enrollment statistics for any UCI course from 2016 to the present:
   - Number of enrolled students
   - Max number of students
   - Number of students who requested to register

@@ -216,7 +216,7 @@ h6 {
   font-size: 0.8rem;
   /* We should allow overflow for the date dropdown that allows the user to show
   every day, week, or month */
-  overflow: visible; 
+  overflow: visible;
 }
 
 .enrollment-table td:first-child {
