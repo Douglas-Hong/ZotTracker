@@ -79,7 +79,7 @@ function createCollapsibleTable(course, courseIndex, dayIncrement) {
 // This function  creates the table associated with the given course section; it will
 // include all the recorded dates, enrolled/max/req/waitlist/nor statistics, and statuses
 function createTable(course, courseIndex, dayIncrement) {
-  return `<table class="data-table enrollment-table">
+  return `<table class="data-table enrollment-table table table-bordered">
       <thead>
         <tr>
           <th scope="col" class="date-col">
@@ -148,7 +148,7 @@ function getStatusColor(status) {
 // This function creates the table that shows which quarters offered a specific course
 function createQuarterTable(quarters) {
   return `<div class="container-fluid">
-      <table class="data-table quarter-table">
+      <table class="data-table quarter-table table table-bordered">
         <thead>
           <tr class="text-center">
             <th scope="col">Year</th>

@@ -1,10 +1,10 @@
 body {
-  background-color: #f9fdf8;
+  background-color: #f4f5f9;
   font-family: 'Inter', sans-serif;
 }
 
 #navigation {
-  background-color: #1d3557;
+  background-color: #1c3879;
 }
 
 .container-fluid {
@@ -57,8 +57,8 @@ h6 {
 .custom-button,
 .custom-button:active,
 .custom-button:focus {
-  background-color: #45789d;
-  border-color: #45789d;
+  background-color: #607eaa;
+  border-color: #607eaa;
 }
 
 .custom-button:hover {
@@ -130,25 +130,25 @@ h6 {
 }
 
 .current-tab {
-  background-color: #45789d !important;
-  border-color: #45789d;
+  background-color: #607eaa !important;
+  border-color: #607eaa;
   color: #fff;
 }
 
 .other-tab {
   background-color: #fff;
-  border-color: #45789d;
-  color: #45789d;
+  border-color: #607eaa;
+  color: #607eaa;
 }
 
 .other-tab:active,
 .other-tab:focus {
-  background-color: #45789d !important;
+  background-color: #607eaa !important;
   color: #fff;
 }
 
 .other-tab:hover {
-  background-color: #45789d;
+  background-color: #607eaa;
   color: #fff;
   transition: background-color 0.15s ease-in-out;
   transition: color 0.15s ease-in-out;
@@ -160,17 +160,17 @@ h6 {
 }
 
 .data-table {
-  border-collapse: collapse;
-  border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+  border: 1px solid black;
+  /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15); */
   font-size: 0.85rem;
   overflow: hidden;
   width: 100%;
 }
 
 .data-table thead tr {
-  background-color: #a8dadc;
+  background-color: #1b3d6d;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .data-table th {
@@ -186,7 +186,7 @@ h6 {
 }
 
 .data-table td {
-  border-bottom: 1px solid #dddddd;
+  /* border-bottom: 1px solid #dddddd; */
   padding: 5px;
 }
 
@@ -238,7 +238,7 @@ h6 {
   padding: 0 5px;
   background-color: inherit;
   border: none;
-  color: #000;
+  color: #fff;
 }
 
 .date-col-item {

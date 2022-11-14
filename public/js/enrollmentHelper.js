@@ -147,7 +147,7 @@ export function createWarning(message) {
 export function createCourseSummary(course, courseIndex, isGraph) {
   $('#enrollment-data').append(
     `<div class="container-fluid">
-      <table class="data-table summary-table">
+      <table class="data-table summary-table table table-bordered">
         <thead>
           <tr>
             <th scope="col">Code</th>
