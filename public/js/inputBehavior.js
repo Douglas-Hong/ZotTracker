@@ -164,6 +164,7 @@ depts.forEach((dept) => {
 });
 
 const quarters = [
+  '2023  Winter Quarter',
   '2022  Fall Quarter',
   '2022  Summer Session 2',
   '2022  10-wk Summer',

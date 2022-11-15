@@ -87,8 +87,8 @@ function createGraph(graphID, numGraphs, dates, max, enrolled, waitlist) {
         label: 'Enrolled',
         data: enrolled,
         fill: false,
-        borderColor: '#457B9D',
-        backgroundColor: '#457B9D',
+        borderColor: '#607eaa',
+        backgroundColor: '#607eaa',
       },
       {
         label: 'Max',
