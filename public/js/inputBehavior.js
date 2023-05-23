@@ -19,12 +19,11 @@ const depts = [
   'ARTS . . . . . . . Arts',
   'ARTSHUM . . . . Arts and Humanities',
   'ASIANAM . . . . Asian American Studies',
-  'BANA . . . . . . . Business Analytics (started 2017 SS2)',
+  'BANA . . . . . . . Business Analytics',
   'BATS . . . . . . . Biomedical and Translational Science',
   'BIO SCI . . . . . .Biological Sciences',
   'BIOCHEM . . . . Biological Chemistry',
   'BME . . . . . . . . Biomedical Engineering',
-  'BSEMD . . . . . .Bio Sci & Educational Media Design (until 2017 Wtr)',
   'CAMPREC . . . .Campus Recreation',
   'CBE . . . . . . . . Chemical and Biomolecular Engineering (started 2018 Fall)',
   'CBEMS . . . . . .Chemical Engr and Materials Science (until 2019 SS2)',
@@ -64,7 +63,7 @@ const depts = [
   'ER MED . . . . . Emergency Medicine',
   'EURO ST . . . . .European Studies',
   'FAM MED . . . . Family Medicine',
-  'FIN . . . . . . . . . Finance (started 2017 Fall)',
+  'FIN . . . . . . . . . Finance',
   'FLM&MDA . . . .Film and Media Studies',
   'FRENCH . . . . . French',
   'GDIM . . . . . . . .Game Design and Interactive Media (started 2021 Fall)',
@@ -164,6 +163,7 @@ depts.forEach((dept) => {
 });
 
 const quarters = [
+  '2023  Fall Quarter',
   '2023  Summer Session 2',
   '2023  10-wk Summer',
   '2023  Summer Session 1',
