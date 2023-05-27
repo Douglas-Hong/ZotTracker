@@ -24,7 +24,7 @@ export function createPage(res) {
 
     res.courseData.courses.forEach((course) => {
       if (Helper.isInterestingCourse(course, res.originalQuery)) {
-        createCourse(course, numGraphs);
+        createCourse(course, numGraphs, res.openLec);
         numGraphs++;
       }
     });
@@ -68,6 +68,10 @@ function createCourse(course, courseIndex) {
     course.enrolled,
     course.waitlist
   );
+
+  if (course.type === 'LEC') {
+    $(`#show-data-button-${courseIndex}`).click();
+  }
 }
 
 // This function creates a course section's graph by configuring the Chart.js graph
