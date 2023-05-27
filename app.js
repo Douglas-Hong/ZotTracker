@@ -111,7 +111,7 @@ function renderResults(course, quarters, res, queryBody) {
       status: 'FOUND',
       originalQuery: queryBody,
       courseData: course,
-      quarters: quarters
+      quarters: quarters,
     }),
   });
 }

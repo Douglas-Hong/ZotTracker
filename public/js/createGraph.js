@@ -24,7 +24,7 @@ export function createPage(res) {
 
     res.courseData.courses.forEach((course) => {
       if (Helper.isInterestingCourse(course, res.originalQuery)) {
-        createCourse(course, numGraphs, res.openLec);
+        createCourse(course, numGraphs);
         numGraphs++;
       }
     });
@@ -69,6 +69,7 @@ function createCourse(course, courseIndex) {
     course.waitlist
   );
 
+  // If the course is a lecture, automatically open its graph for convenience
   if (course.type === 'LEC') {
     $(`#show-data-button-${courseIndex}`).click();
   }
