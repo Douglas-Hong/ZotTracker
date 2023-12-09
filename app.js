@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const uri = process.env.MONGODB_URI;
+const fetch = require('node-fetch');
+const PETERPORTAL_BASE_URL = 'https://api-next.peterportal.org/v1/rest/enrollmentHistory';
 
 const app = express();
 app.use(express.json());
@@ -116,7 +118,7 @@ function renderResults(course, quarters, res, queryBody) {
   });
 }
 
-function processQuery(res, queryBody) {
+async function processQuery(res, queryBody) {
   // Valid minimum input combinations: dept/course number, course code, course title, instructor/course number
   if (
     (queryBody.dept === '' || queryBody.number === '') &&
@@ -126,6 +128,12 @@ function processQuery(res, queryBody) {
   ) {
     renderError('EMPTY INPUT', res, queryBody);
   } else {
+    console.log('QUERY BODY');
+    console.log(queryBody);
+    
+    const peterPortalResponse = await getPeterPortalResponse(queryBody);
+    console.log(peterPortalResponse);
+
     let query = formatQuery(queryBody);
 
     Enrollment.find(query, (err, courses) => {
@@ -174,5 +182,63 @@ function processQuery(res, queryBody) {
         }
       }
     });
+  }
+}
+
+async function getPeterPortalResponse (queryBody) {
+  // TODO: remove courseTitle option
+  const peterPortalParams = new URLSearchParams();
+  for (const [param, value] of Object.entries(queryBody)) {
+    console.log(param, value);
+
+    if (value !== '') {
+      if (param === 'dept') {
+        peterPortalParams.set('department', value);
+      } else if (param === 'number') {
+        peterPortalParams.set('courseNumber', value);
+      } else if (param === 'quarter') {
+        const year = value.split('-')[0];
+        const quarter = getPeterPortalQuarter(value.split('-')[1]);
+        if (quarter) {
+          peterPortalParams.set('year', year);
+          peterPortalParams.set('quarter', quarter);
+        }
+      } else if (param === 'instructor') {
+        peterPortalParams.set('instructor', value);
+      } else if (param === 'courseCode') {
+        peterPortalParams.set('sectionCode', value);
+      } else if (param === 'courseType' && value !== 'all') {
+        const sectionType = value[0].toUpperCase() + value.slice(1).toLowerCase();
+        peterPortalParams.set('sectionType', sectionType);
+      }
+    }
+  }
+    
+  console.log('PETERPORTAL PARAMS');
+  console.log(peterPortalParams.toString());
+
+  const peterPortalRes = await fetch(`${PETERPORTAL_BASE_URL}?${peterPortalParams.toString()}`);
+  const peterPortalJson = await peterPortalRes.json();
+
+  return peterPortalJson;
+}
+
+// TODO: peterpotal doesn't seem to support some obscure quarters like law
+function getPeterPortalQuarter (quarter) {
+  switch (quarter) {
+    case '92':
+      return 'Fall';
+    case '03':
+      return 'Winter';
+    case '14':
+      return 'Spring';
+    case '25':
+      return 'Summer1';
+    case '39':
+      return 'Summer10wk';
+    case '51':
+      return `Summer2`;
+    default:
+      return null;
   }
 }
